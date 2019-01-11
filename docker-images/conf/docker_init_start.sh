@@ -8,3 +8,5 @@ mysql -P9066 -u man1 -h 127.0.0.1 -p654321 -e "create database @@dataNode ='dn1,
 mysql -P8066 -u root -h 127.0.0.1 -p123456 -e "source /opt/dble/conf/testdb.sql" testdb
 
 echo "dble init finish"
+
+/bin/bash
