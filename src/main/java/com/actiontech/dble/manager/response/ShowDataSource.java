@@ -6,8 +6,8 @@
 package com.actiontech.dble.manager.response;
 
 import com.actiontech.dble.DbleServer;
+import com.actiontech.dble.backend.datasource.AbstractPhysicalDBPool;
 import com.actiontech.dble.backend.datasource.PhysicalDBNode;
-import com.actiontech.dble.backend.datasource.PhysicalDBPool;
 import com.actiontech.dble.backend.datasource.PhysicalDatasource;
 import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.Fields;
@@ -111,9 +111,9 @@ public final class ShowDataSource {
 
         } else {
             // add all
-            for (Map.Entry<String, PhysicalDBPool> entry : conf.getDataHosts().entrySet()) {
+            for (Map.Entry<String, AbstractPhysicalDBPool> entry : conf.getDataHosts().entrySet()) {
 
-                PhysicalDBPool dataHost = entry.getValue();
+                AbstractPhysicalDBPool dataHost = entry.getValue();
                 String datahost = entry.getKey();
 
                 for (int i = 0; i < dataHost.getSources().length; i++) {

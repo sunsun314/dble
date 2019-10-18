@@ -10,8 +10,8 @@ import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;
 import com.actiontech.dble.alarm.ToResolveContainer;
+import com.actiontech.dble.backend.datasource.AbstractPhysicalDBPool;
 import com.actiontech.dble.backend.datasource.PhysicalDBNode;
-import com.actiontech.dble.backend.datasource.PhysicalDBPool;
 import com.actiontech.dble.backend.mysql.view.CKVStoreRepository;
 import com.actiontech.dble.backend.mysql.view.FileSystemRepository;
 import com.actiontech.dble.backend.mysql.view.KVStoreRepository;
@@ -269,8 +269,8 @@ public class ProxyMetaManager {
 
     private Set<String> getSelfNodes(ServerConfig config) {
         Set<String> selfNode = null;
-        for (Map.Entry<String, PhysicalDBPool> entry : config.getDataHosts().entrySet()) {
-            PhysicalDBPool host = entry.getValue();
+        for (Map.Entry<String, AbstractPhysicalDBPool> entry : config.getDataHosts().entrySet()) {
+            AbstractPhysicalDBPool host = entry.getValue();
             DBHostConfig wHost = host.getSource().getConfig();
             if (("localhost".equalsIgnoreCase(wHost.getIp()) || "127.0.0.1".equalsIgnoreCase(wHost.getIp())) && wHost.getPort() == config.getSystem().getServerPort()) {
                 for (Map.Entry<String, PhysicalDBNode> nodeEntry : config.getDataNodes().entrySet()) {

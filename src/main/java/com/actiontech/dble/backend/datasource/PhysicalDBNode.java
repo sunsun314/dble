@@ -23,9 +23,9 @@ public class PhysicalDBNode {
 
     protected final String name;
     protected String database;
-    protected volatile PhysicalDBPool dbPool;
+    protected volatile AbstractPhysicalDBPool dbPool;
 
-    public PhysicalDBNode(String hostName, String database, PhysicalDBPool dbPool) {
+    public PhysicalDBNode(String hostName, String database, AbstractPhysicalDBPool dbPool) {
         this.name = hostName;
         this.database = database;
         this.dbPool = dbPool;
@@ -35,7 +35,7 @@ public class PhysicalDBNode {
         return name;
     }
 
-    public PhysicalDBPool getDbPool() {
+    public AbstractPhysicalDBPool getDbPool() {
         return dbPool;
     }
 
@@ -71,7 +71,7 @@ public class PhysicalDBNode {
                     " and datanode db is " + this.database);
         }
         if (!dbPool.isInitSuccess()) {
-            int activeIndex = dbPool.init(dbPool.activeIndex);
+            int activeIndex = dbPool.init(dbPool.getActiveIndex());
             if (activeIndex >= 0) {
                 DbleServer.getInstance().saveDataHostIndex(dbPool.getHostName(), activeIndex, false);
             } else {
@@ -149,7 +149,7 @@ public class PhysicalDBNode {
     }
 
 
-    public void setDbPool(PhysicalDBPool dbPool) {
+    public void setDbPool(AbstractPhysicalDBPool dbPool) {
         this.dbPool = dbPool;
     }
 }

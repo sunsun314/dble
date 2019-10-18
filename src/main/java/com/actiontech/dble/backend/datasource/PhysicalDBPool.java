@@ -24,21 +24,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class PhysicalDBPool {
+public class PhysicalDBPool extends AbstractPhysicalDBPool {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(PhysicalDBPool.class);
-
-    public static final int BALANCE_NONE = 0;
-    private static final int BALANCE_ALL_BACK = 1;
-    private static final int BALANCE_ALL = 2;
-    private static final int BALANCE_ALL_READ = 3;
-
-    public static final int WEIGHT = 0;
 
     private final String hostName;
 
     private final ReentrantReadWriteLock adjustLock = new ReentrantReadWriteLock();
-
     private PhysicalDatasource[] writeSources;
     private Map<Integer, PhysicalDatasource[]> readSources;
     private Map<Integer, PhysicalDatasource[]> standbyReadSourcesMap;
@@ -55,6 +47,12 @@ public class PhysicalDBPool {
     private String[] schemas;
 
     private final DataHostConfig dataHostConfig;
+
+    protected PhysicalDBPool(int balance, DataHostConfig conf, String name) {
+        this.hostName = name;
+        this.balance = balance;
+        this.dataHostConfig = conf;
+    }
 
     public PhysicalDBPool(String name, DataHostConfig conf, PhysicalDatasource[] writeSources,
                           Map<Integer, PhysicalDatasource[]> readSources,
@@ -115,74 +113,6 @@ public class PhysicalDBPool {
 
         LOGGER.info("can't find connection in pool " + this.hostName + " con:" + exitsCon);
         return null;
-    }
-
-    // ensure never be invocated concurrently
-    void delRDs(PhysicalDatasource source) {
-        int index = -1;
-        PhysicalDatasource[] nrDs = null;
-        boolean del = false;
-
-        for (Map.Entry<Integer, PhysicalDatasource[]> entry : readSources.entrySet()) {
-            for (PhysicalDatasource ds : entry.getValue()) {
-                if (ds == source) {
-                    index = entry.getKey();
-                    break;
-                }
-            }
-        }
-
-        PhysicalDatasource[] rDs = this.readSources.get(index);
-        if (rDs.length == 1) {
-            del = true;
-        } else {
-            nrDs = new PhysicalDatasource[rDs.length - 1];
-            int i = 0;
-            for (PhysicalDatasource ds : rDs) {
-                if (ds != source) {
-                    nrDs[i++] = ds;
-                }
-            }
-        }
-
-        adjustLock.writeLock().lock();
-        try {
-            if (del) {
-                this.readSources.remove(index);
-            } else {
-                this.readSources.put(index, nrDs);
-            }
-            this.allDs = this.genAllDataSources();
-        } finally {
-            adjustLock.writeLock().unlock();
-        }
-    }
-
-    // ensure never be invocated concurrently
-    public void addRDs(int index, PhysicalDatasource source) {
-        PhysicalDatasource[] nrDs;
-
-        PhysicalDatasource[] rDs = this.readSources.get(index);
-        if (rDs == null) {
-            nrDs = new PhysicalDatasource[1];
-            nrDs[0] = source;
-        } else {
-            nrDs = new PhysicalDatasource[rDs.length + 1];
-            int i = 0;
-            nrDs[i++] = source;
-            for (PhysicalDatasource ds : rDs) {
-                nrDs[i++] = ds;
-            }
-        }
-
-        adjustLock.writeLock().lock();
-        try {
-            this.readSources.put(index, nrDs);
-            this.allDs = this.genAllDataSources();
-            source.setDbPool(this);
-        } finally {
-            adjustLock.writeLock().unlock();
-        }
     }
 
     public String getHostName() {
@@ -792,7 +722,7 @@ public class PhysicalDBPool {
         }
     }
 
-    public boolean equalsBaseInfo(PhysicalDBPool pool) {
+    public boolean equalsBaseInfo(AbstractPhysicalDBPool pool) {
 
         if (pool.getDataHostConfig().getName().equals(this.dataHostConfig.getName()) &&
                 pool.getDataHostConfig().getHearbeatSQL().equals(this.dataHostConfig.getHearbeatSQL()) &&

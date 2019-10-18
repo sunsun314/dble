@@ -46,7 +46,7 @@ public abstract class PhysicalDatasource {
     private final boolean readNode;
     private volatile long heartbeatRecoveryTime;
     private final DataHostConfig hostConfig;
-    private PhysicalDBPool dbPool;
+    private AbstractPhysicalDBPool dbPool;
     private final AtomicInteger connectionCount;
 
     private AtomicLong readCount = new AtomicLong(0);
@@ -110,11 +110,11 @@ public abstract class PhysicalDatasource {
         return size;
     }
 
-    public void setDbPool(PhysicalDBPool dbPool) {
+    public void setDbPool(AbstractPhysicalDBPool dbPool) {
         this.dbPool = dbPool;
     }
 
-    public PhysicalDBPool getDbPool() {
+    public AbstractPhysicalDBPool getDbPool() {
         return dbPool;
     }
 
