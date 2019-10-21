@@ -10,10 +10,7 @@ import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;
 import com.actiontech.dble.alarm.ToResolveContainer;
-import com.actiontech.dble.backend.datasource.AbstractPhysicalDBPool;
-import com.actiontech.dble.backend.datasource.PhysicalDBNode;
-import com.actiontech.dble.backend.datasource.PhysicalDBPool;
-import com.actiontech.dble.backend.datasource.PhysicalDatasource;
+import com.actiontech.dble.backend.datasource.*;
 import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
 import com.actiontech.dble.config.loader.SchemaLoader;
 import com.actiontech.dble.config.loader.xml.XMLSchemaLoader;
@@ -346,8 +343,12 @@ public class ConfigInitializer implements ProblemReporter {
         //create PhysicalDBPool according to DataHost
         Map<String, AbstractPhysicalDBPool> nodes = new HashMap<>(nodeConf.size());
         for (DataHostConfig conf : nodeConf.values()) {
-            //create PhysicalDBPool
-            AbstractPhysicalDBPool pool = getPhysicalDBPool(conf);
+            AbstractPhysicalDBPool pool = null;
+            if (system.isUseOutterHa()) {
+                pool = getPhysicalDBPoolSingleWH(conf);
+            } else {
+                pool = getPhysicalDBPool(conf);
+            }
             nodes.put(pool.getHostName(), pool);
         }
         return nodes;
@@ -364,7 +365,33 @@ public class ConfigInitializer implements ProblemReporter {
         return dataSources;
     }
 
-    private AbstractPhysicalDBPool getPhysicalDBPool(DataHostConfig conf) {
+    private PhysicalDNPoolSingleWH getPhysicalDBPoolSingleWH(DataHostConfig conf) {
+        //create PhysicalDatasource for write host
+        PhysicalDatasource[] writeSources = createDataSource(conf, conf.getWriteHosts(), false);
+        Map<Integer, DBHostConfig[]> readHostsMap = conf.getReadHosts();
+        Map<Integer, PhysicalDatasource[]> readSourcesMap = new HashMap<>(readHostsMap.size());
+        if (writeSources.length > 1) {
+            throw new ConfigException("Only on writeHost be allowed when in out Ha mode");
+        }
+
+        for (Map.Entry<Integer, DBHostConfig[]> entry : readHostsMap.entrySet()) {
+            PhysicalDatasource[] readSources = createDataSource(conf, entry.getValue(), true);
+            readSourcesMap.put(entry.getKey(), readSources);
+        }
+
+
+        Map<Integer, DBHostConfig[]> standbyReadHostsMap = conf.getStandbyReadHosts();
+        Map<Integer, PhysicalDatasource[]> standbyReadSourcesMap = new HashMap<>(standbyReadHostsMap.size());
+        for (Map.Entry<Integer, DBHostConfig[]> entry : standbyReadHostsMap.entrySet()) {
+            PhysicalDatasource[] standbyReadSources = createDataSource(conf, entry.getValue(), true);
+            standbyReadSourcesMap.put(entry.getKey(), standbyReadSources);
+        }
+
+        return new PhysicalDNPoolSingleWH(conf.getName(), conf, writeSources, readSourcesMap, standbyReadSourcesMap, conf.getBalance());
+    }
+
+
+    private PhysicalDBPool getPhysicalDBPool(DataHostConfig conf) {
         //create PhysicalDatasource for write host
         PhysicalDatasource[] writeSources = createDataSource(conf, conf.getWriteHosts(), false);
         Map<Integer, DBHostConfig[]> readHostsMap = conf.getReadHosts();

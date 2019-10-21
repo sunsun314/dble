@@ -43,11 +43,12 @@ public abstract class PhysicalDatasource {
     private final DBHostConfig config;
     private final ConMap conMap = new ConMap();
     private MySQLHeartbeat heartbeat;
-    private final boolean readNode;
+    private volatile boolean readNode;
     private volatile long heartbeatRecoveryTime;
     private final DataHostConfig hostConfig;
     private AbstractPhysicalDBPool dbPool;
     private final AtomicInteger connectionCount;
+    private final boolean disabled;
 
     private AtomicLong readCount = new AtomicLong(0);
 
@@ -71,7 +72,21 @@ public abstract class PhysicalDatasource {
         heartbeat = this.createHeartBeat();
         this.readNode = isReadNode;
         this.connectionCount = new AtomicInteger();
+        this.disabled = false;
     }
+
+
+    public PhysicalDatasource(DBHostConfig config, DataHostConfig hostConfig, boolean isReadNode, boolean isDisabled) {
+        this.size = config.getMaxCon();
+        this.config = config;
+        this.name = config.getHostName();
+        this.hostConfig = hostConfig;
+        heartbeat = this.createHeartBeat();
+        this.readNode = isReadNode;
+        this.connectionCount = new AtomicInteger();
+        this.disabled = isDisabled;
+    }
+
 
     public boolean isMyConnection(BackendConnection con) {
         if (con instanceof MySQLConnection) {

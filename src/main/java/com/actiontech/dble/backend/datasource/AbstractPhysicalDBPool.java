@@ -1,26 +1,52 @@
 package com.actiontech.dble.backend.datasource;
 
 import com.actiontech.dble.backend.BackendConnection;
+import com.actiontech.dble.backend.heartbeat.MySQLHeartbeat;
 import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
 import com.actiontech.dble.config.model.DataHostConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by szf on 2019/10/18.
  */
 public abstract class AbstractPhysicalDBPool {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPhysicalDBPool.class);
     public static final int BALANCE_NONE = 0;
     protected static final int BALANCE_ALL_BACK = 1;
     protected static final int BALANCE_ALL = 2;
     protected static final int BALANCE_ALL_READ = 3;
 
-    protected String hostName;
     public static final int WEIGHT = 0;
 
+    protected final String hostName;
+    protected final int balance;
+    protected final DataHostConfig dataHostConfig;
+    protected final ThreadLocalRandom random = ThreadLocalRandom.current();
+    protected volatile boolean initSuccess = false;
+    protected String[] schemas;
+
+    protected final ReentrantReadWriteLock adjustLock = new ReentrantReadWriteLock();
+
+
+    protected AbstractPhysicalDBPool(String hostName, int balance, DataHostConfig config) {
+        this.hostName = hostName;
+        this.balance = balance;
+        this.dataHostConfig = config;
+    }
+
+    /**
+     * find the datasource of a exist backendConnection
+     *
+     * @param exitsCon
+     * @return
+     */
     abstract PhysicalDatasource findDatasource(BackendConnection exitsCon);
 
     abstract boolean isSlave(PhysicalDatasource ds);
@@ -29,13 +55,15 @@ public abstract class AbstractPhysicalDBPool {
 
     public abstract PhysicalDatasource getSource();
 
-    public abstract boolean isInitSuccess();
+    public boolean isInitSuccess() {
+        return initSuccess;
+    }
 
     public abstract boolean switchSource(int newIndex, String reason);
 
-    public abstract int init(int index);
+    public abstract void init(int index);
 
-    public abstract int reloadInit(int index);
+    public abstract void reloadInit(int index);
 
     public abstract void doHeartbeat();
 
@@ -59,13 +87,30 @@ public abstract class AbstractPhysicalDBPool {
 
     abstract boolean getReadCon(String schema, boolean autocommit, ResponseHandler handler, Object attachment) throws Exception;
 
-    public abstract boolean equalsBaseInfo(AbstractPhysicalDBPool pool);
+    public boolean equalsBaseInfo(AbstractPhysicalDBPool pool) {
 
-    abstract String[] getSchemas();
+        if (pool.getDataHostConfig().getName().equals(this.dataHostConfig.getName()) &&
+                pool.getDataHostConfig().getHearbeatSQL().equals(this.dataHostConfig.getHearbeatSQL()) &&
+                pool.getDataHostConfig().getBalance() == this.dataHostConfig.getBalance() &&
+                pool.getDataHostConfig().getMaxCon() == this.dataHostConfig.getMaxCon() &&
+                pool.getDataHostConfig().getMinCon() == this.dataHostConfig.getMinCon() &&
+                pool.getHostName().equals(this.hostName)) {
+            return true;
+        }
+        return false;
+    }
 
-    public abstract void setSchemas(String[] mySchemas);
+    public String[] getSchemas() {
+        return schemas;
+    }
 
-    public abstract DataHostConfig getDataHostConfig();
+    public void setSchemas(String[] mySchemas) {
+        this.schemas = mySchemas;
+    }
+
+    public DataHostConfig getDataHostConfig() {
+        return dataHostConfig;
+    }
 
     abstract PhysicalDatasource[] getWriteSources();
 
@@ -77,11 +122,52 @@ public abstract class AbstractPhysicalDBPool {
 
     public abstract Map<Integer, PhysicalDatasource[]> getReadSources();
 
-    public abstract Map<Integer, PhysicalDatasource[]> getrReadSources();
-
     public abstract void switchSourceIfNeed(PhysicalDatasource ds, String reason);
 
-    public abstract PhysicalDatasource randomSelect(ArrayList<PhysicalDatasource> okSources);
+    public PhysicalDatasource randomSelect(ArrayList<PhysicalDatasource> okSources) {
+        if (okSources.isEmpty()) {
+            return this.getSource();
+        } else {
+            int length = okSources.size();
+            int totalWeight = 0;
+            boolean sameWeight = true;
+            for (int i = 0; i < length; i++) {
+                int weight = okSources.get(i).getConfig().getWeight();
+                totalWeight += weight;
+                if (sameWeight && i > 0 && weight != okSources.get(i - 1).getConfig().getWeight()) {
+                    sameWeight = false;
+                }
+            }
+
+            if (totalWeight > 0 && !sameWeight) {
+                // random by different weight
+                int offset = random.nextInt(totalWeight);
+                for (PhysicalDatasource okSource : okSources) {
+                    offset -= okSource.getConfig().getWeight();
+                    if (offset < 0) {
+                        return okSource;
+                    }
+                }
+            }
+            return okSources.get(random.nextInt(length));
+        }
+    }
 
     public abstract int next(int i);
+
+    protected boolean checkSlaveSynStatus() {
+        return (dataHostConfig.getSlaveThreshold() != -1) &&
+                (dataHostConfig.isShowSlaveSql());
+    }
+
+    protected boolean canSelectAsReadNode(PhysicalDatasource theSource) {
+        Integer slaveBehindMaster = theSource.getHeartbeat().getSlaveBehindMaster();
+        int dbSynStatus = theSource.getHeartbeat().getDbSynStatus();
+        if (slaveBehindMaster == null || dbSynStatus == MySQLHeartbeat.DB_SYN_ERROR) {
+            return false;
+        }
+        boolean isSync = dbSynStatus == MySQLHeartbeat.DB_SYN_NORMAL;
+        boolean isNotDelay = slaveBehindMaster < this.dataHostConfig.getSlaveThreshold();
+        return isSync && isNotDelay;
+    }
 }

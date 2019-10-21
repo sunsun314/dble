@@ -70,15 +70,6 @@ public class PhysicalDBNode {
             throw new RuntimeException("invalid param ,connection request db is :" + schema +
                     " and datanode db is " + this.database);
         }
-        if (!dbPool.isInitSuccess()) {
-            int activeIndex = dbPool.init(dbPool.getActiveIndex());
-            if (activeIndex >= 0) {
-                DbleServer.getInstance().saveDataHostIndex(dbPool.getHostName(), activeIndex, false);
-            } else {
-                throw new RuntimeException("DataNode[" + dbPool.getHostName() + "]'s init error, please check it can be connected. " +
-                        "The current Node is {DataHost[" + dbPool.getSource().getConfig().getUrl() + ",Schema[" + schema + "]}");
-            }
-        }
     }
 
     public void getConnection(String schema, boolean isMustWrite, boolean autoCommit, RouteResultsetNode rrs,

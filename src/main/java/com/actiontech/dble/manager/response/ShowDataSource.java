@@ -122,8 +122,8 @@ public final class ShowDataSource {
                         row.setPacketId(++packetId);
                         buffer = row.write(buffer, c, true);
                     }
-                    if (dataHost.getrReadSources().get(i) != null) {
-                        for (PhysicalDatasource r : dataHost.getrReadSources().get(i)) {
+                    if (dataHost.getReadSources().get(i) != null) {
+                        for (PhysicalDatasource r : dataHost.getReadSources().get(i)) {
                             if (!r.getConfig().isDisabled()) {
                                 RowDataPacket sRow = getRow(datahost, r, c.getCharset().getResults());
                                 sRow.setPacketId(++packetId);

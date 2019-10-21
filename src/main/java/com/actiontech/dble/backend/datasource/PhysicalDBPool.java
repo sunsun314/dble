@@ -20,47 +20,24 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class PhysicalDBPool extends AbstractPhysicalDBPool {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(PhysicalDBPool.class);
-
-    private final String hostName;
-
-    private final ReentrantReadWriteLock adjustLock = new ReentrantReadWriteLock();
+    private static final Logger LOGGER = LoggerFactory.getLogger(PhysicalDBPool.class);
     private PhysicalDatasource[] writeSources;
     private Map<Integer, PhysicalDatasource[]> readSources;
     private Map<Integer, PhysicalDatasource[]> standbyReadSourcesMap;
     private Collection<PhysicalDatasource> allDs;
 
     volatile int activeIndex;
-    private volatile boolean initSuccess;
-
     private final ReentrantLock switchLock = new ReentrantLock();
-
-    private final int balance;
-    private final ThreadLocalRandom random = ThreadLocalRandom.current();
-
-    private String[] schemas;
-
-    private final DataHostConfig dataHostConfig;
-
-    protected PhysicalDBPool(int balance, DataHostConfig conf, String name) {
-        this.hostName = name;
-        this.balance = balance;
-        this.dataHostConfig = conf;
-    }
 
     public PhysicalDBPool(String name, DataHostConfig conf, PhysicalDatasource[] writeSources,
                           Map<Integer, PhysicalDatasource[]> readSources,
                           Map<Integer, PhysicalDatasource[]> standbyReadSourcesMap, int balance) {
-        this.hostName = name;
-        this.dataHostConfig = conf;
+        super(name, balance, conf);
         this.writeSources = writeSources;
-        this.balance = balance;
         this.readSources = readSources;
         this.standbyReadSourcesMap = standbyReadSourcesMap;
         this.allDs = this.genAllDataSources();
@@ -124,10 +101,6 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
         return writeSources;
     }
 
-    public Map<Integer, PhysicalDatasource[]> getrReadSources() {
-        return readSources;
-    }
-
     public PhysicalDatasource getSource() {
         return writeSources[activeIndex];
     }
@@ -145,9 +118,6 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
         return (currentIndex != activeIndex);
     }
 
-    public boolean isInitSuccess() {
-        return initSuccess;
-    }
 
     public int getActiveIndex() {
         return activeIndex;
@@ -214,7 +184,7 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
                 // switch index
                 activeIndex = newIndex;
                 // init again
-                int result = this.init(activeIndex);
+                int result = this.InnerInit(activeIndex);
                 if (result >= 0) {
                     DbleServer.getInstance().saveDataHostIndex(hostName, result, false);
                     // clear all connections
@@ -244,7 +214,11 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
         return i < writeSources.length ? i : (i - writeSources.length);
     }
 
-    public int init(int index) {
+    public void init(int index) {
+        InnerInit(index);
+    }
+
+    private int InnerInit(int index) {
         if (!checkIndex(index)) {
             index = 0;
         }
@@ -264,12 +238,12 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
         return -1;
     }
 
-    public int reloadInit(int index) {
+    public void reloadInit(int index) {
         if (initSuccess) {
             LOGGER.info(hostName + "dataHost already inited doing nothing");
-            return activeIndex;
+            return;
         }
-        return init(index);
+        InnerInit(index);
     }
 
     private boolean checkIndex(int i) {
@@ -439,12 +413,7 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
     }
 
     public Map<Integer, PhysicalDatasource[]> getReadSources() {
-        adjustLock.readLock().lock();
-        try {
-            return this.readSources;
-        } finally {
-            adjustLock.readLock().unlock();
-        }
+        return this.readSources;
     }
 
     public Collection<PhysicalDatasource> getAllDataSources() {
@@ -520,7 +489,6 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
 
 
     PhysicalDatasource getReadNode() throws Exception {
-
         PhysicalDatasource theNode = null;
         Map<Integer, PhysicalDatasource[]> rs;
         adjustLock.readLock().lock();
@@ -595,66 +563,8 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
         }
     }
 
-    private boolean checkSlaveSynStatus() {
-        return (dataHostConfig.getSlaveThreshold() != -1) &&
-                (dataHostConfig.isShowSlaveSql());
-    }
-
-    /**
-     * <p>
-     * randomSelect by weight
-     *
-     * @param okSources okSources
-     * @return PhysicalDatasource
-     */
-    public PhysicalDatasource randomSelect(ArrayList<PhysicalDatasource> okSources) {
-
-        if (okSources.isEmpty()) {
-            return this.getSource();
-
-        } else {
-            int length = okSources.size();
-            int totalWeight = 0;
-            boolean sameWeight = true;
-            for (int i = 0; i < length; i++) {
-                int weight = okSources.get(i).getConfig().getWeight();
-                totalWeight += weight;
-                if (sameWeight && i > 0 && weight != okSources.get(i - 1).getConfig().getWeight()) {
-                    sameWeight = false;
-                }
-            }
-
-            if (totalWeight > 0 && !sameWeight) {
-                // random by different weight
-                int offset = random.nextInt(totalWeight);
-                for (PhysicalDatasource okSource : okSources) {
-                    offset -= okSource.getConfig().getWeight();
-                    if (offset < 0) {
-                        return okSource;
-                    }
-                }
-            }
-
-            // sameWeight or all zero then random
-            return okSources.get(random.nextInt(length));
-            // int index = Math.abs(random.nextInt()) % okSources.size();
-            // return okSources.get(index);
-        }
-    }
-
     private boolean isAlive(PhysicalDatasource theSource) {
         return theSource.isAlive();
-    }
-
-    private boolean canSelectAsReadNode(PhysicalDatasource theSource) {
-        Integer slaveBehindMaster = theSource.getHeartbeat().getSlaveBehindMaster();
-        int dbSynStatus = theSource.getHeartbeat().getDbSynStatus();
-        if (slaveBehindMaster == null || dbSynStatus == MySQLHeartbeat.DB_SYN_ERROR) {
-            return false;
-        }
-        boolean isSync = dbSynStatus == MySQLHeartbeat.DB_SYN_NORMAL;
-        boolean isNotDelay = slaveBehindMaster < this.dataHostConfig.getSlaveThreshold();
-        return isSync && isNotDelay;
     }
 
     /**
@@ -722,18 +632,6 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
         }
     }
 
-    public boolean equalsBaseInfo(AbstractPhysicalDBPool pool) {
-
-        if (pool.getDataHostConfig().getName().equals(this.dataHostConfig.getName()) &&
-                pool.getDataHostConfig().getHearbeatSQL().equals(this.dataHostConfig.getHearbeatSQL()) &&
-                pool.getDataHostConfig().getBalance() == this.dataHostConfig.getBalance() &&
-                pool.getDataHostConfig().getMaxCon() == this.dataHostConfig.getMaxCon() &&
-                pool.getDataHostConfig().getMinCon() == this.dataHostConfig.getMinCon() &&
-                pool.getHostName().equals(this.hostName)) {
-            return true;
-        }
-        return false;
-    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder("dataHost:").append(hostName).append(this.hashCode());
@@ -755,14 +653,6 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
 
     public String[] getSchemas() {
         return schemas;
-    }
-
-    public void setSchemas(String[] mySchemas) {
-        this.schemas = mySchemas;
-    }
-
-    public DataHostConfig getDataHostConfig() {
-        return dataHostConfig;
     }
 
 
