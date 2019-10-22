@@ -17,7 +17,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Created by szf on 2019/10/18.
  */
 public abstract class AbstractPhysicalDBPool {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPhysicalDBPool.class);
     public static final int BALANCE_NONE = 0;
     protected static final int BALANCE_ALL_BACK = 1;
     protected static final int BALANCE_ALL = 2;
@@ -170,4 +169,5 @@ public abstract class AbstractPhysicalDBPool {
         boolean isNotDelay = slaveBehindMaster < this.dataHostConfig.getSlaveThreshold();
         return isSync && isNotDelay;
     }
+
 }

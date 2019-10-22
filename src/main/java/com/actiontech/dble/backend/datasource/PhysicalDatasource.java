@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -48,7 +49,7 @@ public abstract class PhysicalDatasource {
     private final DataHostConfig hostConfig;
     private AbstractPhysicalDBPool dbPool;
     private final AtomicInteger connectionCount;
-    private final boolean disabled;
+    private volatile AtomicBoolean disabled;
 
     private AtomicLong readCount = new AtomicLong(0);
 
@@ -72,19 +73,7 @@ public abstract class PhysicalDatasource {
         heartbeat = this.createHeartBeat();
         this.readNode = isReadNode;
         this.connectionCount = new AtomicInteger();
-        this.disabled = false;
-    }
-
-
-    public PhysicalDatasource(DBHostConfig config, DataHostConfig hostConfig, boolean isReadNode, boolean isDisabled) {
-        this.size = config.getMaxCon();
-        this.config = config;
-        this.name = config.getHostName();
-        this.hostConfig = hostConfig;
-        heartbeat = this.createHeartBeat();
-        this.readNode = isReadNode;
-        this.connectionCount = new AtomicInteger();
-        this.disabled = isDisabled;
+        this.disabled = new AtomicBoolean(config.isDisabled());
     }
 
 
@@ -260,7 +249,7 @@ public abstract class PhysicalDatasource {
         for (int i = 0; i < createCount; i++) {
             NewConnectionRespHandler simpleHandler = new NewConnectionRespHandler();
             try {
-                if (this.createNewCount()) {
+                if (!disabled.get() && this.createNewCount()) {
                     // creat new connection
                     this.createNewConnection(simpleHandler, null, schemas[i % schemas.length]);
                     simpleHandler.getBackConn().release();
@@ -553,4 +542,17 @@ public abstract class PhysicalDatasource {
     public int hashCode() {
         return super.hashCode();
     }
+
+    public boolean isDisabled() {
+        return disabled.get();
+    }
+
+    public boolean setDisabled(boolean value) {
+        if (value) {
+            return disabled.compareAndSet(false, true);
+        } else {
+            return disabled.compareAndSet(true, false);
+        }
+    }
+
 }

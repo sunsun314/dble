@@ -37,6 +37,7 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
         PhysicalDatasource[] disabled = standbyReadSourcesMap.get(new Integer(0));
         putAllIntoMap(read);
         putAllIntoMap(disabled);
+        setDataSourceProps();
     }
 
     @Override
@@ -264,9 +265,16 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
         throw new RuntimeException("not allowed here");
     }
 
+
     @Override
     public int next(int i) {
         return 0;
+    }
+
+    private void setDataSourceProps() {
+        for (PhysicalDatasource ds : this.allSourceMap.values()) {
+            ds.setDbPool(this);
+        }
     }
 
 
@@ -372,5 +380,38 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
         }
 
         return okSources;
+    }
+
+
+    public void disableHosts(String hostNames) {
+        String[] nameList = hostNames == null ? (String[]) allSourceMap.keySet().toArray() : hostNames.split(",");
+
+        adjustLock.writeLock().lock();
+        try {
+            for (String dsName : nameList) {
+                PhysicalDatasource datasource = allSourceMap.get(dsName);
+                if (datasource.setDisabled(true)) {
+                    //clear old resource
+                    datasource.clearCons("ha command disable datasource");
+                    datasource.stopHeartbeat();
+                }
+            }
+        } finally {
+            adjustLock.writeLock().unlock();
+        }
+    }
+
+
+    public void enableHosts(String hostNames) {
+        String[] nameList = hostNames == null ? (String[]) allSourceMap.keySet().toArray() : hostNames.split(",");
+        adjustLock.writeLock().lock();
+        try {
+            for (String dsName : nameList) {
+                PhysicalDatasource datasource = allSourceMap.get(dsName);
+                datasource.setDisabled(false);
+            }
+        } finally {
+            adjustLock.writeLock().unlock();
+        }
     }
 }
