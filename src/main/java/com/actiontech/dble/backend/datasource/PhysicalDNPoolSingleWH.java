@@ -9,6 +9,7 @@ import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.backend.mysql.nio.handler.GetConnectionHandler;
 import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
 import com.actiontech.dble.config.model.DataHostConfig;
+import com.actiontech.dble.singleton.HaConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -383,8 +384,8 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
     }
 
 
-    public void disableHosts(String hostNames) {
-        String[] nameList = hostNames == null ? (String[]) allSourceMap.keySet().toArray() : hostNames.split(",");
+    public void disableHosts(String hostNames, boolean syncWriteConf) {
+        String[] nameList = hostNames == null ? Arrays.copyOf(allSourceMap.keySet().toArray(), allSourceMap.keySet().toArray().length, String[].class) : hostNames.split(",");
 
         adjustLock.writeLock().lock();
         try {
@@ -396,6 +397,9 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
                     datasource.stopHeartbeat();
                 }
             }
+
+            HaConfigManager.getInstance().updateConfDataHost(this, syncWriteConf);
+
         } finally {
             adjustLock.writeLock().unlock();
         }

@@ -354,7 +354,11 @@ public abstract class PhysicalDatasource {
 
                         @Override
                         public void connectionAcquired(BackendConnection conn) {
-                            takeCon(conn, handler, attachment, schema);
+                            if (disabled.get()) {
+                                handler.connectionError(new IOException("dataSource disabled"), conn);
+                            } else {
+                                takeCon(conn, handler, attachment, schema);
+                            }
                         }
                     }, schema);
                 } catch (IOException e) {
@@ -380,6 +384,10 @@ public abstract class PhysicalDatasource {
                 AlertUtil.alert(AlarmCode.REACH_MAX_CON, Alert.AlertLevel.WARN, maxConError, "dble", this.getConfig().getId(), labels);
                 ToResolveContainer.REACH_MAX_CON.add(this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
                 throw new IOException(maxConError);
+            } else if (this.disabled.get()) {
+                String disableError = "the Datasource is turned into disabled " + this.getHostConfig().getName() + "-" + this.getConfig().getHostName();
+                LOGGER.warn(disableError);
+                throw new IOException(disableError);
             } else { // create connection
                 if (ToResolveContainer.REACH_MAX_CON.contains(this.getHostConfig().getName() + "-" + this.getConfig().getHostName())) {
                     Map<String, String> labels = AlertUtil.genSingleLabel("data_host", this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
@@ -404,6 +412,10 @@ public abstract class PhysicalDatasource {
                 AlertUtil.alert(AlarmCode.REACH_MAX_CON, Alert.AlertLevel.WARN, maxConError, "dble", this.getConfig().getId(), labels);
                 ToResolveContainer.REACH_MAX_CON.add(this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
                 throw new IOException(maxConError);
+            } else if (this.disabled.get()) {
+                String disableError = "the Datasource is turned into disabled " + this.getHostConfig().getName() + "-" + this.getConfig().getHostName();
+                LOGGER.warn(disableError);
+                throw new IOException(disableError);
             } else { // create connection
                 if (ToResolveContainer.REACH_MAX_CON.contains(this.getHostConfig().getName() + "-" + this.getConfig().getHostName())) {
                     Map<String, String> labels = AlertUtil.genSingleLabel("data_host", this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
@@ -422,12 +434,14 @@ public abstract class PhysicalDatasource {
     public BackendConnection getConnectionForHeartbeat(String schema, boolean autocommit) throws IOException {
         BackendConnection con = this.conMap.tryTakeCon(schema, autocommit);
         if (con == null) {
-            if (!this.createNewCount()) {
-                LOGGER.warn("no ilde connection in pool and reached maxCon,create new connection for heartbeat ");
-                con = createNewBackendConnection(schema);
-            } else { // create connection
-                LOGGER.info("no ilde connection in pool,create new connection for heartbeat ");
-                con = createNewBackendConnection(schema);
+            if (!disabled.get()) {
+                if (!this.createNewCount()) {
+                    LOGGER.warn("no ilde connection in pool and reached maxCon,create new connection for heartbeat ");
+                    con = createNewBackendConnection(schema);
+                } else { // create connection
+                    LOGGER.info("no ilde connection in pool,create new connection for heartbeat ");
+                    con = createNewBackendConnection(schema);
+                }
             }
         }
         con = takeCon(con, schema);
@@ -525,7 +539,7 @@ public abstract class PhysicalDatasource {
     }
 
     public boolean isAlive() {
-        return heartbeat.isHeartBeatOK() || (heartbeat.isStop() && testConnSuccess);
+        return !disabled.get() && (heartbeat.isHeartBeatOK() || (heartbeat.isStop() && testConnSuccess));
     }
 
 
@@ -553,6 +567,15 @@ public abstract class PhysicalDatasource {
         } else {
             return disabled.compareAndSet(true, false);
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("");
+        return sb.append("dataSource[name=").append(name)
+                .append(",disabled=")
+                .append(disabled.toString()).append(",maxCon=")
+                .append(size).append("]").toString();
     }
 
 }
