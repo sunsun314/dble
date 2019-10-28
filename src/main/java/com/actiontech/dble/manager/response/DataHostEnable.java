@@ -27,7 +27,7 @@ public class DataHostEnable {
 
         if (dataHost instanceof PhysicalDNPoolSingleWH) {
             PhysicalDNPoolSingleWH dh = (PhysicalDNPoolSingleWH) dataHost;
-            dh.enableHosts(subHostName);
+            dh.enableHosts(subHostName, true);
         } else {
             mc.writeErrMessage(ErrorCode.ER_YES, "dataHost " + dhName + " do not exists");
         }

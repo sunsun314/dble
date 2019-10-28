@@ -1,15 +1,20 @@
 package com.actiontech.dble.singleton;
 
+import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH;
-import com.actiontech.dble.cluster.ClusterPathUtil;
+import com.actiontech.dble.config.loader.console.ZookeeperPath;
 import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
 import com.actiontech.dble.config.loader.zkprocess.parse.ParseXmlServiceInf;
 import com.actiontech.dble.config.loader.zkprocess.parse.XmlProcessBase;
 import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
 import com.actiontech.dble.config.util.SchemaWriteJob;
+import com.actiontech.dble.util.ResourceUtil;
+import io.netty.util.internal.ConcurrentSet;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -28,14 +33,33 @@ public class HaConfigManager {
     private volatile Set<PhysicalDNPoolSingleWH> waitingSet = new HashSet<>();
 
     private HaConfigManager() {
-        XmlProcessBase xmlProcess = new XmlProcessBase();
-        this.parseSchemaXmlService = new SchemasParseXmlImpl(xmlProcess);
+        try {
+            XmlProcessBase xmlProcess = new XmlProcessBase();
+            xmlProcess.addParseClass(Schemas.class);
+            xmlProcess.initJaxbClass();
+            this.parseSchemaXmlService = new SchemasParseXmlImpl(xmlProcess);
+        } catch (Exception e) {
+
+        }
+
     }
 
     public void init() {
-        schema = this.parseSchemaXmlService.parseXmlToBean(ClusterPathUtil.UCORE_LOCAL_WRITE_PATH + WRITEPATH);
+        schema = this.parseSchemaXmlService.parseXmlToBean(WRITEPATH);
+        return;
     }
 
+    public void write(Schemas schemas) {
+        String path = ResourceUtil.getResourcePathFromRoot(ZookeeperPath.ZK_LOCAL_WRITE_PATH.getKey());
+        path = new File(path).getPath() + File.separator;
+        path += WRITEPATH;
+        this.parseSchemaXmlService.parseToXmlWrite(schemas, path, "schema");
+    }
+
+    public void finishAndNext() {
+        isWriting.set(false);
+        triggerNext();
+    }
 
     public void updateConfDataHost(PhysicalDNPoolSingleWH physicalDNPoolSingleWH, boolean syncWriteConf) {
         SchemaWriteJob thisTimeJob = null;
@@ -47,7 +71,7 @@ public class HaConfigManager {
                 schemaWriteJob = new SchemaWriteJob(waitingSet, schema);
                 thisTimeJob = schemaWriteJob;
                 waitingSet = new HashSet<>();
-                new Thread(schemaWriteJob).start();
+                DbleServer.getInstance().getComplexQueryExecutor().execute(schemaWriteJob);
             } finally {
                 adjustLock.writeLock().unlock();
             }
@@ -59,6 +83,7 @@ public class HaConfigManager {
             } finally {
                 adjustLock.readLock().unlock();
             }
+            triggerNext();
         }
         if (syncWriteConf) {
             //waitDone
@@ -68,12 +93,12 @@ public class HaConfigManager {
 
 
     public void triggerNext() {
-        if (isWriting.compareAndSet(false, true)) {
+        if (waitingSet.size() != 0 && isWriting.compareAndSet(false, true)) {
             adjustLock.writeLock().lock();
             try {
                 schemaWriteJob = new SchemaWriteJob(waitingSet, schema);
                 waitingSet = new HashSet<>();
-                new Thread(schemaWriteJob).start();
+                DbleServer.getInstance().getComplexQueryExecutor().execute(schemaWriteJob);
             } finally {
                 adjustLock.writeLock().unlock();
             }

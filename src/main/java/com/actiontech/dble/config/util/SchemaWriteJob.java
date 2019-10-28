@@ -6,6 +6,7 @@ import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
+import com.actiontech.dble.singleton.HaConfigManager;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
@@ -40,8 +41,8 @@ public class SchemaWriteJob implements Runnable {
                 }
             }
         }
-
-
+        HaConfigManager.getInstance().write(schemas);
+        HaConfigManager.getInstance().finishAndNext();
         lock.lock();
         try {
             finish = true;
@@ -62,7 +63,7 @@ public class SchemaWriteJob implements Runnable {
         w.setWeight("" + ws.getConfig().getWeight());
         w.setUser(ws.getConfig().getUser());
         WriteHost ow = dh.getWriteHost().get(0);
-        if (ow.getId().equals(ws.getConfig().getId())) {
+        if (ow.getHost().equals(ws.getConfig().getHostName())) {
             w.setPassword(ow.getPassword());
             w.setUsingDecrypt(ow.getUsingDecrypt());
         } else {

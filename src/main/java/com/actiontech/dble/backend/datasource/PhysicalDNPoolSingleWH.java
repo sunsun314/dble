@@ -406,7 +406,7 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
     }
 
 
-    public void enableHosts(String hostNames) {
+    public void enableHosts(String hostNames, boolean syncWriteConf) {
         String[] nameList = hostNames == null ? (String[]) allSourceMap.keySet().toArray() : hostNames.split(",");
         adjustLock.writeLock().lock();
         try {
@@ -414,6 +414,8 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
                 PhysicalDatasource datasource = allSourceMap.get(dsName);
                 datasource.setDisabled(false);
             }
+
+            HaConfigManager.getInstance().updateConfDataHost(this, syncWriteConf);
         } finally {
             adjustLock.writeLock().unlock();
         }
