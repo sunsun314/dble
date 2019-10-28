@@ -19,7 +19,8 @@ public class DataHostHandler {
             "\\s*(node\\s*=\\s*'([a-zA-Z_0-9\\-\\,]+)')?$", Pattern.CASE_INSENSITIVE);
     private static final Pattern PATTERN_DH_ENABLE = Pattern.compile("^\\s*dataHost\\s*@@enable\\s*name\\s*=\\s*'([a-zA-Z_0-9\\-]+)'" +
             "\\s*(node\\s*=\\s*'([a-zA-Z_0-9\\-\\,]+)')?$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern PATTERN_DH_SWITCH = Pattern.compile("", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_DH_SWITCH = Pattern.compile("^dataHost\\s*@@switch\\s*name\\s*=\\s*'([a-zA-Z_0-9\\-\\,]+)'" +
+            "\\s*master\\s*=\\s*'([a-zA-Z_0-9\\-\\,]+)'\\s*$", Pattern.CASE_INSENSITIVE);
 
 
     private DataHostHandler() {
@@ -27,7 +28,7 @@ public class DataHostHandler {
 
     public static void handle(String stmt, ManagerConnection c) {
         Matcher disable = PATTERN_DH_DISABLE.matcher(stmt);
-        Matcher enable = PATTERN_DH_DISABLE.matcher(stmt);
+        Matcher enable = PATTERN_DH_ENABLE.matcher(stmt);
         Matcher switcher = PATTERN_DH_SWITCH.matcher(stmt);
         if (disable.matches()) {
             DataHostDisable.execute(disable, c);
@@ -40,4 +41,6 @@ public class DataHostHandler {
         }
 
     }
+
+
 }

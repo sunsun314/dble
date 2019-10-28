@@ -90,7 +90,7 @@ public class SchemaWriteJob implements Runnable {
                 r.setUsingDecrypt(ow.getUsingDecrypt());
             } else {
                 for (ReadHost rh : ow1.getReadHost()) {
-                    if (rh.getId().equals(r.getId())) {
+                    if (rh.getHost().equals(r.getHost())) {
                         r.setPassword(rh.getPassword());
                         r.setUsingDecrypt(rh.getUsingDecrypt());
                     }

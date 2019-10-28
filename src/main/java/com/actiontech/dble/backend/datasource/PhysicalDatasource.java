@@ -110,6 +110,10 @@ public abstract class PhysicalDatasource {
         return readNode;
     }
 
+    public void setReadNode(boolean value) {
+        this.readNode = value;
+    }
+
     public int getSize() {
         return size;
     }

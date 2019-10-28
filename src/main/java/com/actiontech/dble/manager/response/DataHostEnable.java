@@ -5,6 +5,7 @@ import com.actiontech.dble.backend.datasource.AbstractPhysicalDBPool;
 import com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.net.mysql.OkPacket;
 
 import java.util.regex.Matcher;
 
@@ -28,6 +29,12 @@ public class DataHostEnable {
         if (dataHost instanceof PhysicalDNPoolSingleWH) {
             PhysicalDNPoolSingleWH dh = (PhysicalDNPoolSingleWH) dataHost;
             dh.enableHosts(subHostName, true);
+
+            OkPacket packet = new OkPacket();
+            packet.setPacketId(1);
+            packet.setAffectedRows(0);
+            packet.setServerStatus(2);
+            packet.write(mc);
         } else {
             mc.writeErrMessage(ErrorCode.ER_YES, "dataHost " + dhName + " do not exists");
         }
