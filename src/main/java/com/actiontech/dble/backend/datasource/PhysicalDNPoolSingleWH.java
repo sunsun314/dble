@@ -167,7 +167,7 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
             AlertUtil.alert(AlarmCode.DATA_HOST_CAN_NOT_REACH, Alert.AlertLevel.WARN, heartbeatError, "mysql", theNode.getConfig().getId(), labels);
             throw new IOException(heartbeatError);
         }
-        theNode.getConnection(schema, autocommit, handler, attachment);
+        theNode.getConnection(schema, autocommit, handler, attachment, false);
     }
 
     @Override
@@ -223,7 +223,7 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
             PhysicalDatasource theNode = getReadNode();
             if (theNode != null) {
                 theNode.setReadCount();
-                theNode.getConnection(schema, autocommit, handler, attachment);
+                theNode.getConnection(schema, autocommit, handler, attachment, false);
                 return true;
             } else {
                 LOGGER.info("read host is not available.");
@@ -426,6 +426,11 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
         try {
             PhysicalDatasource newWriteHost = allSourceMap.get(writeHost);
             writeSource.setReadNode(true);
+            if (writeSource.setDisabled(true)) {
+                //clear old resource
+                writeSource.clearCons("ha command switch datasource");
+                writeSource.stopHeartbeat();
+            }
             newWriteHost.setReadNode(false);
             writeSource = newWriteHost;
             HaConfigManager.getInstance().updateConfDataHost(this, syncWriteConf);

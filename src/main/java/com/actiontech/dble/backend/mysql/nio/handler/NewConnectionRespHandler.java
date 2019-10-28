@@ -33,6 +33,7 @@ public class NewConnectionRespHandler implements ResponseHandler {
             if (backConn == null) {
                 throw new IOException(errMsg);
             } else if (((MySQLConnection) backConn).getPool().isDisabled()) {
+                backConn.close("DataSource turned into disabled");
                 throw new IOException("DataSource " + ((MySQLConnection) backConn).getPool().toString() + " is disabled");
             }
             return backConn;

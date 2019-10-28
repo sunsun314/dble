@@ -451,7 +451,7 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
             AlertUtil.alert(AlarmCode.DATA_HOST_CAN_NOT_REACH, Alert.AlertLevel.WARN, heartbeatError, "mysql", theNode.getConfig().getId(), labels);
             throw new IOException(heartbeatError);
         }
-        theNode.getConnection(schema, autocommit, handler, attachment);
+        theNode.getConnection(schema, autocommit, handler, attachment, false);
     }
 
     PhysicalDatasource getRWBalanceNode() {
@@ -551,7 +551,7 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
             theNode = getReadNode();
             if (theNode != null) {
                 theNode.setReadCount();
-                theNode.getConnection(schema, autocommit, handler, attachment);
+                theNode.getConnection(schema, autocommit, handler, attachment, false);
                 return true;
             } else {
                 LOGGER.info("read host is not available.");

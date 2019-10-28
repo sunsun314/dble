@@ -255,7 +255,7 @@ public abstract class PhysicalDatasource {
             try {
                 if (!disabled.get() && this.createNewCount()) {
                     // creat new connection
-                    this.createNewConnection(simpleHandler, null, schemas[i % schemas.length]);
+                    this.createNewConnection(simpleHandler, null, schemas[i % schemas.length], false);
                     simpleHandler.getBackConn().release();
                 } else {
                     break;
@@ -342,7 +342,7 @@ public abstract class PhysicalDatasource {
     }
 
     private void createNewConnection(final ResponseHandler handler, final Object attachment,
-                                     final String schema) {
+                                     final String schema, final boolean mustWrite) {
         // aysn create connection
         DbleServer.getInstance().getComplexQueryExecutor().execute(new Runnable() {
             public void run() {
@@ -360,6 +360,8 @@ public abstract class PhysicalDatasource {
                         public void connectionAcquired(BackendConnection conn) {
                             if (disabled.get()) {
                                 handler.connectionError(new IOException("dataSource disabled"), conn);
+                            } else if (mustWrite && isReadNode()) {
+                                handler.connectionError(new IOException("writeSrouce switched"), conn);
                             } else {
                                 takeCon(conn, handler, attachment, schema);
                             }
@@ -375,7 +377,7 @@ public abstract class PhysicalDatasource {
     public abstract void createNewConnection(ResponseHandler handler, String schema) throws IOException;
 
     public void getConnection(String schema, boolean autocommit, final ResponseHandler handler,
-                              final Object attachment) throws IOException {
+                              final Object attachment, boolean mustWrite) throws IOException {
 
         BackendConnection con = this.conMap.tryTakeCon(schema, autocommit);
         if (con != null) {
@@ -400,7 +402,7 @@ public abstract class PhysicalDatasource {
 
                 }
                 LOGGER.info("no idle connection in pool,create new connection for " + this.name + " of schema " + schema);
-                createNewConnection(handler, attachment, schema);
+                createNewConnection(handler, attachment, schema, mustWrite);
             }
         }
     }
@@ -478,7 +480,7 @@ public abstract class PhysicalDatasource {
         LOGGER.info("create new connection for " +
                 this.name + " of schema " + schema);
         if (this.createNewCount()) {
-            createNewConnection(handler, attachment, schema);
+            createNewConnection(handler, attachment, schema, false);
         }
     }
 

@@ -45,7 +45,7 @@ public class SetTestJob implements ResponseHandler, Runnable {
         try {
             Map<String, AbstractPhysicalDBPool> dataHosts = DbleServer.getInstance().getConfig().getDataHosts();
             for (AbstractPhysicalDBPool dn : dataHosts.values()) {
-                dn.getSource().getConnection(databaseName, true, this, null);
+                dn.getSource().getConnection(databaseName, true, this, null, false);
                 break;
             }
         } catch (Exception e) {

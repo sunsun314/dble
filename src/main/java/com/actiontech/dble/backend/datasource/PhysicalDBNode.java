@@ -61,7 +61,7 @@ public class PhysicalDBNode {
         if (ds == null) {
             throw new RuntimeException("can't find exits connection, maybe finished " + exitsCon);
         } else {
-            ds.getConnection(schema, autocommit, handler, attachment);
+            ds.getConnection(schema, autocommit, handler, attachment, false);
         }
     }
 
@@ -132,8 +132,9 @@ public class PhysicalDBNode {
             if (writeSource.getConfig().isDisabled()) {
                 throw new IllegalArgumentException("[" + writeSource.getHostConfig().getName() + "." + writeSource.getConfig().getHostName() + "] is disabled");
             }
+
             writeSource.setWriteCount();
-            writeSource.getConnection(schema, autoCommit, handler, attachment);
+            writeSource.getConnection(schema, autoCommit, handler, attachment, true);
         } else {
             throw new IllegalArgumentException("Invalid DataSource:" + dbPool.getActiveIndex());
         }
