@@ -426,11 +426,8 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
         try {
             PhysicalDatasource newWriteHost = allSourceMap.get(writeHost);
             writeSource.setReadNode(true);
-            if (writeSource.setDisabled(true)) {
-                //clear old resource
-                writeSource.clearCons("ha command switch datasource");
-                writeSource.stopHeartbeat();
-            }
+            //close all old master connection ,so that new write query would not put into the old writeHost
+            writeSource.clearCons("ha command switch datasource");
             newWriteHost.setReadNode(false);
             writeSource = newWriteHost;
             HaConfigManager.getInstance().updateConfDataHost(this, syncWriteConf);
