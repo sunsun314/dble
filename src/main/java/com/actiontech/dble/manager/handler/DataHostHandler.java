@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Created by szf on 2019/10/22.
  */
-public class DataHostHandler {
+public final class DataHostHandler {
 
 
     private static final Pattern PATTERN_DH_DISABLE = Pattern.compile("^\\s*dataHost\\s*@@disable\\s*name\\s*=\\s*'([a-zA-Z_0-9\\-]+)'" +

@@ -38,9 +38,9 @@ public class DataHostHaResponse implements ClusterXmlLoader {
         } else {
             //data_host_locks events,we only try to response to the DISABLE,ignore others
             HaInfo info = new HaInfo(configValue.getValue());
-            if (info.getLockType() == HaInfo.HaType.DATAHOST_DISABLE
-                    && !info.getStartId().equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID))
-                    && info.getStatus() == HaInfo.HaStatus.SUCCESS) {
+            if (info.getLockType() == HaInfo.HaType.DATAHOST_DISABLE &&
+                    !info.getStartId().equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID)) &&
+                    info.getStatus() == HaInfo.HaStatus.SUCCESS) {
                 KvBean lastestStatus = ClusterHelper.getKV(ClusterPathUtil.getHaStatusPath(info.getDhName()));
                 PhysicalDNPoolSingleWH dataHost = (PhysicalDNPoolSingleWH) DbleServer.getInstance().getConfig().getDataHosts().get(info.getDhName());
                 dataHost.changeIntoLastestStatus(lastestStatus.getValue());
@@ -52,7 +52,7 @@ public class DataHostHaResponse implements ClusterXmlLoader {
     @Override
     public void notifyCluster() throws Exception {
         HaConfigManager.getInstance().init();
-        if ("true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID))) {
+        if ("true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
             Map<String, String> map = HaConfigManager.getInstance().getSourceJsonList();
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 ClusterHelper.setKV(ClusterPathUtil.getHaStatusPath(entry.getKey()), entry.getValue());

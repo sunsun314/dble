@@ -578,10 +578,10 @@ public abstract class PhysicalDatasource {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("");
-        return sb.append("dataSource[name=").append(name)
-                .append(",disabled=")
-                .append(disabled.toString()).append(",maxCon=")
-                .append(size).append("]").toString();
+        return sb.append("dataSource[name=").append(name).
+                append(",disabled=").
+                append(disabled.toString()).append(",maxCon=").
+                append(size).append("]").toString();
     }
 
 }

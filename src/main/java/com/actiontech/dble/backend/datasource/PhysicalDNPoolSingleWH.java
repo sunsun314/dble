@@ -8,7 +8,6 @@ import com.actiontech.dble.backend.heartbeat.MySQLHeartbeat;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.backend.mysql.nio.handler.GetConnectionHandler;
 import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
-import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
 import com.actiontech.dble.config.model.DataHostConfig;
@@ -87,6 +86,18 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
     @Override
     public void init(int index) {
         init();
+    }
+
+    public void init() {
+        for (Map.Entry<String, PhysicalDatasource> entry : allSourceMap.entrySet()) {
+            if (initSource(entry.getValue())) {
+                initSuccess = true;
+                LOGGER.info(hostName + " " + entry.getKey() + " init success");
+            }
+        }
+        if (initSuccess) {
+            LOGGER.warn(hostName + " init failure");
+        }
     }
 
     @Override
@@ -287,18 +298,6 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
         }
     }
 
-
-    public void init() {
-        for (Map.Entry<String, PhysicalDatasource> entry : allSourceMap.entrySet()) {
-            if (initSource(entry.getValue())) {
-                initSuccess = true;
-                LOGGER.info(hostName + " " + entry.getKey() + " init success");
-            }
-        }
-        if (initSuccess) {
-            LOGGER.warn(hostName + " init failure");
-        }
-    }
 
     private void putAllIntoMap(PhysicalDatasource[] source) {
         if (source != null && source.length > 0) {

@@ -2,7 +2,6 @@ package com.actiontech.dble.singleton;
 
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH;
-import com.actiontech.dble.backend.datasource.PhysicalDatasource;
 import com.actiontech.dble.config.loader.console.ZookeeperPath;
 import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
@@ -15,11 +14,9 @@ import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceS
 import com.actiontech.dble.config.util.SchemaWriteJob;
 import com.actiontech.dble.util.ResourceUtil;
 import com.alibaba.fastjson.JSONObject;
-import io.netty.util.internal.ConcurrentSet;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -30,7 +27,7 @@ import static com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH.JSON
 /**
  * Created by szf on 2019/10/23.
  */
-public class HaConfigManager {
+public final class HaConfigManager {
 
     private static final HaConfigManager INSTANCE = new HaConfigManager();
     private ParseXmlServiceInf<Schemas> parseSchemaXmlService;
@@ -48,9 +45,8 @@ public class HaConfigManager {
             xmlProcess.initJaxbClass();
             this.parseSchemaXmlService = new SchemasParseXmlImpl(xmlProcess);
         } catch (Exception e) {
-
+            throw new RuntimeException(e);
         }
-
     }
 
     public void init() {

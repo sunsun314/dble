@@ -3,7 +3,6 @@ package com.actiontech.dble.manager.response;
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.AbstractPhysicalDBPool;
 import com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH;
-import com.actiontech.dble.backend.datasource.PhysicalDatasource;
 import com.actiontech.dble.cluster.ClusterHelper;
 import com.actiontech.dble.cluster.ClusterParamCfg;
 import com.actiontech.dble.cluster.ClusterPathUtil;
@@ -21,7 +20,11 @@ import static com.actiontech.dble.util.KVPathUtil.SEPARATOR;
 /**
  * Created by szf on 2019/10/22.
  */
-public class DataHostDisable {
+public final class DataHostDisable {
+
+    private DataHostDisable() {
+
+    }
 
     public static void execute(Matcher disable, ManagerConnection mc) {
         String dhName = disable.group(1);
@@ -29,7 +32,6 @@ public class DataHostDisable {
         boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID));
 
         //check the dataHost is exists
-
         AbstractPhysicalDBPool dataHost = DbleServer.getInstance().getConfig().getDataHosts().get(dhName);
         if (dataHost == null) {
             mc.writeErrMessage(ErrorCode.ER_YES, "dataHost " + dhName + " do not exists");

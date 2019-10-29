@@ -3,7 +3,6 @@ package com.actiontech.dble.manager.response;
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.AbstractPhysicalDBPool;
 import com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH;
-import com.actiontech.dble.backend.datasource.PhysicalDatasource;
 import com.actiontech.dble.cluster.ClusterHelper;
 import com.actiontech.dble.cluster.ClusterParamCfg;
 import com.actiontech.dble.cluster.ClusterPathUtil;
@@ -16,12 +15,15 @@ import com.actiontech.dble.singleton.ClusterGeneralConfig;
 
 import java.util.regex.Matcher;
 
-import static com.actiontech.dble.util.KVPathUtil.SEPARATOR;
 
 /**
  * Created by szf on 2019/10/22.
  */
-public class DataHostEnable {
+public final class DataHostEnable {
+
+    private DataHostEnable() {
+
+    }
 
     public static void execute(Matcher enable, ManagerConnection mc) {
         String dhName = enable.group(1);

@@ -5,7 +5,6 @@
 */
 package com.actiontech.dble.backend.datasource;
 
-import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;

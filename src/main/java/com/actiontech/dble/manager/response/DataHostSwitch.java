@@ -18,7 +18,11 @@ import java.util.regex.Matcher;
 /**
  * Created by szf on 2019/10/22.
  */
-public class DataHostSwitch {
+public final class DataHostSwitch {
+
+    private DataHostSwitch() {
+
+    }
 
     public static void execute(Matcher switcher, ManagerConnection mc) {
         String dhName = switcher.group(1);

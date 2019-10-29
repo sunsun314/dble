@@ -184,7 +184,7 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
                 // switch index
                 activeIndex = newIndex;
                 // init again
-                int result = this.InnerInit(activeIndex);
+                int result = this.innerInit(activeIndex);
                 if (result >= 0) {
                     DbleServer.getInstance().saveDataHostIndex(hostName, result, false);
                     // clear all connections
@@ -215,10 +215,10 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
     }
 
     public void init(int index) {
-        InnerInit(index);
+        innerInit(index);
     }
 
-    private int InnerInit(int index) {
+    private int innerInit(int index) {
         if (!checkIndex(index)) {
             index = 0;
         }
@@ -243,7 +243,7 @@ public class PhysicalDBPool extends AbstractPhysicalDBPool {
             LOGGER.info(hostName + "dataHost already inited doing nothing");
             return;
         }
-        InnerInit(index);
+        innerInit(index);
     }
 
     private boolean checkIndex(int i) {
