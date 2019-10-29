@@ -2,21 +2,30 @@ package com.actiontech.dble.singleton;
 
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH;
+import com.actiontech.dble.backend.datasource.PhysicalDatasource;
 import com.actiontech.dble.config.loader.console.ZookeeperPath;
 import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
+import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
+import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
+import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
 import com.actiontech.dble.config.loader.zkprocess.parse.ParseXmlServiceInf;
 import com.actiontech.dble.config.loader.zkprocess.parse.XmlProcessBase;
 import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
+import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
 import com.actiontech.dble.config.util.SchemaWriteJob;
 import com.actiontech.dble.util.ResourceUtil;
+import com.alibaba.fastjson.JSONObject;
 import io.netty.util.internal.ConcurrentSet;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import static com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH.JSON_LIST;
+import static com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH.JSON_NAME;
+import static com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH.JSON_WRITE_SOURCE;
 
 /**
  * Created by szf on 2019/10/23.
@@ -105,6 +114,24 @@ public class HaConfigManager {
         }
     }
 
+    public Map<String, String> getSourceJsonList() {
+        Map<String, String> map = new HashMap<>();
+        for (DataHost dh : schema.getDataHost()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(JSON_NAME, dh.getName());
+            List<DataSourceStatus> list = new ArrayList<>();
+            for (WriteHost wh : dh.getWriteHost()) {
+                list.add(new DataSourceStatus(wh.getHost(), "true".equals(wh.getDisabled()), false));
+                jsonObject.put(JSON_WRITE_SOURCE, new DataSourceStatus(wh.getHost(), "true".equals(wh.getDisabled()), false));
+                for (ReadHost rh : wh.getReadHost()) {
+                    list.add(new DataSourceStatus(rh.getHost(), "false".equals(rh.getDisabled()), true));
+                }
+            }
+            jsonObject.put(JSON_LIST, list);
+            map.put(dh.getName(), jsonObject.toJSONString());
+        }
+        return map;
+    }
 
     public static HaConfigManager getInstance() {
         return INSTANCE;

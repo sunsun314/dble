@@ -8,12 +8,18 @@ import com.actiontech.dble.backend.heartbeat.MySQLHeartbeat;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.backend.mysql.nio.handler.GetConnectionHandler;
 import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
+import com.actiontech.dble.config.ErrorCode;
+import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
+import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
 import com.actiontech.dble.config.model.DataHostConfig;
 import com.actiontech.dble.singleton.HaConfigManager;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -24,6 +30,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PhysicalDNPoolSingleWH.class);
+    public static final String JSON_NAME = "dataHost";
+    public static final String JSON_LIST = "dataSources";
+    public static final String JSON_WRITE_SOURCE = "writeSource";
 
     private volatile PhysicalDatasource writeSource;
 
@@ -434,5 +443,71 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
         } finally {
             adjustLock.writeLock().unlock();
         }
+    }
+
+
+    public void changeIntoLastestStatus(String jsonStatus) {
+        adjustLock.writeLock().lock();
+        try {
+            JSONObject jsonObj = JSONObject.parseObject(jsonStatus);
+            JsonProcessBase base = new JsonProcessBase();
+            Type parseType = new TypeToken<List<DataSourceStatus>>() {
+            }.getType();
+            List<DataSourceStatus> list = base.toBeanformJson(jsonObj.getJSONArray(JSON_LIST).toJSONString(), parseType);
+            for (DataSourceStatus status : list) {
+                PhysicalDatasource phys = allSourceMap.get(status.getName());
+                if (phys != null) {
+                    if (phys.setDisabled(status.isDisable()) && status.isDisable()) {
+                        //clear old resource
+                        phys.clearCons("ha command disable datasource");
+                        phys.stopHeartbeat();
+                    }
+                    if (status.isWriteHost() &&
+                            phys != writeSource) {
+                        PhysicalDatasource newWriteHost = allSourceMap.get(phys);
+                        writeSource.setReadNode(true);
+                        writeSource.clearCons("ha command switch datasource");
+                        newWriteHost.setReadNode(false);
+                        writeSource = newWriteHost;
+                    }
+                } else {
+                    LOGGER.warn("Can match dataSource" + status.getName() + ".Check for the config file please");
+                }
+            }
+            HaConfigManager.getInstance().updateConfDataHost(this, false);
+        } finally {
+            adjustLock.writeLock().unlock();
+        }
+    }
+
+    public String getClusterHaJson() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(JSON_NAME, this.getHostName());
+        List<DataSourceStatus> list = new ArrayList<>();
+        for (PhysicalDatasource phys : allSourceMap.values()) {
+            list.add(new DataSourceStatus(phys.getName(), phys.isDisabled(), !phys.isReadNode()));
+        }
+        jsonObject.put(JSON_LIST, list);
+        jsonObject.put(JSON_WRITE_SOURCE, new DataSourceStatus(writeSource.getName(), writeSource.isDisabled(), !writeSource.isReadNode()));
+        return jsonObject.toJSONString();
+    }
+
+    public boolean checkDataSourceExist(String subHostName) {
+        //add check for subHostName
+        if (subHostName != null) {
+            for (String dn : subHostName.split(",")) {
+                boolean find = false;
+                for (PhysicalDatasource pds : this.getAllDataSources()) {
+                    if (pds.getName().equals(dn)) {
+                        find = true;
+                        break;
+                    }
+                }
+                if (!find) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
