@@ -12,7 +12,14 @@ import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.HaInfo;
 import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.net.mysql.OkPacket;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
+import com.actiontech.dble.util.KVPathUtil;
+import com.actiontech.dble.util.ZKUtils;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
 /**
@@ -23,6 +30,8 @@ public final class DataHostSwitch {
     private DataHostSwitch() {
 
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataHostSwitch.class);
 
     public static void execute(Matcher switcher, ManagerConnection mc) {
         String dhName = switcher.group(1);
@@ -44,7 +53,13 @@ public final class DataHostSwitch {
             }
 
             if (ClusterGeneralConfig.isUseGeneralCluster() && useCluster) {
-                switchWithCluster(dh, masterName, mc);
+                if (!switchWithCluster(dh, masterName, mc)) {
+                    return;
+                }
+            } else if (ClusterGeneralConfig.isUseZK() && useCluster) {
+                if (!switchWithZK(dh, masterName, mc)) {
+                    return;
+                }
             } else {
                 //dble start in single mode
                 dh.switchMaster(masterName, true);
@@ -60,7 +75,7 @@ public final class DataHostSwitch {
         }
     }
 
-    public static void switchWithCluster(PhysicalDNPoolSingleWH dh, String subHostName, ManagerConnection mc) {
+    public static boolean switchWithCluster(PhysicalDNPoolSingleWH dh, String subHostName, ManagerConnection mc) {
         //get the lock from ucore
         DistributeLock distributeLock = new DistributeLock(ClusterPathUtil.getHaLockPath(dh.getHostName()),
                 new HaInfo(dh.getHostName(),
@@ -72,15 +87,40 @@ public final class DataHostSwitch {
         try {
             if (!distributeLock.acquire()) {
                 mc.writeErrMessage(ErrorCode.ER_YES, "Other instance is changing the dataHost, please try again later.");
-                return;
+                return false;
             }
             dh.switchMaster(subHostName, false);
             ClusterHelper.setKV(ClusterPathUtil.getHaStatusPath(dh.getHostName()), dh.getClusterHaJson());
         } catch (Exception e) {
             mc.writeErrMessage(ErrorCode.ER_YES, e.getMessage());
-            return;
+            return false;
         } finally {
             distributeLock.release();
         }
+        return true;
+    }
+
+
+    public static boolean switchWithZK(PhysicalDNPoolSingleWH dh, String subHostName, ManagerConnection mc) {
+        CuratorFramework zkConn = ZKUtils.getConnection();
+        InterProcessMutex distributeLock = new InterProcessMutex(zkConn, KVPathUtil.getHaLockPath(dh.getHostName()));
+        try {
+            try {
+                if (!distributeLock.acquire(100, TimeUnit.MILLISECONDS)) {
+                    mc.writeErrMessage(ErrorCode.ER_YES, "Other instance is change the dataHost status");
+                    return false;
+                }
+                dh.switchMaster(subHostName, false);
+                DataHostDisable.setStatusToZK(ClusterPathUtil.getHaStatusPath(dh.getHostName()), zkConn, dh.getClusterHaJson());
+            } finally {
+                distributeLock.release();
+                LOGGER.info("reload config: release distributeLock " + KVPathUtil.getConfChangeLockPath() + " from zk");
+            }
+        } catch (Exception e) {
+            LOGGER.info("reload config using ZK failure", e);
+            mc.writeErrMessage(ErrorCode.ER_YES, e.getMessage());
+            return false;
+        }
+        return true;
     }
 }

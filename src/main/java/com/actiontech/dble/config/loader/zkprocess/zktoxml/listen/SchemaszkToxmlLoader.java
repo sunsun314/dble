@@ -5,13 +5,20 @@
 
 package com.actiontech.dble.config.loader.zkprocess.zktoxml.listen;
 
+import com.actiontech.dble.cluster.ClusterHelper;
+import com.actiontech.dble.cluster.ClusterParamCfg;
+import com.actiontech.dble.cluster.ClusterPathUtil;
+import com.actiontech.dble.cluster.bean.KvBean;
 import com.actiontech.dble.config.loader.console.ZookeeperPath;
 import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
 import com.actiontech.dble.config.loader.zkprocess.comm.ZookeeperProcessListen;
 import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
+import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
+import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datanode.DataNode;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.schema.Schema;
+import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
 import com.actiontech.dble.config.loader.zkprocess.parse.ParseJsonServiceInf;
 import com.actiontech.dble.config.loader.zkprocess.parse.ParseXmlServiceInf;
 import com.actiontech.dble.config.loader.zkprocess.parse.XmlProcessBase;
@@ -21,16 +28,24 @@ import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.json.
 import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.DataInf;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.DirectoryInf;
+import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkDirectoryImpl;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
+import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.util.KVPathUtil;
 import com.actiontech.dble.util.ResourceUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.reflect.TypeToken;
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.List;
+
+import static com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH.JSON_LIST;
+import static com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH.JSON_NAME;
 
 /**
  * SchemaszkToxmlLoader
@@ -103,6 +118,28 @@ public class SchemaszkToxmlLoader extends ZkMultiLoader implements NotifyService
         DataInf dataHostZkDirectory = this.getZkData(zkDirectory, KVPathUtil.DATA_HOST);
         List<DataHost> dataHostList = parseJsonDataHost.parseJsonToBean(dataHostZkDirectory.getDataValue());
         schema.setDataHost(dataHostList);
+        try {
+            if ("true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
+                List<String> valueList = getCurator().getChildren().forPath(KVPathUtil.getHaStatusPath());
+                if (valueList != null && valueList.size() > 0) {
+                    for (String value : valueList) {
+                        JSONObject jsonObj = JSONObject.parseObject(value);
+                        JsonProcessBase base = new JsonProcessBase();
+                        Type parseType = new TypeToken<List<DataSourceStatus>>() {
+                        }.getType();
+                        String dataHostName = jsonObj.getString(JSON_NAME);
+                        List<DataSourceStatus> list = base.toBeanformJson(jsonObj.getJSONArray(JSON_LIST).toJSONString(), parseType);
+                        for (DataHost dataHost : dataHostList) {
+                            if (dataHost.getName().equals(dataHostName)) {
+                                ClusterHelper.changeDataHostByStatus(dataHost, list);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.warn("get error try to write schema.xml");
+        }
 
         DataInf version = this.getZkData(zkDirectory, KVPathUtil.VERSION);
         schema.setVersion(version == null ? null : version.getDataValue());
@@ -111,5 +148,6 @@ public class SchemaszkToxmlLoader extends ZkMultiLoader implements NotifyService
         return schema;
 
     }
+
 
 }

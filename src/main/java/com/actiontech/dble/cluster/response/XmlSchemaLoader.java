@@ -89,7 +89,12 @@ public class XmlSchemaLoader implements ClusterXmlLoader {
                     String dataHostName = path[path.length - 1];
                     for (DataHost dataHost : dataHostList) {
                         if (dataHost.getName().equals(dataHostName)) {
-                            changeDataHostByStatus(dataHost, kv.getValue());
+                            JSONObject obj = JSONObject.parseObject(kv.getValue());
+                            JsonProcessBase base = new JsonProcessBase();
+                            Type parseType = new TypeToken<List<DataSourceStatus>>() {
+                            }.getType();
+                            List<DataSourceStatus> list = base.toBeanformJson(obj.getJSONArray(JSON_LIST).toJSONString(), parseType);
+                            ClusterHelper.changeDataHostByStatus(dataHost, list);
                         }
                     }
                 }
@@ -120,49 +125,6 @@ public class XmlSchemaLoader implements ClusterXmlLoader {
         schemas.put(ClusterPathUtil.DATA_HOST, schema.getDataHost());
         ClusterHelper.setKV(CONFIG_PATH, schemas.toJSONString());
 
-    }
-
-
-    private void changeDataHostByStatus(DataHost dataHost, String jsonValue) {
-        if (dataHost.getWriteHost().size() > 1) {
-            throw new RuntimeException("Multi-WriteHost is not allowed when use OutterHa ");
-        }
-        WriteHost writeHost = dataHost.getWriteHost().get(0);
-        JSONObject jsonObj = JSONObject.parseObject(jsonValue);
-        JsonProcessBase base = new JsonProcessBase();
-        Type parseType = new TypeToken<List<DataSourceStatus>>() {
-        }.getType();
-        List<DataSourceStatus> list = base.toBeanformJson(jsonObj.getJSONArray(JSON_LIST).toJSONString(), parseType);
-        WriteHost newWriteHost = null;
-        for (DataSourceStatus status : list) {
-            if (status.getName().equals(writeHost.getHost())) {
-                if (!status.isWriteHost()) {
-                    ReadHost change = new ReadHost(writeHost);
-                    change.setDisabled(status.isDisable() ? "true" : "false");
-                    writeHost.getReadHost().add(change);
-                } else {
-                    newWriteHost = writeHost;
-                    writeHost.setDisabled(status.isDisable() ? "true" : "false");
-                }
-            } else {
-                for (ReadHost read : writeHost.getReadHost()) {
-                    if (read.getHost().equals(status.getName())) {
-                        if (status.isWriteHost()) {
-                            newWriteHost = new WriteHost(read);
-                            writeHost.getReadHost().remove(read);
-                            newWriteHost.setDisabled(status.isDisable() ? "true" : "false");
-                            newWriteHost.setReadHost(writeHost.getReadHost());
-                        } else {
-                            read.setDisabled(status.isDisable() ? "true" : "false");
-                        }
-                    }
-                }
-            }
-        }
-        if (newWriteHost != null) {
-            dataHost.getWriteHost().remove(writeHost);
-            dataHost.getWriteHost().add(newWriteHost);
-        }
     }
 
 }

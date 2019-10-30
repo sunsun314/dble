@@ -8,11 +8,24 @@ import com.actiontech.dble.cluster.ClusterParamCfg;
 import com.actiontech.dble.cluster.ClusterPathUtil;
 import com.actiontech.dble.cluster.DistributeLock;
 import com.actiontech.dble.config.ErrorCode;
+import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.HaInfo;
 import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.net.mysql.OkPacket;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
+import com.actiontech.dble.util.KVPathUtil;
+import com.actiontech.dble.util.ZKUtils;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+import org.apache.curator.utils.ZKPaths;
+import org.apache.zookeeper.data.Stat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 import java.util.regex.Matcher;
 
 import static com.actiontech.dble.util.KVPathUtil.SEPARATOR;
@@ -21,6 +34,7 @@ import static com.actiontech.dble.util.KVPathUtil.SEPARATOR;
  * Created by szf on 2019/10/22.
  */
 public final class DataHostDisable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataHostDisable.class);
 
     private DataHostDisable() {
 
@@ -45,7 +59,13 @@ public final class DataHostDisable {
                 return;
             }
             if (ClusterGeneralConfig.isUseGeneralCluster() && useCluster) {
-                disableWithCluster(dh, subHostName, mc);
+                if (!disableWithCluster(dh, subHostName, mc)) {
+                    return;
+                }
+            } else if (ClusterGeneralConfig.isUseZK() && useCluster) {
+                if (!disableWithZK(dh, subHostName, mc)) {
+                    return;
+                }
             } else {
                 //dble start in single mode
                 dh.disableHosts(subHostName, true);
@@ -61,8 +81,72 @@ public final class DataHostDisable {
         }
     }
 
+    public static boolean disableWithZK(PhysicalDNPoolSingleWH dh, String subHostName, ManagerConnection mc) {
+        CuratorFramework zkConn = ZKUtils.getConnection();
+        InterProcessMutex distributeLock = new InterProcessMutex(zkConn, KVPathUtil.getHaLockPath(dh.getHostName()));
+        try {
+            try {
+                if (!distributeLock.acquire(100, TimeUnit.MILLISECONDS)) {
+                    mc.writeErrMessage(ErrorCode.ER_YES, "Other instance is change the dataHost status");
+                    return false;
+                }
+                dh.disableHosts(subHostName, false);
+                setStatusToZK(ClusterPathUtil.getHaStatusPath(dh.getHostName()), zkConn, dh.getClusterHaJson());
+                ZKUtils.createTempNode(KVPathUtil.getHaStatusPath(dh.getHostName()), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID), ClusterPathUtil.SUCCESS.getBytes(StandardCharsets.UTF_8));
+                String errorMessage = isZKfinished(zkConn, KVPathUtil.getHaStatusPath(dh.getHostName()));
+                if (errorMessage != null && !"".equals(errorMessage)) {
+                    mc.writeErrMessage(ErrorCode.ER_YES, errorMessage);
+                    return false;
+                }
+            } finally {
+                distributeLock.release();
+                LOGGER.info("reload config: release distributeLock " + KVPathUtil.getConfChangeLockPath() + " from zk");
+            }
+        } catch (Exception e) {
+            LOGGER.info("reload config using ZK failure", e);
+            mc.writeErrMessage(ErrorCode.ER_YES, e.getMessage());
+            return false;
+        }
+        return true;
+    }
 
-    public static void disableWithCluster(PhysicalDNPoolSingleWH dh, String subHostName, ManagerConnection mc) {
+    public static void setStatusToZK(String nodePath, CuratorFramework curator, String value) throws Exception {
+        Stat stat = curator.checkExists().forPath(nodePath);
+        if (null == stat) {
+            ZKPaths.mkdirs(curator.getZookeeperClient().getZooKeeper(), nodePath);
+        }
+        LOGGER.debug("ZkMultiLoader write file :" + nodePath + ", value :" + value);
+        curator.setData().inBackground().forPath(nodePath, value.getBytes());
+    }
+
+
+    public static String isZKfinished(CuratorFramework zkConn, String preparePath) {
+        try {
+            List<String> preparedList = zkConn.getChildren().forPath(preparePath);
+            List<String> onlineList = zkConn.getChildren().forPath(KVPathUtil.getOnlinePath());
+
+            StringBuilder errorMsg = new StringBuilder();
+            while (preparedList.size() < onlineList.size()) {
+                LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(1000));
+                onlineList = zkConn.getChildren().forPath(KVPathUtil.getOnlinePath());
+                preparedList = zkConn.getChildren().forPath(preparePath);
+            }
+            for (String preparedNode : preparedList) {
+                String nodePath = ZKPaths.makePath(preparePath, preparedNode);
+                byte[] resultStatus = zkConn.getData().forPath(nodePath);
+                String data = new String(resultStatus, StandardCharsets.UTF_8);
+                if (!ClusterPathUtil.SUCCESS.equals(data)) {
+                    errorMsg.append(preparedNode).append(":").append(data).append("\n");
+                }
+                zkConn.delete().forPath(ZKPaths.makePath(KVPathUtil.getConfStatusPath(), preparedNode));
+            }
+            return errorMsg.toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    public static boolean disableWithCluster(PhysicalDNPoolSingleWH dh, String subHostName, ManagerConnection mc) {
         //get the lock from ucore
         DistributeLock distributeLock = new DistributeLock(ClusterPathUtil.getHaLockPath(dh.getHostName()),
                 new HaInfo(dh.getHostName(),
@@ -74,11 +158,10 @@ public final class DataHostDisable {
         try {
             if (!distributeLock.acquire()) {
                 mc.writeErrMessage(ErrorCode.ER_YES, "Other instance is changing the dataHost, please try again later.");
-                return;
+                return false;
             }
             dh.disableHosts(subHostName, false);
             ClusterHelper.setKV(ClusterPathUtil.getHaStatusPath(dh.getHostName()), dh.getClusterHaJson());
-
             ClusterHelper.setKV(ClusterPathUtil.getHaLockPath(dh.getHostName()),
                     new HaInfo(dh.getHostName(),
                             ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID),
@@ -92,10 +175,11 @@ public final class DataHostDisable {
             }
         } catch (Exception e) {
             mc.writeErrMessage(ErrorCode.ER_YES, e.getMessage());
-            return;
+            return false;
         } finally {
             ClusterHelper.cleanPath(ClusterPathUtil.getHaLockPath(dh.getHostName()) + SEPARATOR);
             distributeLock.release();
         }
+        return true;
     }
 }
