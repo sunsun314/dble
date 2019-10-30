@@ -5,6 +5,10 @@
 
 package com.actiontech.dble.cluster.response;
 
+import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
+import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
+import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
+import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.cluster.ClusterHelper;
 import com.actiontech.dble.cluster.ClusterParamCfg;
@@ -24,11 +28,15 @@ import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.json.
 import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
 import com.actiontech.dble.util.ResourceUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.List;
+
+import static com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH.JSON_LIST;
 
 /**
  * Created by szf on 2018/1/26.
@@ -73,6 +81,20 @@ public class XmlSchemaLoader implements ClusterXmlLoader {
 
         List<DataHost> dataHostList = parseJsonDataHost.parseJsonToBean(jsonObj.getJSONArray(ClusterPathUtil.DATA_HOST).toJSONString());
         schema.setDataHost(dataHostList);
+        if ("true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
+            List<KvBean> statusKVList = ClusterHelper.getKVPath(ClusterPathUtil.getHaStatusPath());
+            if (statusKVList != null && statusKVList.size() > 0) {
+                for (KvBean kv : statusKVList) {
+                    String[] path = kv.getKey().split("/");
+                    String dataHostName = path[path.length - 1];
+                    for (DataHost dataHost : dataHostList) {
+                        if (dataHost.getName().equals(dataHostName)) {
+                            changeDataHostByStatus(dataHost, kv.getValue());
+                        }
+                    }
+                }
+            }
+        }
 
         schema.setVersion(jsonObj.getString(ClusterPathUtil.VERSION));
 
@@ -98,6 +120,49 @@ public class XmlSchemaLoader implements ClusterXmlLoader {
         schemas.put(ClusterPathUtil.DATA_HOST, schema.getDataHost());
         ClusterHelper.setKV(CONFIG_PATH, schemas.toJSONString());
 
+    }
+
+
+    private void changeDataHostByStatus(DataHost dataHost, String jsonValue) {
+        if (dataHost.getWriteHost().size() > 1) {
+            throw new RuntimeException("Multi-WriteHost is not allowed when use OutterHa ");
+        }
+        WriteHost writeHost = dataHost.getWriteHost().get(0);
+        JSONObject jsonObj = JSONObject.parseObject(jsonValue);
+        JsonProcessBase base = new JsonProcessBase();
+        Type parseType = new TypeToken<List<DataSourceStatus>>() {
+        }.getType();
+        List<DataSourceStatus> list = base.toBeanformJson(jsonObj.getJSONArray(JSON_LIST).toJSONString(), parseType);
+        WriteHost newWriteHost = null;
+        for (DataSourceStatus status : list) {
+            if (status.getName().equals(writeHost.getHost())) {
+                if (!status.isWriteHost()) {
+                    ReadHost change = new ReadHost(writeHost);
+                    change.setDisabled(status.isDisable() ? "true" : "false");
+                    writeHost.getReadHost().add(change);
+                } else {
+                    newWriteHost = writeHost;
+                    writeHost.setDisabled(status.isDisable() ? "true" : "false");
+                }
+            } else {
+                for (ReadHost read : writeHost.getReadHost()) {
+                    if (read.getHost().equals(status.getName())) {
+                        if (status.isWriteHost()) {
+                            newWriteHost = new WriteHost(read);
+                            writeHost.getReadHost().remove(read);
+                            newWriteHost.setDisabled(status.isDisable() ? "true" : "false");
+                            newWriteHost.setReadHost(writeHost.getReadHost());
+                        } else {
+                            read.setDisabled(status.isDisable() ? "true" : "false");
+                        }
+                    }
+                }
+            }
+        }
+        if (newWriteHost != null) {
+            dataHost.getWriteHost().remove(writeHost);
+            dataHost.getWriteHost().add(newWriteHost);
+        }
     }
 
 }
