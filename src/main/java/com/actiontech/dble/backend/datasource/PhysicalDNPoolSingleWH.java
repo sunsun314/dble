@@ -1,5 +1,6 @@
 package com.actiontech.dble.backend.datasource;
 
+import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;
@@ -22,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created by szf on 2019/10/17.
@@ -394,7 +396,8 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
 
     public void disableHosts(String hostNames, boolean syncWriteConf) {
         String[] nameList = hostNames == null ? Arrays.copyOf(allSourceMap.keySet().toArray(), allSourceMap.keySet().toArray().length, String[].class) : hostNames.split(",");
-
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.readLock().lock();
         adjustLock.writeLock().lock();
         try {
             for (String dsName : nameList) {
@@ -409,6 +412,7 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
             HaConfigManager.getInstance().updateConfDataHost(this, syncWriteConf);
 
         } finally {
+            lock.readLock().unlock();
             adjustLock.writeLock().unlock();
         }
     }
@@ -416,6 +420,8 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
 
     public void enableHosts(String hostNames, boolean syncWriteConf) {
         String[] nameList = hostNames == null ? Arrays.copyOf(allSourceMap.keySet().toArray(), allSourceMap.keySet().toArray().length, String[].class) : hostNames.split(",");
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.readLock().lock();
         adjustLock.writeLock().lock();
         try {
             for (String dsName : nameList) {
@@ -425,11 +431,14 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
 
             HaConfigManager.getInstance().updateConfDataHost(this, syncWriteConf);
         } finally {
+            lock.readLock().lock();
             adjustLock.writeLock().unlock();
         }
     }
 
     public void switchMaster(String writeHost, boolean syncWriteConf) {
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.readLock().lock();
         adjustLock.writeLock().lock();
         try {
             PhysicalDatasource newWriteHost = allSourceMap.get(writeHost);
@@ -440,12 +449,15 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
             writeSource = newWriteHost;
             HaConfigManager.getInstance().updateConfDataHost(this, syncWriteConf);
         } finally {
+            lock.readLock().unlock();
             adjustLock.writeLock().unlock();
         }
     }
 
 
     public void changeIntoLastestStatus(String jsonStatus) {
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.readLock().lock();
         adjustLock.writeLock().lock();
         try {
             JSONObject jsonObj = JSONObject.parseObject(jsonStatus);
@@ -474,6 +486,7 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
             }
             HaConfigManager.getInstance().updateConfDataHost(this, false);
         } finally {
+            lock.readLock().unlock();
             adjustLock.writeLock().unlock();
         }
     }

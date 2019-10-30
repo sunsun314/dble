@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author mycat
@@ -61,7 +62,7 @@ public class ServerConfig {
     private volatile long rollbackTime;
     private volatile int status;
     private volatile boolean changing = false;
-    private final ReentrantLock lock;
+    private final ReentrantReadWriteLock lock;
     private ConfigInitializer confInitNew;
 
     public ServerConfig() {
@@ -82,7 +83,7 @@ public class ServerConfig {
         this.rollbackTime = -1L;
         this.status = RELOAD;
 
-        this.lock = new ReentrantLock();
+        this.lock = new ReentrantReadWriteLock();
 
     }
 
@@ -104,7 +105,7 @@ public class ServerConfig {
         this.rollbackTime = -1L;
         this.status = RELOAD;
 
-        this.lock = new ReentrantLock();
+        this.lock = new ReentrantReadWriteLock();
     }
 
     private void waitIfChanging() {
@@ -193,7 +194,7 @@ public class ServerConfig {
         return firewall2;
     }
 
-    public ReentrantLock getLock() {
+    public ReentrantReadWriteLock getLock() {
         return lock;
     }
 

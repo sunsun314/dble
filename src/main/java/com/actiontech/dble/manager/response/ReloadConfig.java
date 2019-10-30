@@ -50,6 +50,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.actiontech.dble.cluster.ClusterPathUtil.SEPARATOR;
 import static com.actiontech.dble.meta.ReloadStatus.TRIGGER_TYPE_COMMAND;
@@ -131,8 +132,8 @@ public final class ReloadConfig {
             }
 
         } else {
-            final ReentrantLock lock = DbleServer.getInstance().getConfig().getLock();
-            lock.lock();
+            final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+            lock.writeLock().lock();
             try {
                 try {
                     if (!ReloadManager.startReload(TRIGGER_TYPE_COMMAND, loadAll ? ConfStatus.Status.RELOAD_ALL : ConfStatus.Status.RELOAD)) {
@@ -149,7 +150,7 @@ public final class ReloadConfig {
                     writeErrorResult(c, e.getMessage() == null ? e.toString() : e.getMessage());
                 }
             } finally {
-                lock.unlock();
+                lock.writeLock().unlock();
             }
         }
 
@@ -165,8 +166,8 @@ public final class ReloadConfig {
      */
     private static void reloadWithUcore(final boolean loadAll, final int loadAllMode, ManagerConnection c) {
         //step 1 lock the local meta ,than all the query depends on meta will be hanging
-        final ReentrantLock lock = DbleServer.getInstance().getConfig().getLock();
-        lock.lock();
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.writeLock().lock();
         try {
             //step 2 reload the local config file
             if (!load(loadAll, loadAllMode)) {
@@ -205,14 +206,14 @@ public final class ReloadConfig {
             LOGGER.warn("reload config failure", e);
             writeErrorResult(c, e.getMessage() == null ? e.toString() : e.getMessage());
         } finally {
-            lock.unlock();
+            lock.writeLock().unlock();
         }
     }
 
 
     private static void reloadWithZookeeper(final boolean loadAll, final int loadAllMode, CuratorFramework zkConn, ManagerConnection c) {
-        final ReentrantLock lock = DbleServer.getInstance().getConfig().getLock();
-        lock.lock();
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.writeLock().lock();
         try {
             if (!load(loadAll, loadAllMode)) {
                 writeSpecialError(c, "Reload interruputed by others,config should be reload");
@@ -260,7 +261,7 @@ public final class ReloadConfig {
             ReloadLogHelper.warn("reload config failure", e, LOGGER);
             writeErrorResult(c, e.getMessage() == null ? e.toString() : e.getMessage());
         } finally {
-            lock.unlock();
+            lock.writeLock().unlock();
         }
     }
 

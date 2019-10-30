@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 import static com.actiontech.dble.cluster.ClusterPathUtil.DATA_HOST_STATUS;
 
@@ -32,6 +34,12 @@ public class DataHostHaResponse implements ClusterXmlLoader {
         }
         LOGGER.info("notify " + configValue.getKey() + " " + configValue.getValue() + " " + configValue.getChangeType());
         if (configValue.getKey().contains(DATA_HOST_STATUS)) {
+            KvBean reloadStatus = ClusterHelper.getKV(ClusterPathUtil.getConfStatusPath());
+            while (reloadStatus != null) {
+                LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(1000));
+                reloadStatus = ClusterHelper.getKV(ClusterPathUtil.getConfStatusPath());
+                continue;
+            }
             //try to change dataHost status just like the
             String[] path = configValue.getKey().split("/");
             String dhName = path[path.length - 1];

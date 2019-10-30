@@ -58,6 +58,7 @@ public final class DataHostDisable {
                 mc.writeErrMessage(ErrorCode.ER_YES, "Some of the dataSource in command in " + dh.getHostName() + " do not exists");
                 return;
             }
+
             if (ClusterGeneralConfig.isUseGeneralCluster() && useCluster) {
                 if (!disableWithCluster(dh, subHostName, mc)) {
                     return;
