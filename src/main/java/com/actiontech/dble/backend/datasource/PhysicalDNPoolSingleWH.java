@@ -463,11 +463,10 @@ public class PhysicalDNPoolSingleWH extends AbstractPhysicalDBPool {
                     }
                     if (status.isWriteHost() &&
                             phys != writeSource) {
-                        PhysicalDatasource newWriteHost = allSourceMap.get(phys);
                         writeSource.setReadNode(true);
                         writeSource.clearCons("ha command switch datasource");
-                        newWriteHost.setReadNode(false);
-                        writeSource = newWriteHost;
+                        phys.setReadNode(false);
+                        writeSource = phys;
                     }
                 } else {
                     LOGGER.warn("Can match dataSource" + status.getName() + ".Check for the config file please");

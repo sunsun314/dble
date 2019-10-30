@@ -18,7 +18,7 @@ public class HaInfo {
     private final String dhName;
 
     private final HaStatus status;
-    private String split = "|";
+    private String split = ";";
 
     public HaInfo(String dhName, String startId, HaType lockType, HaStatus status) {
         this.lockType = lockType;

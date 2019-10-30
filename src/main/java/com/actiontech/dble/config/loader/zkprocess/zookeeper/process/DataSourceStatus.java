@@ -6,12 +6,12 @@ package com.actiontech.dble.config.loader.zkprocess.zookeeper.process;
 public class DataSourceStatus {
     String name;
     boolean disable;
-    boolean isWriteHost;
+    boolean writeHost;
 
     public DataSourceStatus(String name, boolean disable, boolean isWriteHost) {
         this.name = name;
         this.disable = disable;
-        this.isWriteHost = isWriteHost;
+        this.writeHost = isWriteHost;
     }
 
     public String getName() {
@@ -23,6 +23,6 @@ public class DataSourceStatus {
     }
 
     public boolean isWriteHost() {
-        return isWriteHost;
+        return writeHost;
     }
 }

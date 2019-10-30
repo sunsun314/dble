@@ -28,7 +28,7 @@ public final class DataHostEnable {
     public static void execute(Matcher enable, ManagerConnection mc) {
         String dhName = enable.group(1);
         String subHostName = enable.group(3);
-        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID));
+        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA));
         //check the dataHost is exists
 
         AbstractPhysicalDBPool dataHost = DbleServer.getInstance().getConfig().getDataHosts().get(dhName);

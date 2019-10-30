@@ -29,7 +29,7 @@ public final class DataHostDisable {
     public static void execute(Matcher disable, ManagerConnection mc) {
         String dhName = disable.group(1);
         String subHostName = disable.group(3);
-        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID));
+        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA));
 
         //check the dataHost is exists
         AbstractPhysicalDBPool dataHost = DbleServer.getInstance().getConfig().getDataHosts().get(dhName);
@@ -85,6 +85,7 @@ public final class DataHostDisable {
                             HaInfo.HaType.DATAHOST_DISABLE,
                             HaInfo.HaStatus.SUCCESS
                     ).toString());
+            ClusterHelper.setKV(ClusterPathUtil.getSelfResponsePath(ClusterPathUtil.getHaLockPath(dh.getHostName())), ClusterPathUtil.SUCCESS);
             String errorMsg = ClusterHelper.waitingForAllTheNode(ClusterPathUtil.SUCCESS, ClusterPathUtil.getHaLockPath(dh.getHostName()) + SEPARATOR);
             if (errorMsg != null) {
                 throw new RuntimeException(errorMsg);

@@ -27,6 +27,8 @@ public class DataHostHaResponse implements ClusterXmlLoader {
         if (configValue.getKey().split("/").length == ClusterPathUtil.getHaStatusPath().split("/").length + 2) {
             //child change the listener is not supported
             return;
+        } else if (configValue.getChangeType().equals(KvBean.DELETE)) {
+            return;
         }
         LOGGER.info("notify " + configValue.getKey() + " " + configValue.getValue() + " " + configValue.getChangeType());
         if (configValue.getKey().contains(DATA_HOST_STATUS)) {
@@ -44,7 +46,7 @@ public class DataHostHaResponse implements ClusterXmlLoader {
                 KvBean lastestStatus = ClusterHelper.getKV(ClusterPathUtil.getHaStatusPath(info.getDhName()));
                 PhysicalDNPoolSingleWH dataHost = (PhysicalDNPoolSingleWH) DbleServer.getInstance().getConfig().getDataHosts().get(info.getDhName());
                 dataHost.changeIntoLastestStatus(lastestStatus.getValue());
-                ClusterHelper.setKV(ClusterPathUtil.getSelfResponsePath(configValue.getKey()), HaInfo.HaStatus.SUCCESS.toString());
+                ClusterHelper.setKV(ClusterPathUtil.getSelfResponsePath(configValue.getKey()),  ClusterPathUtil.SUCCESS);
             }
         }
     }

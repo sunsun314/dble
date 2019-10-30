@@ -27,7 +27,7 @@ public final class DataHostSwitch {
     public static void execute(Matcher switcher, ManagerConnection mc) {
         String dhName = switcher.group(1);
         String masterName = switcher.group(2);
-        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID));
+        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA));
         //check the dataHost is exists
 
         AbstractPhysicalDBPool dataHost = DbleServer.getInstance().getConfig().getDataHosts().get(dhName);
@@ -65,7 +65,7 @@ public final class DataHostSwitch {
         DistributeLock distributeLock = new DistributeLock(ClusterPathUtil.getHaLockPath(dh.getHostName()),
                 new HaInfo(dh.getHostName(),
                         ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID),
-                        HaInfo.HaType.DATAHOST_ENABLE,
+                        HaInfo.HaType.DATAHOST_SWITCH,
                         HaInfo.HaStatus.INIT
                 ).toString()
         );
