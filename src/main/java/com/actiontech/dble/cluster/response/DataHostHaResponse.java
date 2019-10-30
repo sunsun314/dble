@@ -46,7 +46,7 @@ public class DataHostHaResponse implements ClusterXmlLoader {
                 KvBean lastestStatus = ClusterHelper.getKV(ClusterPathUtil.getHaStatusPath(info.getDhName()));
                 PhysicalDNPoolSingleWH dataHost = (PhysicalDNPoolSingleWH) DbleServer.getInstance().getConfig().getDataHosts().get(info.getDhName());
                 dataHost.changeIntoLastestStatus(lastestStatus.getValue());
-                ClusterHelper.setKV(ClusterPathUtil.getSelfResponsePath(configValue.getKey()),  ClusterPathUtil.SUCCESS);
+                ClusterHelper.setKV(ClusterPathUtil.getSelfResponsePath(configValue.getKey()), ClusterPathUtil.SUCCESS);
             }
         }
     }

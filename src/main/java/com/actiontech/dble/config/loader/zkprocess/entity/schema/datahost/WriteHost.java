@@ -23,11 +23,11 @@ import java.util.List;
 @XmlType(name = "writeHost")
 public class WriteHost {
 
-    public WriteHost(){
+    public WriteHost() {
 
     }
 
-    public WriteHost(ReadHost readHost){
+    public WriteHost(ReadHost readHost) {
         this.user = readHost.user;
         this.password = readHost.password;
         this.host = readHost.host;
