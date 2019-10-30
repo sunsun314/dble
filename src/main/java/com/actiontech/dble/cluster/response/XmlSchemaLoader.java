@@ -5,8 +5,6 @@
 
 package com.actiontech.dble.cluster.response;
 
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
 import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;

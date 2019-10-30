@@ -7,15 +7,11 @@ package com.actiontech.dble.config.loader.zkprocess.zktoxml.listen;
 
 import com.actiontech.dble.cluster.ClusterHelper;
 import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.cluster.ClusterPathUtil;
-import com.actiontech.dble.cluster.bean.KvBean;
 import com.actiontech.dble.config.loader.console.ZookeeperPath;
 import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
 import com.actiontech.dble.config.loader.zkprocess.comm.ZookeeperProcessListen;
 import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datanode.DataNode;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.schema.Schema;
 import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
