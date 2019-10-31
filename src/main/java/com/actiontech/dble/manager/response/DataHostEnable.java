@@ -19,6 +19,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
@@ -37,8 +38,7 @@ public final class DataHostEnable {
     public static void execute(Matcher enable, ManagerConnection mc) {
         String dhName = enable.group(1);
         String subHostName = enable.group(3);
-        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA)) ||
-                "true".equals(ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA));
+        boolean useCluster = ClusterHelper.useCluster();
         //check the dataHost is exists
 
         AbstractPhysicalDBPool dataHost = DbleServer.getInstance().getConfig().getDataHosts().get(dhName);

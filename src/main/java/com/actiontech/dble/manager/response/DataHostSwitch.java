@@ -37,8 +37,7 @@ public final class DataHostSwitch {
     public static void execute(Matcher switcher, ManagerConnection mc) {
         String dhName = switcher.group(1);
         String masterName = switcher.group(2);
-        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA)) ||
-                "true".equals(ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA));
+        boolean useCluster = ClusterHelper.useCluster();
         //check the dataHost is exists
 
         AbstractPhysicalDBPool dataHost = DbleServer.getInstance().getConfig().getDataHosts().get(dhName);

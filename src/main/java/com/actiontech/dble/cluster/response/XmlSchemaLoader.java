@@ -79,7 +79,7 @@ public class XmlSchemaLoader implements ClusterXmlLoader {
 
         List<DataHost> dataHostList = parseJsonDataHost.parseJsonToBean(jsonObj.getJSONArray(ClusterPathUtil.DATA_HOST).toJSONString());
         schema.setDataHost(dataHostList);
-        if ("true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
+        if (ClusterHelper.useCluster()){
             List<KvBean> statusKVList = ClusterHelper.getKVPath(ClusterPathUtil.getHaStatusPath());
             if (statusKVList != null && statusKVList.size() > 0) {
                 for (KvBean kv : statusKVList) {

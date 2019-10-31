@@ -4,6 +4,7 @@ import com.actiontech.dble.cluster.bean.ClusterAlertBean;
 import com.actiontech.dble.cluster.bean.KvBean;
 import com.actiontech.dble.cluster.bean.SubscribeRequest;
 import com.actiontech.dble.cluster.bean.SubscribeReturnBean;
+import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
 import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
@@ -106,6 +107,11 @@ public final class ClusterHelper {
             dataHost.getWriteHost().remove(writeHost);
             dataHost.getWriteHost().add(newWriteHost);
         }
+    }
+
+    public static boolean useCluster() {
+        return "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA)) ||
+                "true".equals(ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA));
     }
 
 }

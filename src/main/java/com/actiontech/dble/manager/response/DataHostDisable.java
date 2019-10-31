@@ -43,8 +43,7 @@ public final class DataHostDisable {
     public static void execute(Matcher disable, ManagerConnection mc) {
         String dhName = disable.group(1);
         String subHostName = disable.group(3);
-        boolean useCluster = "true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA)) ||
-                "true".equals(ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA));
+        boolean useCluster = ClusterHelper.useCluster();
 
         //check the dataHost is exists
         AbstractPhysicalDBPool dataHost = DbleServer.getInstance().getConfig().getDataHosts().get(dhName);

@@ -1,5 +1,6 @@
 package com.actiontech.dble.config.loader.zkprocess.xmltozk.listen;
 
+import com.actiontech.dble.cluster.ClusterHelper;
 import com.actiontech.dble.cluster.ClusterParamCfg;
 import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
 import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
@@ -27,7 +28,7 @@ public class DataHostStatusTozkLoader extends ZkMultiLoader implements NotifySer
     @Override
     public boolean notifyProcess() throws Exception {
         HaConfigManager.getInstance().init();
-        if ("true".equals(ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
+        if (ClusterHelper.useCluster()) {
             Map<String, String> map = HaConfigManager.getInstance().getSourceJsonList();
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 this.checkAndWriteString(KVPathUtil.getHaStatusPath() + SEPARATOR, entry.getKey(), entry.getValue());
