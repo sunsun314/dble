@@ -97,6 +97,7 @@ public final class ClusterHelper {
                         } else {
                             read.setDisabled(status.isDisable() ? "true" : "false");
                         }
+                        break;
                     }
                 }
             }

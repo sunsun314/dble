@@ -13,7 +13,6 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
-import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +53,7 @@ public class DataHostResponseListener implements PathChildrenCacheListener {
             String jsonString = new String(zkConn.getData().forPath(KVPathUtil.getHaStatusPath(info.getDhName())), "UTF-8");
             dataHost.changeIntoLastestStatus(jsonString);
             //response to kv
-            ZKUtils.createTempNode(ZKPaths.makePath(childData.getPath(), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID)), ClusterPathUtil.SUCCESS);
+            ZKUtils.createTempNode(childData.getPath(), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID), ClusterPathUtil.SUCCESS.getBytes());
         }
     }
 
