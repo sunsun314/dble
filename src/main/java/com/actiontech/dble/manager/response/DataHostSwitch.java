@@ -113,7 +113,7 @@ public final class DataHostSwitch {
                     return false;
                 }
                 dh.switchMaster(subHostName, false);
-                DataHostDisable.setStatusToZK(ClusterPathUtil.getHaStatusPath(dh.getHostName()), zkConn, dh.getClusterHaJson());
+                DataHostDisable.setStatusToZK(KVPathUtil.getHaStatusPath(dh.getHostName()), zkConn, dh.getClusterHaJson());
             } finally {
                 distributeLock.release();
                 LOGGER.info("reload config: release distributeLock " + KVPathUtil.getConfChangeLockPath() + " from zk");

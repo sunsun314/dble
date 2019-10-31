@@ -2,10 +2,8 @@ package com.actiontech.dble.config.loader.zkprocess.zktoxml.listen;
 
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.PhysicalDNPoolSingleWH;
-import com.actiontech.dble.cluster.ClusterHelper;
 import com.actiontech.dble.cluster.ClusterParamCfg;
 import com.actiontech.dble.cluster.ClusterPathUtil;
-import com.actiontech.dble.cluster.bean.KvBean;
 import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.HaInfo;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
@@ -33,9 +31,9 @@ public class DataHostResponseListener implements PathChildrenCacheListener {
         ChildData childData = event.getData();
         switch (event.getType()) {
             case CHILD_ADDED:
+                updateStatus(childData);
                 break;
             case CHILD_UPDATED:
-                updateStatus(childData);
                 break;
             case CHILD_REMOVED:
                 break;
@@ -49,11 +47,12 @@ public class DataHostResponseListener implements PathChildrenCacheListener {
         String data = new String(childData.getData(), StandardCharsets.UTF_8);
         LOGGER.info("Ha disable node " + childData.getPath() + " updated , and data is " + data);
         HaInfo info = new HaInfo(data);
+        CuratorFramework zkConn = ZKUtils.getConnection();
         if (!info.getStartId().equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID)) &&
                 info.getStatus() == HaInfo.HaStatus.SUCCESS) {
-            KvBean lastestStatus = ClusterHelper.getKV(KVPathUtil.getHaStatusPath(info.getDhName()));
             PhysicalDNPoolSingleWH dataHost = (PhysicalDNPoolSingleWH) DbleServer.getInstance().getConfig().getDataHosts().get(info.getDhName());
-            dataHost.changeIntoLastestStatus(lastestStatus.getValue());
+            String jsonString = new String(zkConn.getData().forPath(KVPathUtil.getHaStatusPath(info.getDhName())), "UTF-8");
+            dataHost.changeIntoLastestStatus(jsonString);
             //response to kv
             ZKUtils.createTempNode(ZKPaths.makePath(childData.getPath(), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID)), ClusterPathUtil.SUCCESS);
         }

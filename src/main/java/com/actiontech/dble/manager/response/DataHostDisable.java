@@ -94,9 +94,14 @@ public final class DataHostDisable {
                 }
                 dh.disableHosts(subHostName, false);
                 setStatusToZK(KVPathUtil.getHaStatusPath(dh.getHostName()), zkConn, dh.getClusterHaJson());
+                setStatusToZK(KVPathUtil.getHaResponsePath(dh.getHostName()), zkConn, new HaInfo(dh.getHostName(),
+                        ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID),
+                        HaInfo.HaType.DATAHOST_DISABLE,
+                        HaInfo.HaStatus.SUCCESS
+                ).toString());
                 ZKUtils.createTempNode(KVPathUtil.getHaResponsePath(dh.getHostName()), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID),
                         ClusterPathUtil.SUCCESS.getBytes(StandardCharsets.UTF_8));
-                String errorMessage = isZKfinished(zkConn, KVPathUtil.getHaStatusPath(dh.getHostName()));
+                String errorMessage = isZKfinished(zkConn, KVPathUtil.getHaResponsePath(dh.getHostName()));
                 if (errorMessage != null && !"".equals(errorMessage)) {
                     mc.writeErrMessage(ErrorCode.ER_YES, errorMessage);
                     return false;
@@ -141,10 +146,12 @@ public final class DataHostDisable {
                 if (!ClusterPathUtil.SUCCESS.equals(data)) {
                     errorMsg.append(preparedNode).append(":").append(data).append("\n");
                 }
-                zkConn.delete().forPath(ZKPaths.makePath(KVPathUtil.getConfStatusPath(), preparedNode));
+                zkConn.delete().forPath(ZKPaths.makePath(preparePath, preparedNode));
             }
+            zkConn.delete().forPath(preparePath);
             return errorMsg.toString();
         } catch (Exception e) {
+            LOGGER.warn("get error when waiting for others ", e);
             return e.getMessage();
         }
     }
