@@ -202,15 +202,19 @@ public final class KVPathUtil {
     }
 
     public static String getHaStatusPath() {
-        return BASE_PATH + DATA_HOSTS + SEPARATOR + DATA_HOST_STATUS + SEPARATOR;
+        return BASE_PATH + DATA_HOSTS + SEPARATOR + DATA_HOST_STATUS;
     }
 
     public static String getHaStatusPath(String dhName) {
-        return getHaStatusPath() + dhName;
+        return getHaStatusPath() + SEPARATOR + dhName;
     }
 
     public static String getHaResponsePath() {
-        return BASE_PATH + DATA_HOSTS + SEPARATOR + DATA_HOST_RESPONSE + SEPARATOR;
+        return BASE_PATH + DATA_HOSTS + SEPARATOR + DATA_HOST_RESPONSE;
+    }
+
+    public static String getHaResponsePath(String dhName) {
+        return BASE_PATH + DATA_HOSTS + SEPARATOR + DATA_HOST_RESPONSE + SEPARATOR + dhName;
     }
 
     public static String getHaLockPath() {

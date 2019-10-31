@@ -93,8 +93,9 @@ public final class DataHostDisable {
                     return false;
                 }
                 dh.disableHosts(subHostName, false);
-                setStatusToZK(ClusterPathUtil.getHaStatusPath(dh.getHostName()), zkConn, dh.getClusterHaJson());
-                ZKUtils.createTempNode(KVPathUtil.getHaStatusPath(dh.getHostName()), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID), ClusterPathUtil.SUCCESS.getBytes(StandardCharsets.UTF_8));
+                setStatusToZK(KVPathUtil.getHaStatusPath(dh.getHostName()), zkConn, dh.getClusterHaJson());
+                ZKUtils.createTempNode(KVPathUtil.getHaResponsePath(dh.getHostName()), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID),
+                        ClusterPathUtil.SUCCESS.getBytes(StandardCharsets.UTF_8));
                 String errorMessage = isZKfinished(zkConn, KVPathUtil.getHaStatusPath(dh.getHostName()));
                 if (errorMessage != null && !"".equals(errorMessage)) {
                     mc.writeErrMessage(ErrorCode.ER_YES, errorMessage);

@@ -11,6 +11,8 @@ import org.apache.curator.framework.CuratorFramework;
 
 import java.util.Map;
 
+import static com.actiontech.dble.util.KVPathUtil.SEPARATOR;
+
 /**
  * Created by szf on 2019/10/30.
  */
@@ -28,7 +30,7 @@ public class DataHostStatusTozkLoader extends ZkMultiLoader implements NotifySer
         if ("true".equals(ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
             Map<String, String> map = HaConfigManager.getInstance().getSourceJsonList();
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                this.checkAndWriteString(KVPathUtil.getHaStatusPath(), entry.getKey(), entry.getValue());
+                this.checkAndWriteString(KVPathUtil.getHaStatusPath() + SEPARATOR, entry.getKey(), entry.getValue());
             }
         }
         return true;

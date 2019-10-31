@@ -31,9 +31,11 @@ import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkMultiLoad
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.util.KVPathUtil;
 import com.actiontech.dble.util.ResourceUtil;
+import com.actiontech.dble.util.ZKUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.reflect.TypeToken;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,10 +119,11 @@ public class SchemaszkToxmlLoader extends ZkMultiLoader implements NotifyService
         schema.setDataHost(dataHostList);
         try {
             if ("true".equals(ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
-                List<String> valueList = getCurator().getChildren().forPath(KVPathUtil.getHaStatusPath());
-                if (valueList != null && valueList.size() > 0) {
-                    for (String value : valueList) {
-                        JSONObject jsonObj = JSONObject.parseObject(value);
+                List<String> chindrenList = getCurator().getChildren().forPath(KVPathUtil.getHaStatusPath());
+                if (chindrenList != null && chindrenList.size() > 0) {
+                    for (String child : chindrenList) {
+                        String data = new String(getCurator().getData().forPath(ZKPaths.makePath(KVPathUtil.getHaStatusPath()+ZKPaths.PATH_SEPARATOR,child)),"UTF-8");
+                        JSONObject jsonObj = JSONObject.parseObject(data);
                         JsonProcessBase base = new JsonProcessBase();
                         Type parseType = new TypeToken<List<DataSourceStatus>>() {
                         }.getType();

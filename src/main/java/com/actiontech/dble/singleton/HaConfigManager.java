@@ -120,7 +120,7 @@ public final class HaConfigManager {
                 list.add(new DataSourceStatus(wh.getHost(), "true".equals(wh.getDisabled()), false));
                 jsonObject.put(JSON_WRITE_SOURCE, new DataSourceStatus(wh.getHost(), "true".equals(wh.getDisabled()), false));
                 for (ReadHost rh : wh.getReadHost()) {
-                    list.add(new DataSourceStatus(rh.getHost(), "false".equals(rh.getDisabled()), true));
+                    list.add(new DataSourceStatus(rh.getHost(), "true".equals(rh.getDisabled()), true));
                 }
             }
             jsonObject.put(JSON_LIST, list);
