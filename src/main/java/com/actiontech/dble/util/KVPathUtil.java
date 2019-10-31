@@ -135,6 +135,7 @@ public final class KVPathUtil {
     public static final String SEQUENCES = "sequences";
 
     public static final String DATA_HOSTS = "data_hosts";
+    public static final String DATA_HOST_RESPONSE = "data_host_response";
     public static final String DATA_HOST_STATUS = "data_host_status";
     public static final String DATA_HOST_LOCKS = "data_host_locks";
 
@@ -206,6 +207,10 @@ public final class KVPathUtil {
 
     public static String getHaStatusPath(String dhName) {
         return getHaStatusPath() + dhName;
+    }
+
+    public static String getHaResponsePath() {
+        return BASE_PATH + DATA_HOSTS + SEPARATOR + DATA_HOST_RESPONSE + SEPARATOR;
     }
 
     public static String getHaLockPath() {

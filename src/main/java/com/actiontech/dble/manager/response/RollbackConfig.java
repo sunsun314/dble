@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.actiontech.dble.cluster.ClusterPathUtil.SEPARATOR;
 import static com.actiontech.dble.meta.ReloadStatus.TRIGGER_TYPE_COMMAND;
@@ -93,8 +93,8 @@ public final class RollbackConfig {
                 writeErrorResult(c, e.getMessage() == null ? e.toString() : e.getMessage());
             }
         } else {
-            final ReentrantLock lock = DbleServer.getInstance().getConfig().getLock();
-            lock.lock();
+            final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+            lock.writeLock().lock();
             try {
                 if (!rollback(TRIGGER_TYPE_COMMAND)) {
                     writeSpecialError(c, "Rollback interruputed by others,config should be reload");
@@ -104,7 +104,7 @@ public final class RollbackConfig {
             } catch (Exception e) {
                 writeErrorResult(c, e.getMessage() == null ? e.toString() : e.getMessage());
             } finally {
-                lock.unlock();
+                lock.writeLock().unlock();
             }
         }
         ReloadManager.reloadFinish();
@@ -113,8 +113,8 @@ public final class RollbackConfig {
 
     private static void rollbackWithUcore(ManagerConnection c) {
         //step 1 lock the local meta ,than all the query depends on meta will be hanging
-        final ReentrantLock lock = DbleServer.getInstance().getConfig().getLock();
-        lock.lock();
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.writeLock().lock();
         try {
             // step 2 rollback self config
             if (!rollback(TRIGGER_TYPE_COMMAND)) {
@@ -148,7 +148,7 @@ public final class RollbackConfig {
             LOGGER.warn("reload config failure", e);
             writeErrorResult(c, e.getMessage() == null ? e.toString() : e.getMessage());
         } finally {
-            lock.unlock();
+            lock.writeLock().unlock();
         }
     }
 
@@ -160,8 +160,8 @@ public final class RollbackConfig {
      * @param c
      */
     private static void rollbackWithZk(CuratorFramework zkConn, ManagerConnection c) {
-        final ReentrantLock lock = DbleServer.getInstance().getConfig().getLock();
-        lock.lock();
+        final ReentrantReadWriteLock lock = DbleServer.getInstance().getConfig().getLock();
+        lock.writeLock().lock();
         try {
             if (!rollback(TRIGGER_TYPE_COMMAND)) {
                 writeSpecialError(c, "Rollback interruputed by others,config should be reload");
@@ -207,7 +207,7 @@ public final class RollbackConfig {
             LOGGER.info("rollback config failure", e);
             writeErrorResult(c, e.getMessage() == null ? e.toString() : e.getMessage());
         } finally {
-            lock.unlock();
+            lock.writeLock().unlock();
         }
     }
 

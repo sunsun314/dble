@@ -49,7 +49,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.actiontech.dble.cluster.ClusterPathUtil.SEPARATOR;

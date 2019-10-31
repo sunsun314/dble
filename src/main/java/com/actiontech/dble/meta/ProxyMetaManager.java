@@ -21,6 +21,8 @@ import com.actiontech.dble.cluster.*;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.ServerConfig;
 import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
+import com.actiontech.dble.config.loader.zkprocess.zktoxml.listen.DataHostResponseListener;
+import com.actiontech.dble.config.loader.zkprocess.zktoxml.listen.DataHostStatusListener;
 import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DDLInfo;
 import com.actiontech.dble.config.model.DBHostConfig;
 import com.actiontech.dble.config.model.SchemaConfig;
@@ -349,6 +351,11 @@ public class ProxyMetaManager {
         ZKUtils.createOnline(KVPathUtil.getOnlinePath(), ZkConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_MYID), OnlineStatus.getInstance());
         //add watcher
         ZKUtils.addChildPathCache(ddlPath, new DDLChildListener());
+        //add tow ha status && ha lock watcher
+        if ("true".equals(ClusterGeneralConfig.getInstance().getValue(ClusterParamCfg.CLUSTER_CFG_CLUSTER_HA))) {
+            ZKUtils.addChildPathCache(KVPathUtil.getHaStatusPath(), new DataHostStatusListener());
+            ZKUtils.addChildPathCache(KVPathUtil.getHaResponsePath(), new DataHostResponseListener());
+        }
         //add watcher
         ZKUtils.addViewPathCache(KVPathUtil.getViewPath(), new ViewChildListener());
         // syncMeta UNLOCK
