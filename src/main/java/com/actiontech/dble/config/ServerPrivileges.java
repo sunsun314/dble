@@ -11,7 +11,9 @@ import com.actiontech.dble.config.model.UserConfig;
 import com.actiontech.dble.config.model.UserPrivilegesConfig;
 import com.actiontech.dble.net.handler.FrontendPrivileges;
 import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.singleton.TraceManager;
 import com.alibaba.druid.wall.WallCheckResult;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,36 +164,41 @@ public class ServerPrivileges implements FrontendPrivileges {
 
     // check SQL Privilege
     public static boolean checkPrivilege(ServerConnection source, String schema, String tableName, CheckType chekcType) {
-        UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(source.getUser());
-        if (userConfig == null) {
-            return true;
-        }
-        UserPrivilegesConfig userPrivilege = userConfig.getPrivilegesConfig();
-        if (userPrivilege == null || !userPrivilege.isCheck()) {
-            return true;
-        }
-        UserPrivilegesConfig.SchemaPrivilege schemaPrivilege = userPrivilege.getSchemaPrivilege(schema);
-        if (schemaPrivilege == null) {
-            return true;
-        }
-        UserPrivilegesConfig.TablePrivilege tablePrivilege = schemaPrivilege.getTablePrivilege(tableName);
-        if (tablePrivilege == null && schemaPrivilege.getDml().length == 0) {
-            return true;
-        }
-        int index = -1;
-        if (chekcType == CheckType.INSERT) {
-            index = 0;
-        } else if (chekcType == CheckType.UPDATE) {
-            index = 1;
-        } else if (chekcType == CheckType.SELECT) {
-            index = 2;
-        } else if (chekcType == CheckType.DELETE) {
-            index = 3;
-        }
-        if (tablePrivilege != null) {
-            return tablePrivilege.getDml()[index] > 0;
-        } else {
-            return schemaPrivilege.getDml()[index] > 0;
+        Span span = TraceManager.getTracer().buildSpan("table-user-privilege-check").start();
+        try {
+            UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(source.getUser());
+            if (userConfig == null) {
+                return true;
+            }
+            UserPrivilegesConfig userPrivilege = userConfig.getPrivilegesConfig();
+            if (userPrivilege == null || !userPrivilege.isCheck()) {
+                return true;
+            }
+            UserPrivilegesConfig.SchemaPrivilege schemaPrivilege = userPrivilege.getSchemaPrivilege(schema);
+            if (schemaPrivilege == null) {
+                return true;
+            }
+            UserPrivilegesConfig.TablePrivilege tablePrivilege = schemaPrivilege.getTablePrivilege(tableName);
+            if (tablePrivilege == null && schemaPrivilege.getDml().length == 0) {
+                return true;
+            }
+            int index = -1;
+            if (chekcType == CheckType.INSERT) {
+                index = 0;
+            } else if (chekcType == CheckType.UPDATE) {
+                index = 1;
+            } else if (chekcType == CheckType.SELECT) {
+                index = 2;
+            } else if (chekcType == CheckType.DELETE) {
+                index = 3;
+            }
+            if (tablePrivilege != null) {
+                return tablePrivilege.getDml()[index] > 0;
+            } else {
+                return schemaPrivilege.getDml()[index] > 0;
+            }
+        } finally {
+            span.finish();
         }
     }
 }

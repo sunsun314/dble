@@ -12,6 +12,9 @@ import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
 import com.actiontech.dble.net.handler.BackendAsyncHandler;
 import com.actiontech.dble.net.mysql.*;
 import com.actiontech.dble.server.NonBlockingSession;
+import com.actiontech.dble.singleton.TraceManager;
+import io.opentracing.Scope;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +64,8 @@ public class MySQLConnectionHandler extends BackendAsyncHandler {
             if (session.isKilled()) return;
             session.setBackendResponseTime(source);
         }
+        Span span = source.getConnectionSpan();
+        Scope scope = TraceManager.getTracer().scopeManager().activate(span);
         if (source.isComplexQuery()) {
             offerData(data, DbleServer.getInstance().getComplexQueryExecutor());
         } else if (DbleServer.getInstance().getConfig().getSystem().getUsePerformanceMode() == 1) {

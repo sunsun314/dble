@@ -13,9 +13,11 @@ import com.actiontech.dble.route.parser.druid.DruidParserFactory;
 import com.actiontech.dble.route.parser.druid.ServerSchemaStatVisitor;
 import com.actiontech.dble.route.util.RouterUtil;
 import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.singleton.TraceManager;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +78,13 @@ public class DefaultRouteStrategy extends AbstractRouteStrategy {
     public RouteResultset routeNormalSqlWithAST(SchemaConfig schema,
                                                 String originSql, RouteResultset rrs,
                                                 LayerCachePool cachePool, ServerConnection sc, boolean isExplain) throws SQLException {
-        SQLStatement statement = parserSQL(originSql, sc);
+        Span span = TraceManager.getTracer().buildSpan("parse-sql").start();
+        SQLStatement statement = null;
+        try {
+            statement = parserSQL(originSql, sc);
+        } finally {
+            span.finish();
+        }
         if (sc.getSession2().getIsMultiStatement().get()) {
             originSql = statement.toString();
             rrs.setStatement(originSql);

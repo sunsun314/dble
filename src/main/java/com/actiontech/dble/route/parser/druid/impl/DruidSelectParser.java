@@ -30,6 +30,7 @@ import com.actiontech.dble.server.util.SchemaUtil;
 import com.actiontech.dble.server.util.SchemaUtil.SchemaInfo;
 import com.actiontech.dble.singleton.CacheService;
 import com.actiontech.dble.singleton.ProxyMeta;
+import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.sqlengine.mpp.ColumnRoutePair;
 import com.actiontech.dble.util.StringUtil;
 import com.alibaba.druid.sql.ast.*;
@@ -38,6 +39,7 @@ import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.dialect.mysql.ast.expr.MySqlOrderingExpr;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlExprParser;
+import io.opentracing.Span;
 
 import java.sql.SQLException;
 import java.sql.SQLNonTransientException;
@@ -125,61 +127,66 @@ public class DruidSelectParser extends DefaultDruidParser {
 
     private void routeSingleTable(RouteResultset rrs, SchemaInfo schemaInfo, MySqlSelectQueryBlock mysqlSelectQuery,
                                   SQLSelectStatement selectStmt, ServerConnection sc) throws SQLException {
-        rrs.setSchema(schemaInfo.getSchema());
-        rrs.setTable(schemaInfo.getTable());
-        rrs.setTableAlias(schemaInfo.getTableAlias());
-        rrs.setStatement(RouterUtil.removeSchema(rrs.getStatement(), schemaInfo.getSchema()));
-        SchemaConfig schema = schemaInfo.getSchemaConfig();
+        Span span = TraceManager.getTracer().buildSpan("single-table-simple-route").start();
+        try {
+            rrs.setSchema(schemaInfo.getSchema());
+            rrs.setTable(schemaInfo.getTable());
+            rrs.setTableAlias(schemaInfo.getTableAlias());
+            rrs.setStatement(RouterUtil.removeSchema(rrs.getStatement(), schemaInfo.getSchema()));
+            SchemaConfig schema = schemaInfo.getSchemaConfig();
 
-        String noShardingNode = RouterUtil.isNoSharding(schema, schemaInfo.getTable());
-        if ((mysqlSelectQuery.isForUpdate() || mysqlSelectQuery.isLockInShareMode()) && !sc.isAutocommit()) {
-            rrs.setCanRunInReadDB(false);
-        }
-        if (noShardingNode != null) {
-            //route to singleNode
-            RouterUtil.routeToSingleNode(rrs, noShardingNode);
-        } else {
-            //route for configured table
-            TableConfig tc = schema.getTables().get(schemaInfo.getTable());
-            if (tc == null) {
-                String msg = "Table '" + schema.getName() + "." + schemaInfo.getTable() + "' doesn't exist";
-                throw new SQLException(msg, "42S02", ErrorCode.ER_NO_SUCH_TABLE);
+            String noShardingNode = RouterUtil.isNoSharding(schema, schemaInfo.getTable());
+            if ((mysqlSelectQuery.isForUpdate() || mysqlSelectQuery.isLockInShareMode()) && !sc.isAutocommit()) {
+                rrs.setCanRunInReadDB(false);
             }
-            rrs.setCacheKey(tc.getCacheKey());
+            if (noShardingNode != null) {
+                //route to singleNode
+                RouterUtil.routeToSingleNode(rrs, noShardingNode);
+            } else {
+                //route for configured table
+                TableConfig tc = schema.getTables().get(schemaInfo.getTable());
+                if (tc == null) {
+                    String msg = "Table '" + schema.getName() + "." + schemaInfo.getTable() + "' doesn't exist";
+                    throw new SQLException(msg, "42S02", ErrorCode.ER_NO_SUCH_TABLE);
+                }
+                rrs.setCacheKey(tc.getCacheKey());
 
-            //loop conditions to determine the scope
-            SortedSet<RouteResultsetNode> nodeSet = new TreeSet<>();
-            for (RouteCalculateUnit unit : ctx.getRouteCalculateUnits()) {
-                RouteResultset rrsTmp = RouterUtil.tryRouteForOneTable(schema, unit, tc.getName(), rrs, true,
-                        CacheService.getTableId2DataNodeCache(), null);
-                if (rrsTmp != null && rrsTmp.getNodes() != null) {
-                    Collections.addAll(nodeSet, rrsTmp.getNodes());
-                    if (rrsTmp.isGlobalTable()) {
-                        break;
+                //loop conditions to determine the scope
+                SortedSet<RouteResultsetNode> nodeSet = new TreeSet<>();
+                for (RouteCalculateUnit unit : ctx.getRouteCalculateUnits()) {
+                    RouteResultset rrsTmp = RouterUtil.tryRouteForOneTable(schema, unit, tc.getName(), rrs, true,
+                            CacheService.getTableId2DataNodeCache(), null);
+                    if (rrsTmp != null && rrsTmp.getNodes() != null) {
+                        Collections.addAll(nodeSet, rrsTmp.getNodes());
+                        if (rrsTmp.isGlobalTable()) {
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (nodeSet.size() == 0) {
-                String msg = " find no Route:" + rrs.getStatement();
-                LOGGER.info(msg);
-                throw new SQLNonTransientException(msg);
-            } else if (nodeSet.size() > 1) {
-                //if the sql involved node more than 1 ,Aggregate function/Group by/Order by should use complexQuery
-                parseOrderAggGroupMysql(schema, selectStmt, rrs, mysqlSelectQuery, tc);
-                if (rrs.isNeedOptimizer()) {
-                    rrs.setNodes(null);
-                    return;
+                if (nodeSet.size() == 0) {
+                    String msg = " find no Route:" + rrs.getStatement();
+                    LOGGER.info(msg);
+                    throw new SQLNonTransientException(msg);
+                } else if (nodeSet.size() > 1) {
+                    //if the sql involved node more than 1 ,Aggregate function/Group by/Order by should use complexQuery
+                    parseOrderAggGroupMysql(schema, selectStmt, rrs, mysqlSelectQuery, tc);
+                    if (rrs.isNeedOptimizer()) {
+                        rrs.setNodes(null);
+                        return;
+                    }
                 }
+                RouteResultsetNode[] nodes = new RouteResultsetNode[nodeSet.size()];
+                int i = 0;
+                for (RouteResultsetNode aNodeSet : nodeSet) {
+                    nodes[i] = aNodeSet;
+                    i++;
+                }
+                rrs.setNodes(nodes);
+                rrs.setFinishedRoute(true);
             }
-            RouteResultsetNode[] nodes = new RouteResultsetNode[nodeSet.size()];
-            int i = 0;
-            for (RouteResultsetNode aNodeSet : nodeSet) {
-                nodes[i] = aNodeSet;
-                i++;
-            }
-            rrs.setNodes(nodes);
-            rrs.setFinishedRoute(true);
+        } finally {
+            span.finish();
         }
     }
 
@@ -187,7 +194,6 @@ public class DruidSelectParser extends DefaultDruidParser {
      * route for from is null
      * check the sql subquery first
      * route for a NoNameTable
-     *
      */
     private void routeForNoFrom(SchemaConfig schema, RouteResultset rrs, ServerSchemaStatVisitor visitor, boolean isExplain, ServerConnection sc,
                                 SQLSelectStatement selectStmt) throws SQLException {
@@ -571,6 +577,7 @@ public class DruidSelectParser extends DefaultDruidParser {
         }
 
     }
+
     /**
      * getAllConditions
      */

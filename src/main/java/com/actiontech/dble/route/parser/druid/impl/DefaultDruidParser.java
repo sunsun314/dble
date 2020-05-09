@@ -25,9 +25,11 @@ import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.server.util.SchemaUtil;
 import com.actiontech.dble.singleton.CacheService;
 import com.actiontech.dble.singleton.ProxyMeta;
+import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlOutputVisitor;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +72,9 @@ public class DefaultDruidParser implements DruidParser {
     @Override
     public SchemaConfig visitorParse(SchemaConfig schemaConfig, RouteResultset rrs, SQLStatement stmt, ServerSchemaStatVisitor visitor, ServerConnection sc, boolean isExplain)
             throws SQLException {
+        Span span = TraceManager.getTracer().buildSpan("visitor-all-sql-object").start();
         stmt.accept(visitor);
+        span.finish();
         if (visitor.getNotSupportMsg() != null) {
             throw new SQLNonTransientException(visitor.getNotSupportMsg());
         }
@@ -79,8 +83,9 @@ public class DefaultDruidParser implements DruidParser {
             schemaName = schemaConfig.getName();
         }
         Map<String, String> tableAliasMap = getTableAliasMap(schemaName, visitor.getAliasMap());
+        span = TraceManager.getTracer().buildSpan("build-route-calculate-units").start();
         ctx.setRouteCalculateUnits(ConditionUtil.buildRouteCalculateUnits(visitor.getAllWhereUnit(), tableAliasMap, schemaName));
-
+        span.finish();
         return schemaConfig;
     }
 

@@ -10,6 +10,9 @@ import com.actiontech.dble.net.handler.FrontendQueryHandler;
 import com.actiontech.dble.route.parser.util.ParseUtil;
 import com.actiontech.dble.server.handler.*;
 import com.actiontech.dble.server.parser.ServerParse;
+import com.actiontech.dble.singleton.TraceManager;
+import com.google.common.collect.ImmutableMap;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +51,8 @@ public class ServerQueryHandler implements FrontendQueryHandler {
             c.writeErrMessage(ErrorCode.ER_QUERY_INTERRUPTED, "The query is interrupted.");
             return;
         }
+        Span span = TraceManager.popSpan(this.source, false);
+        span.log(ImmutableMap.of("serverConnection", "" + source.getId(), "sql", sql));
 
         source.getSession2().queryCount();
         source.getSession2().rowCountRolling();

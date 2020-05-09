@@ -23,10 +23,13 @@ import com.actiontech.dble.route.parser.util.Pair;
 import com.actiontech.dble.server.NonBlockingSession;
 import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.server.parser.ServerParse;
+import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.util.PasswordAuthPlugin;
 import com.actiontech.dble.util.StringUtil;
 import com.actiontech.dble.util.TimeUtil;
 import com.actiontech.dble.util.exception.UnknownTxIsolationException;
+import com.google.common.collect.ImmutableMap;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +68,8 @@ public class MySQLConnection extends AbstractConnection implements
     private volatile boolean testing = false;
     private volatile String closeReason = null;
     private volatile BackEndCleaner recycler = null;
+    private volatile Span conectionSpan = null;
+    private volatile Span handlerSpan = null;
 
     private static long initClientFlags() {
         int flag = 0;
@@ -441,6 +446,7 @@ public class MySQLConnection extends AbstractConnection implements
     }
 
     private void synAndDoExecuteMultiNode(StringBuilder synSQL, RouteResultsetNode rrn, CharsetNames clientCharset) {
+        TraceManager.getTracer().activeSpan().log(ImmutableMap.of("real-sql-execution", synSQL));
         if (synSQL == null) {
             // not need syn connection
             if (session != null) {
@@ -925,6 +931,17 @@ public class MySQLConnection extends AbstractConnection implements
 
     public AtomicBoolean getLogResponse() {
         return logResponse;
+    }
+
+    public void setHanlerSpan(Span fSpan) {
+        handlerSpan = fSpan;
+    }
+
+    public Span getConnectionSpan() {
+        if (conectionSpan == null && handlerSpan != null) {
+            conectionSpan = TraceManager.getTracer().buildSpan("connection-response-full").asChildOf(handlerSpan).start();
+        }
+        return conectionSpan;
     }
 
 

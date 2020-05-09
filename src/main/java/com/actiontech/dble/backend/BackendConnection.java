@@ -10,6 +10,7 @@ import com.actiontech.dble.net.ClosableConnection;
 import com.actiontech.dble.route.RouteResultsetNode;
 import com.actiontech.dble.server.NonBlockingSession;
 import com.actiontech.dble.server.ServerConnection;
+import io.opentracing.Span;
 
 import java.io.UnsupportedEncodingException;
 

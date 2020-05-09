@@ -11,6 +11,9 @@ import com.actiontech.dble.alarm.AlertUtil;
 import com.actiontech.dble.backend.BackendConnection;
 import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
 import com.actiontech.dble.route.RouteResultsetNode;
+import com.actiontech.dble.singleton.TraceManager;
+import io.opentracing.Scope;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,21 +157,26 @@ public class PhysicalDataNode {
     }
 
     private void getWriteNodeConnection(String schema, boolean autoCommit, ResponseHandler handler, Object attachment, boolean fakeRead) throws IOException {
-        checkRequest(schema);
-        if (dataHost.isInitSuccess()) {
-            PhysicalDataSource writeSource = dataHost.getWriteSource();
-            if (writeSource.isDisabled()) {
-                throw new IllegalArgumentException("[" + writeSource.getHostConfig().getName() + "." + writeSource.getConfig().getHostName() + "] is disabled");
-            } else if (writeSource.isFakeNode()) {
-                throw new IllegalArgumentException("[" + writeSource.getHostConfig().getName() + "." + writeSource.getConfig().getHostName() + "] is fake node");
+        Span span = TraceManager.getTracer().buildSpan("get-connection-from-pool").start();
+        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
+            checkRequest(schema);
+            if (dataHost.isInitSuccess()) {
+                PhysicalDataSource writeSource = dataHost.getWriteSource();
+                if (writeSource.isDisabled()) {
+                    throw new IllegalArgumentException("[" + writeSource.getHostConfig().getName() + "." + writeSource.getConfig().getHostName() + "] is disabled");
+                } else if (writeSource.isFakeNode()) {
+                    throw new IllegalArgumentException("[" + writeSource.getHostConfig().getName() + "." + writeSource.getConfig().getHostName() + "] is fake node");
+                }
+                if (!fakeRead && writeSource.isReadOnly()) {
+                    throw new IllegalArgumentException("The Data Source[" + writeSource.getConfig().getUrl() + "] is running with the --read-only option so it cannot execute this statement");
+                }
+                writeSource.setWriteCount();
+                writeSource.getConnection(schema, autoCommit, handler, attachment, true);
+            } else {
+                throw new IllegalArgumentException("Invalid DataSource:" + dataHost.getHostName());
             }
-            if (!fakeRead && writeSource.isReadOnly()) {
-                throw new IllegalArgumentException("The Data Source[" + writeSource.getConfig().getUrl() + "] is running with the --read-only option so it cannot execute this statement");
-            }
-            writeSource.setWriteCount();
-            writeSource.getConnection(schema, autoCommit, handler, attachment, true);
-        } else {
-            throw new IllegalArgumentException("Invalid DataSource:" + dataHost.getHostName());
+        } finally {
+            span.finish();
         }
     }
 }

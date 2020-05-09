@@ -24,11 +24,14 @@ import com.actiontech.dble.server.NonBlockingSession;
 import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.server.parser.ServerParse;
 import com.actiontech.dble.singleton.CacheService;
+import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.singleton.WriteQueueFlowController;
 import com.actiontech.dble.statistic.stat.QueryResult;
 import com.actiontech.dble.statistic.stat.QueryResultDispatcher;
 import com.actiontech.dble.util.DebugPauseUtil;
 import com.actiontech.dble.util.StringUtil;
+import io.opentracing.Scope;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +102,8 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
     }
 
     public void execute() throws Exception {
+        Span span = TraceManager.getTracer().buildSpan("multi-query-handler").start();
+        TraceManager.setSpan(session.getSource(), span);
         lock.lock();
         try {
             this.reset();
@@ -121,6 +126,7 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
         }
         for (final RouteResultsetNode node : rrs.getNodes()) {
             BackendConnection conn = session.getTarget(node);
+
             if (session.tryExistsCon(conn, node)) {
                 node.setRunOnSlave(rrs.getRunOnSlave());
                 innerExecute(conn, node);
@@ -135,14 +141,21 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
     }
 
     private void innerExecute(BackendConnection conn, RouteResultsetNode node) {
-        if (clearIfSessionClosed(session)) {
-            cleanBuffer();
-            return;
+        Span hSpan = TraceManager.popSpan(this.session.getSource(), false);
+        Span span = TraceManager.getTracer().buildSpan("connection-execute").asChildOf(hSpan).start();
+        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
+            if (clearIfSessionClosed(session)) {
+                cleanBuffer();
+                return;
+            }
+            MySQLConnection mysqlCon = (MySQLConnection) conn;
+            mysqlCon.setHanlerSpan(hSpan);
+            mysqlCon.setResponseHandler(this);
+            mysqlCon.setSession(session);
+            mysqlCon.executeMultiNode(node, session.getSource(), sessionAutocommit && !session.getSource().isTxStart() && !node.isModifySQL());
+        } finally {
+            span.finish();
         }
-        MySQLConnection mysqlCon = (MySQLConnection) conn;
-        mysqlCon.setResponseHandler(this);
-        mysqlCon.setSession(session);
-        mysqlCon.executeMultiNode(node, session.getSource(), sessionAutocommit && !session.getSource().isTxStart() && !node.isModifySQL());
     }
 
     public void cleanBuffer() {
@@ -357,6 +370,8 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
         boolean zeroReached;
         lock.lock();
         try {
+            MySQLConnection con = (MySQLConnection) conn;
+            con.getConnectionSpan().finish();
             unResponseRrns.remove(rNode);
             zeroReached = canResponse();
             if (zeroReached) {
@@ -384,6 +399,8 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
                     cleanBuffer();
                 } else {
                     boolean multiStatementFlag = session.multiStatementPacket(eof, ++packetId);
+                    Span hSpan = TraceManager.popSpan(this.session.getSource(), true);
+                    hSpan.finish();
                     writeEofResult(eof, source);
                     session.multiStatementNextSql(multiStatementFlag);
                 }
@@ -516,6 +533,9 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
     }
 
     private void writeEofResult(byte[] eof, ServerConnection source) {
+        Span hSpan = TraceManager.popSpan(this.session.getSource(), false);
+        List<Span> slist = TraceManager.popFullList(this.session.getSource());
+        Span span = TraceManager.getTracer().buildSpan("write-final-to-client").asChildOf(hSpan).start();
         eof[3] = packetId;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("last packet id:" + packetId);
@@ -524,6 +544,8 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
         session.setResponseTime(true);
         doSqlStat();
         source.write(byteBuffer);
+        span.finish();
+        TraceManager.finishList(slist);
     }
 
     void doSqlStat() {

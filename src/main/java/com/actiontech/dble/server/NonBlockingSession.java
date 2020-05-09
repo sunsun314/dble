@@ -43,9 +43,12 @@ import com.actiontech.dble.server.trace.TraceRecord;
 import com.actiontech.dble.server.trace.TraceResult;
 import com.actiontech.dble.singleton.PauseDatanodeManager;
 import com.actiontech.dble.singleton.ProxyMeta;
+import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.statistic.stat.QueryTimeCost;
 import com.actiontech.dble.statistic.stat.QueryTimeCostContainer;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
+import io.opentracing.Scope;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -436,45 +439,50 @@ public class NonBlockingSession implements Session {
 
     @Override
     public void execute(RouteResultset rrs) {
-        if (killed) {
-            source.writeErrMessage(ErrorCode.ER_QUERY_INTERRUPTED, "The query is interrupted.");
-            return;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            StringBuilder s = new StringBuilder();
-            LOGGER.debug(s.append(source).append(rrs).toString() + " rrs ");
-        }
-
-        if (PauseDatanodeManager.getInstance().getIsPausing().get() &&
-                !PauseDatanodeManager.getInstance().checkTarget(target) &&
-                PauseDatanodeManager.getInstance().checkRRS(rrs)) {
-            if (PauseDatanodeManager.getInstance().waitForResume(rrs, this.getSource(), CONTINUE_TYPE_SINGLE)) {
+        Span span = TraceManager.getTracer().buildSpan("execute-route-result").start();
+        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
+            if (killed) {
+                source.writeErrMessage(ErrorCode.ER_QUERY_INTERRUPTED, "The query is interrupted.");
                 return;
             }
-        }
 
-        RouteResultsetNode[] nodes = rrs.getNodes();
-        if (nodes == null || nodes.length == 0 || nodes[0].getName() == null || nodes[0].getName().equals("")) {
-            if (rrs.isNeedOptimizer()) {
-                try {
-                    this.complexRrs = rrs;
-                    executeMultiSelect(rrs);
-                } catch (MySQLOutPutException e) {
-                    source.writeErrMessage(e.getSqlState(), e.getMessage(), e.getErrorCode());
-                }
-            } else {
-                source.writeErrMessage(ErrorCode.ER_NO_DB_ERROR,
-                        "No dataNode found ,please check tables defined in schema:" + source.getSchema());
+            if (LOGGER.isDebugEnabled()) {
+                StringBuilder s = new StringBuilder();
+                LOGGER.debug(s.append(source).append(rrs).toString() + " rrs ");
             }
-            return;
-        }
 
-        setRouteResultToTrace(rrs.getNodes());
-        if (nodes.length == 1) {
-            executeForSingleNode(rrs);
-        } else {
-            executeMultiResultSet(rrs);
+            if (PauseDatanodeManager.getInstance().getIsPausing().get() &&
+                    !PauseDatanodeManager.getInstance().checkTarget(target) &&
+                    PauseDatanodeManager.getInstance().checkRRS(rrs)) {
+                if (PauseDatanodeManager.getInstance().waitForResume(rrs, this.getSource(), CONTINUE_TYPE_SINGLE)) {
+                    return;
+                }
+            }
+
+            RouteResultsetNode[] nodes = rrs.getNodes();
+            if (nodes == null || nodes.length == 0 || nodes[0].getName() == null || nodes[0].getName().equals("")) {
+                if (rrs.isNeedOptimizer()) {
+                    try {
+                        this.complexRrs = rrs;
+                        executeMultiSelect(rrs);
+                    } catch (MySQLOutPutException e) {
+                        source.writeErrMessage(e.getSqlState(), e.getMessage(), e.getErrorCode());
+                    }
+                } else {
+                    source.writeErrMessage(ErrorCode.ER_NO_DB_ERROR,
+                            "No dataNode found ,please check tables defined in schema:" + source.getSchema());
+                }
+                return;
+            }
+
+            setRouteResultToTrace(rrs.getNodes());
+            if (nodes.length == 1) {
+                executeForSingleNode(rrs);
+            } else {
+                executeMultiResultSet(rrs);
+            }
+        } finally {
+            span.finish();
         }
     }
 

@@ -7,6 +7,9 @@ package com.actiontech.dble.server.parser;
 
 import com.actiontech.dble.config.Versions;
 import com.actiontech.dble.route.parser.util.ParseUtil;
+import com.actiontech.dble.singleton.TraceManager;
+import io.opentracing.Scope;
+import io.opentracing.Span;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,110 +94,115 @@ public final class ServerParse {
     }
 
     public static int parse(String stmt) {
-        int length = stmt.length();
-        //FIX BUG FOR SQL SUCH AS /XXXX/SQL
-        int rt = OTHER;
-        for (int i = 0; i < length; ++i) {
-            switch (stmt.charAt(i)) {
-                case ' ':
-                case '\t':
-                case '\r':
-                case '\n':
-                    continue;
-                case '/':
-                    // such as /*!40101 SET character_set_client = @saved_cs_client
-                    // */;
-                    if (i == 0 && stmt.charAt(1) == '*' && stmt.charAt(2) == '!' && stmt.charAt(length - 2) == '*' &&
-                            stmt.charAt(length - 1) == '/') {
-                        return MYSQL_CMD_COMMENT;
-                    }
-                    //fall through
-                case '#':
-                    i = ParseUtil.comment(stmt, i);
-                    if (i + 1 == length) {
-                        return MYSQL_COMMENT;
-                    }
-                    continue;
-                case '-':
-                    i = ParseUtil.commentDoubleDash(stmt, i);
-                    if (i + 1 == length) {
-                        return MYSQL_COMMENT;
-                    }
-                    continue;
-                case 'A':
-                case 'a':
-                    rt = aCheck(stmt, i);
-                    break;
-                case 'B':
-                case 'b':
-                    rt = beginCheck(stmt, i);
-                    break;
-                case 'C':
-                case 'c':
-                    rt = cCheck(stmt, i);
-                    break;
-                case 'D':
-                case 'd':
-                    rt = deleteOrdCheck(stmt, i);
-                    break;
-                case 'E':
-                case 'e':
-                    rt = eCheck(stmt, i);
-                    break;
-                case 'F':
-                case 'f':
-                    rt = flushCheck(stmt, i);
-                    break;
-                case 'I':
-                case 'i':
-                    rt = insertCheck(stmt, i);
-                    break;
-                case 'M':
-                case 'm':
-                    rt = migrateCheck(stmt, i);
-                    break;
-                case 'O':
-                case 'o':
-                    rt = optimizeCheck(stmt, i);
-                    break;
-                case 'P':
-                case 'p':
-                    rt = prepareCheck(stmt, i);
-                    break;
-                case 'R':
-                case 'r':
-                    rt = rCheck(stmt, i);
-                    break;
-                case 'S':
-                case 's':
-                    rt = sCheck(stmt, i);
-                    break;
-                case 'T':
-                case 't':
-                    rt = tCheck(stmt, i);
-                    break;
-                case 'U':
-                case 'u':
-                    rt = uCheck(stmt, i);
-                    break;
-                case 'K':
-                case 'k':
-                    rt = killCheck(stmt, i);
-                    break;
-                case 'H':
-                case 'h':
-                    rt = helpCheck(stmt, i);
-                    break;
-                case 'L':
-                case 'l':
-                    rt = lCheck(stmt, i);
-                    break;
-                default:
-                    break;
+        Span span = TraceManager.getTracer().buildSpan("pre-parse").start();
+        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
+            int length = stmt.length();
+            //FIX BUG FOR SQL SUCH AS /XXXX/SQL
+            int rt = OTHER;
+            for (int i = 0; i < length; ++i) {
+                switch (stmt.charAt(i)) {
+                    case ' ':
+                    case '\t':
+                    case '\r':
+                    case '\n':
+                        continue;
+                    case '/':
+                        // such as /*!40101 SET character_set_client = @saved_cs_client
+                        // */;
+                        if (i == 0 && stmt.charAt(1) == '*' && stmt.charAt(2) == '!' && stmt.charAt(length - 2) == '*' &&
+                                stmt.charAt(length - 1) == '/') {
+                            return MYSQL_CMD_COMMENT;
+                        }
+                        //fall through
+                    case '#':
+                        i = ParseUtil.comment(stmt, i);
+                        if (i + 1 == length) {
+                            return MYSQL_COMMENT;
+                        }
+                        continue;
+                    case '-':
+                        i = ParseUtil.commentDoubleDash(stmt, i);
+                        if (i + 1 == length) {
+                            return MYSQL_COMMENT;
+                        }
+                        continue;
+                    case 'A':
+                    case 'a':
+                        rt = aCheck(stmt, i);
+                        break;
+                    case 'B':
+                    case 'b':
+                        rt = beginCheck(stmt, i);
+                        break;
+                    case 'C':
+                    case 'c':
+                        rt = cCheck(stmt, i);
+                        break;
+                    case 'D':
+                    case 'd':
+                        rt = deleteOrdCheck(stmt, i);
+                        break;
+                    case 'E':
+                    case 'e':
+                        rt = eCheck(stmt, i);
+                        break;
+                    case 'F':
+                    case 'f':
+                        rt = flushCheck(stmt, i);
+                        break;
+                    case 'I':
+                    case 'i':
+                        rt = insertCheck(stmt, i);
+                        break;
+                    case 'M':
+                    case 'm':
+                        rt = migrateCheck(stmt, i);
+                        break;
+                    case 'O':
+                    case 'o':
+                        rt = optimizeCheck(stmt, i);
+                        break;
+                    case 'P':
+                    case 'p':
+                        rt = prepareCheck(stmt, i);
+                        break;
+                    case 'R':
+                    case 'r':
+                        rt = rCheck(stmt, i);
+                        break;
+                    case 'S':
+                    case 's':
+                        rt = sCheck(stmt, i);
+                        break;
+                    case 'T':
+                    case 't':
+                        rt = tCheck(stmt, i);
+                        break;
+                    case 'U':
+                    case 'u':
+                        rt = uCheck(stmt, i);
+                        break;
+                    case 'K':
+                    case 'k':
+                        rt = killCheck(stmt, i);
+                        break;
+                    case 'H':
+                    case 'h':
+                        rt = helpCheck(stmt, i);
+                        break;
+                    case 'L':
+                    case 'l':
+                        rt = lCheck(stmt, i);
+                        break;
+                    default:
+                        break;
+                }
+                break;
             }
-            break;
+            return rt;
+        } finally {
+            span.finish();
         }
-        return rt;
     }
 
     private static int eCheck(String stmt, int offset) {
