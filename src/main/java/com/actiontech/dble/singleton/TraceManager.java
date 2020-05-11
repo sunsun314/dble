@@ -9,6 +9,7 @@ import io.jaegertracing.internal.reporters.CompositeReporter;
 import io.jaegertracing.internal.reporters.LoggingReporter;
 import io.jaegertracing.internal.reporters.RemoteReporter;
 import io.jaegertracing.internal.samplers.ConstSampler;
+import io.jaegertracing.internal.samplers.ProbabilisticSampler;
 import io.jaegertracing.thrift.internal.senders.HttpSender;
 import io.opentracing.Span;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class TraceManager {
                 .withReporter(compositeReporter)
                 .withMetrics(metrics)
                 .withExpandExceptionLogs()
-                .withSampler(new ConstSampler(true));
+                .withSampler(new ProbabilisticSampler(0.5));
 
         tracer = builder.build();
     }

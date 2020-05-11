@@ -225,6 +225,7 @@ public final class RouterUtil {
             }
             rrs.setNodes(nodes);
         } finally {
+            span.log(ImmutableMap.of("routeResult-simple", rrs == null ? "" : rrs.toString()));
             span.finish();
         }
 

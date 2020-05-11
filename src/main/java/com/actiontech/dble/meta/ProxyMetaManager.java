@@ -41,10 +41,13 @@ import com.actiontech.dble.server.util.SchemaUtil.SchemaInfo;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.singleton.DistrbtLockManager;
 import com.actiontech.dble.singleton.OnlineStatus;
+import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.util.KVPathUtil;
 import com.actiontech.dble.util.StringUtil;
 import com.actiontech.dble.util.ZKUtils;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import io.opentracing.Span;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
@@ -230,27 +233,33 @@ public class ProxyMetaManager {
     }
 
     public StructureMeta.TableMeta getSyncTableMeta(String schema, String tbName) throws SQLNonTransientException {
-        while (true) {
-            int oldVersion = version.get();
-            if (metaCount.get() == 0) {
-                StructureMeta.TableMeta meta = getTableMeta(schema, tbName);
-                if (version.get() == oldVersion) {
-                    return meta;
-                }
-            } else {
-                metaLock.lock();
-                try {
-                    if (lockTables.containsKey(genLockKey(schema, tbName))) {
-                        String msg = "SCHEMA[" + schema + "], TABLE[" + tbName + "] is doing DDL";
-                        LOGGER.info(msg);
-                        throw new SQLNonTransientException(msg, "HY000", ErrorCode.ER_DOING_DDL);
-                    } else {
-                        return getTableMeta(schema, tbName);
+        Span span = TraceManager.getTracer().buildSpan("get-meta").start();
+        span.log(ImmutableMap.of("table-name", schema + "." + tbName));
+        try {
+            while (true) {
+                int oldVersion = version.get();
+                if (metaCount.get() == 0) {
+                    StructureMeta.TableMeta meta = getTableMeta(schema, tbName);
+                    if (version.get() == oldVersion) {
+                        return meta;
                     }
-                } finally {
-                    metaLock.unlock();
+                } else {
+                    metaLock.lock();
+                    try {
+                        if (lockTables.containsKey(genLockKey(schema, tbName))) {
+                            String msg = "SCHEMA[" + schema + "], TABLE[" + tbName + "] is doing DDL";
+                            LOGGER.info(msg);
+                            throw new SQLNonTransientException(msg, "HY000", ErrorCode.ER_DOING_DDL);
+                        } else {
+                            return getTableMeta(schema, tbName);
+                        }
+                    } finally {
+                        metaLock.unlock();
+                    }
                 }
             }
+        } finally {
+            span.finish();
         }
     }
 

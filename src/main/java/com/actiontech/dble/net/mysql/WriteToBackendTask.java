@@ -7,6 +7,8 @@ package com.actiontech.dble.net.mysql;
 
 import com.actiontech.dble.backend.mysql.BufferUtil;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
+import com.actiontech.dble.singleton.TraceManager;
+import io.opentracing.Span;
 
 import java.nio.ByteBuffer;
 
@@ -20,12 +22,23 @@ public class WriteToBackendTask {
     }
 
     public void execute() {
-        int size = packet.calcPacketSize();
-        if (size >= MySQLPacket.MAX_PACKET_SIZE) {
-            packet.writeBigPackage(conn, size);
-        } else {
-            writeCommonPackage(conn);
+        Span span = null;
+        if (conn.getHandlerSpan() != null) {
+            span = TraceManager.getTracer().buildSpan("Write-To-Backend").asChildOf(conn.getHandlerSpan()).start();
         }
+        try {
+            int size = packet.calcPacketSize();
+            if (size >= MySQLPacket.MAX_PACKET_SIZE) {
+                packet.writeBigPackage(conn, size);
+            } else {
+                writeCommonPackage(conn);
+            }
+        } finally {
+            if (span != null) {
+                span.finish();
+            }
+        }
+
     }
 
     private void writeCommonPackage(MySQLConnection c) {
