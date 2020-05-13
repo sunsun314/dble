@@ -3,13 +3,13 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.config.Fields;
 import com.actiontech.dble.common.config.model.SystemConfig;
 import com.actiontech.dble.common.config.util.ConfigUtil;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResultSetHeaderPacket;

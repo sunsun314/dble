@@ -2,21 +2,21 @@
  * Copyright (C) 2016-2020 ActionTech.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.cluster.response;
+package com.actiontech.dble.maintenance.cluster.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
-import com.actiontech.dble.cluster.ClusterHelper;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.cluster.ClusterPathUtil;
-import com.actiontech.dble.cluster.bean.KvBean;
-import com.actiontech.dble.cluster.listener.ClusterClearKeyListener;
+import com.actiontech.dble.maintenance.cluster.ClusterHelper;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
+import com.actiontech.dble.maintenance.cluster.bean.KvBean;
+import com.actiontech.dble.maintenance.cluster.listener.ClusterClearKeyListener;
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.PauseInfo;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.NIOProcessor;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.common.net.NIOProcessor;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.singleton.PauseDatanodeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static com.actiontech.dble.cluster.bean.KvBean.DELETE;
+import static com.actiontech.dble.maintenance.cluster.bean.KvBean.DELETE;
 
 
 public class PauseDataNodeResponse implements ClusterXmlLoader {

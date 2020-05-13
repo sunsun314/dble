@@ -5,8 +5,8 @@
 */
 package com.actiontech.dble.parser.util;
 
-import com.actiontech.dble.route.parser.util.Pair;
-import com.actiontech.dble.route.parser.util.PairUtil;
+import com.actiontech.dble.common.util.Pair;
+import com.actiontech.dble.common.util.PairUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;

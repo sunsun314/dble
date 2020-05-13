@@ -3,10 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.cache.impl;
+package com.actiontech.dble.common.cache.impl;
 
-import com.actiontech.dble.cache.CachePool;
-import com.actiontech.dble.cache.CacheStatic;
+import com.actiontech.dble.common.cache.CachePool;
+import com.actiontech.dble.common.cache.CacheStatic;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import org.slf4j.Logger;

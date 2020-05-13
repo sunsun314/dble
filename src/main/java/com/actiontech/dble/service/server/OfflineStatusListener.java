@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.service;
+package com.actiontech.dble.service.server;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;

@@ -3,16 +3,16 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.handler;
+package com.actiontech.dble.sql.route.simple.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
 import com.actiontech.dble.common.cache.LayerCachePool;
 import com.actiontech.dble.common.config.model.SchemaConfig;
-import com.actiontech.dble.sql.route.simple.route.RouteResultset;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
-import com.actiontech.dble.service.ServerConnection;
-import com.actiontech.dble.sql.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

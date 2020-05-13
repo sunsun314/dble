@@ -1,7 +1,7 @@
-package com.actiontech.dble.config.loader.zkprocess.zookeeper.process;
+package com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process;
 
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
 
 import java.util.Date;
 import java.util.Map;

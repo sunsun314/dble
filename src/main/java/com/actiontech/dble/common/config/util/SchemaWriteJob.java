@@ -1,11 +1,11 @@
-package com.actiontech.dble.config.util;
+package com.actiontech.dble.common.config.util;
 
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.Schemas;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.DataHost;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.ReadHost;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.WriteHost;
 import com.actiontech.dble.singleton.HaConfigManager;
 import org.slf4j.LoggerFactory;
 

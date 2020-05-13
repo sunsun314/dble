@@ -2,7 +2,7 @@
  * Copyright (C) 2016-2020 ActionTech.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
@@ -12,7 +12,7 @@ import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
 import com.actiontech.dble.maintenance.cluster.bean.KvBean;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.PauseInfo;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.singleton.PauseDatanodeManager;
 import org.slf4j.Logger;

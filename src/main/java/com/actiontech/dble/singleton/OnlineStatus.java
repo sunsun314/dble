@@ -5,12 +5,12 @@
 
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.backend.mysql.view.CKVStoreRepository;
-import com.actiontech.dble.backend.mysql.view.Repository;
-import com.actiontech.dble.cluster.*;
-import com.actiontech.dble.cluster.DistributeLock;
-import com.actiontech.dble.cluster.bean.InstanceOnline;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.sql.view.CKVStoreRepository;
+import com.actiontech.dble.sql.view.Repository;
+import com.actiontech.dble.maintenance.cluster.*;
+import com.actiontech.dble.maintenance.cluster.DistributeLock;
+import com.actiontech.dble.maintenance.cluster.bean.InstanceOnline;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

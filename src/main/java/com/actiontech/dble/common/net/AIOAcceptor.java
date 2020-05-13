@@ -3,12 +3,9 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.common.net.aio;
+package com.actiontech.dble.common.net;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.common.net.FrontendConnection;
-import com.actiontech.dble.common.net.nio.NIOProcessor;
-import com.actiontech.dble.common.net.SocketAcceptor;
 import com.actiontech.dble.common.net.factory.FrontendConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

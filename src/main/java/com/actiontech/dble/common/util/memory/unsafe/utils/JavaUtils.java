@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.actiontech.dble.memory.unsafe.utils;
+package com.actiontech.dble.common.util.memory.unsafe.utils;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;

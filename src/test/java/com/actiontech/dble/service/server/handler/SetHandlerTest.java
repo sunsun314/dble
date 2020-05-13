@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -6,11 +6,11 @@
 package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.config.Fields;
 import com.actiontech.dble.common.config.helper.KeyVariables;
 import com.actiontech.dble.common.config.model.SystemConfig;
-import com.actiontech.dble.management.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResultSetHeaderPacket;

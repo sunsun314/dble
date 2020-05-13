@@ -3,16 +3,16 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
-import com.actiontech.dble.assistant.backend.mysql.VersionUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.VersionUtil;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.Isolations;
-import com.actiontech.dble.sql.route.simple.route.parser.util.Pair;
-import com.actiontech.dble.sql.route.simple.route.parser.util.ParseUtil;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.common.util.Pair;
+import com.actiontech.dble.common.util.ParseUtil;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.sqljob.OneRawSQLQueryResultHandler;
 import com.actiontech.dble.common.sqljob.SetTestJob;
 import com.actiontech.dble.common.util.StringUtil;

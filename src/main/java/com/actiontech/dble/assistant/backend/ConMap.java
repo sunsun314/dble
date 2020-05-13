@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.backend;
+package com.actiontech.dble.assistant.backend;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.net.NIOProcessor;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
+import com.actiontech.dble.common.net.NIOProcessor;
 import com.actiontech.dble.common.util.StringUtil;
 
 import java.util.Collection;

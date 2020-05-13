@@ -3,10 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.service.response;
+package com.actiontech.dble.service.server.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.net.FrontendConnection;
 import com.actiontech.dble.common.mysql.packet.ErrorPacket;
 import com.actiontech.dble.common.mysql.packet.OkPacket;

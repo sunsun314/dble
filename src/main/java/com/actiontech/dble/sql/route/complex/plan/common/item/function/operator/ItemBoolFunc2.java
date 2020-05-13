@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.item.function.operator;
+package com.actiontech.dble.sql.route.complex.plan.common.item.function.operator;
 
-import com.actiontech.dble.plan.common.MySQLcom;
-import com.actiontech.dble.plan.common.item.Item;
-import com.actiontech.dble.plan.common.item.function.operator.cmpfunc.util.ArgComparator;
-import com.actiontech.dble.plan.common.item.function.primary.ItemBoolFunc;
+import com.actiontech.dble.sql.route.complex.plan.common.MySQLcom;
+import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.operator.cmpfunc.util.ArgComparator;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.primary.ItemBoolFunc;
 
 /**
  * Bool with 2 string args

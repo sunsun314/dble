@@ -3,9 +3,9 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.cache;
+package com.actiontech.dble.common.cache;
 
-import com.actiontech.dble.cache.impl.EnchachePooFactory;
+import com.actiontech.dble.common.cache.impl.EnchachePooFactory;
 import org.junit.Assert;
 import org.junit.Test;
 

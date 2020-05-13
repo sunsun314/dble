@@ -1,12 +1,12 @@
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.sqlengine.MultiRowSQLQueryResultHandler;
-import com.actiontech.dble.sqlengine.SQLJob;
-import com.actiontech.dble.sqlengine.SQLQueryResult;
-import com.actiontech.dble.sqlengine.SQLQueryResultListener;
+import com.actiontech.dble.common.sqljob.MultiRowSQLQueryResultHandler;
+import com.actiontech.dble.common.sqljob.SQLJob;
+import com.actiontech.dble.common.sqljob.SQLQueryResult;
+import com.actiontech.dble.common.sqljob.SQLQueryResultListener;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -3,14 +3,14 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.config;
+package com.actiontech.dble.common.config;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.config.model.FirewallConfig;
-import com.actiontech.dble.config.model.UserConfig;
-import com.actiontech.dble.config.model.UserPrivilegesConfig;
-import com.actiontech.dble.net.handler.FrontendPrivileges;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.common.config.model.FirewallConfig;
+import com.actiontech.dble.common.config.model.UserConfig;
+import com.actiontech.dble.common.config.model.UserPrivilegesConfig;
+import com.actiontech.dble.service.handler.FrontendPrivileges;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.singleton.TraceManager;
 import com.alibaba.druid.wall.WallCheckResult;
 import io.opentracing.Span;

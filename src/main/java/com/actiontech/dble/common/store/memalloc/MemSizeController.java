@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.store.memalloc;
+package com.actiontech.dble.common.store.memalloc;
 
 import java.util.concurrent.atomic.AtomicLong;
 

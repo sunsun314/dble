@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.maintenance.cluster.ClusterHelper;
 import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
 import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
@@ -15,14 +15,14 @@ import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.TableConfig;
 import com.actiontech.dble.common.config.model.UserConfig;
 import com.actiontech.dble.common.config.util.ConfigUtil;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.sql.meta.table.DryRunGetNodeTablesHandler;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResultSetHeaderPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
-import com.actiontech.dble.server.variables.SystemVariables;
-import com.actiontech.dble.server.variables.VarsExtractorHandler;
+import com.actiontech.dble.common.mysql.variables.SystemVariables;
+import com.actiontech.dble.common.mysql.variables.VarsExtractorHandler;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.common.util.StringUtil;
 import org.slf4j.Logger;

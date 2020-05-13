@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.xmltozk.listen;
+package com.actiontech.dble.common.config.loader.zkprocess.xmltozk.listen;
 
-import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZookeeperProcessListen;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.NotifyService;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZookeeperProcessListen;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
 import com.actiontech.dble.common.util.KVPathUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.ZKPaths;

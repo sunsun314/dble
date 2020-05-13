@@ -3,24 +3,24 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.backend.datasource;
+package com.actiontech.dble.assistant.backend.datasource;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.alarm.AlarmCode;
-import com.actiontech.dble.alarm.Alert;
-import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.backend.BackendConnection;
-import com.actiontech.dble.backend.heartbeat.MySQLHeartbeat;
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
-import com.actiontech.dble.backend.mysql.nio.handler.GetConnectionHandler;
-import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
-import com.actiontech.dble.config.helper.GetAndSyncDataSourceKeyVariables;
-import com.actiontech.dble.config.helper.KeyVariables;
-import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
-import com.actiontech.dble.config.model.DataHostConfig;
+import com.actiontech.dble.maintenance.alarm.AlarmCode;
+import com.actiontech.dble.maintenance.alarm.Alert;
+import com.actiontech.dble.maintenance.alarm.AlertUtil;
+import com.actiontech.dble.assistant.backend.BackendConnection;
+import com.actiontech.dble.assistant.backend.heartbeat.MySQLHeartbeat;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLDataSource;
+import com.actiontech.dble.common.config.helper.GetAndSyncDataSourceKeyVariables;
+import com.actiontech.dble.common.config.helper.KeyVariables;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.JsonProcessBase;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
+import com.actiontech.dble.common.config.model.DataHostConfig;
 import com.actiontech.dble.singleton.HaConfigManager;
+import com.actiontech.dble.sql.handler.GetConnectionHandler;
+import com.actiontech.dble.sql.handler.ResponseHandler;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;

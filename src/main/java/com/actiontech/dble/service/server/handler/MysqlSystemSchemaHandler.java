@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.mysql.packet.*;
 import com.actiontech.dble.common.config.Fields;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.statement.SQLSelectItem;

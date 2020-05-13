@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query;
+package com.actiontech.dble.sql.handler.query;
 
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.ResponseHandler;
+import com.actiontech.dble.sql.handler.ResponseHandler;
 
 import java.util.List;
 

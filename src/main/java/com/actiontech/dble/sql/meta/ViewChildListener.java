@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
-import com.actiontech.dble.btrace.provider.ClusterDelayProvider;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
+import com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.curator.framework.CuratorFramework;
@@ -17,7 +17,7 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 
 import java.nio.charset.StandardCharsets;
 
-import static com.actiontech.dble.backend.mysql.view.Repository.*;
+import static com.actiontech.dble.sql.view.Repository.*;
 
 
 public class ViewChildListener implements PathChildrenCacheListener {

@@ -1,8 +1,8 @@
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.FlowCotrollerConfig;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.singleton.WriteQueueFlowController;
 

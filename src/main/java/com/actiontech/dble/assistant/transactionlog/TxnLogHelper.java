@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.log.transaction;
+package com.actiontech.dble.assistant.transactionlog;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 
 public final class TxnLogHelper {
     private TxnLogHelper() {

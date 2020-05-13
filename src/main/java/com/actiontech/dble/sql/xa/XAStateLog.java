@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.xa;
+package com.actiontech.dble.sql.xa;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.Repository;
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.impl.FileSystemRepository;
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.impl.InMemoryRepository;
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.impl.KVStoreRepository;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
+import com.actiontech.dble.sql.xa.recovery.Repository;
+import com.actiontech.dble.sql.xa.recovery.impl.FileSystemRepository;
+import com.actiontech.dble.sql.xa.recovery.impl.InMemoryRepository;
+import com.actiontech.dble.sql.xa.recovery.impl.KVStoreRepository;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

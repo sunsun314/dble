@@ -3,19 +3,19 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.zktoxml.listen;
+package com.actiontech.dble.common.config.loader.zkprocess.zktoxml.listen;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZookeeperProcessListen;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.DirectoryInf;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.BinlogPause;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkDataImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkDirectoryImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
-import com.actiontech.dble.manager.response.ShowBinlogStatus;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.NotifyService;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZookeeperProcessListen;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.DirectoryInf;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.BinlogPause;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkDataImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkDirectoryImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
+import com.actiontech.dble.management.response.ShowBinlogStatus;
 import com.actiontech.dble.common.util.KVPathUtil;
 import com.actiontech.dble.common.util.ZKUtils;
 import org.apache.curator.framework.CuratorFramework;

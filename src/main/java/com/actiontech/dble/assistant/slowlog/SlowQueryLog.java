@@ -3,12 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.server.status;
+package com.actiontech.dble.assistant.slowlog;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.slowlog.SlowQueryLogProcessor;
-import com.actiontech.dble.server.ServerConnection;
-import com.actiontech.dble.server.trace.TraceResult;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.maintenance.trace.bean.TraceResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

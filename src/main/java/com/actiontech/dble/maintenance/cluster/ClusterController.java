@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.cluster;
+package com.actiontech.dble.maintenance.cluster;
 
 import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;

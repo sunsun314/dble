@@ -1,4 +1,4 @@
-package com.actiontech.dble.cluster.bean;
+package com.actiontech.dble.maintenance.cluster.bean;
 
 import java.util.Map;
 

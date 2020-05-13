@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config;
+package com.actiontech.dble.common.config;
 
 /**
  * Created by szf on 2018/8/6.

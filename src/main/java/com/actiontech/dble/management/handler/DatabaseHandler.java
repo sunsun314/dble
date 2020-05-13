@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.maintenance.alarm.AlarmCode;
@@ -13,12 +13,12 @@ import com.actiontech.dble.maintenance.alarm.ToResolveContainer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
-import com.actiontech.dble.sqlengine.OneRawSQLQueryResultHandler;
-import com.actiontech.dble.sqlengine.SQLJob;
-import com.actiontech.dble.sqlengine.SQLQueryResult;
-import com.actiontech.dble.sqlengine.SQLQueryResultListener;
+import com.actiontech.dble.common.sqljob.OneRawSQLQueryResultHandler;
+import com.actiontech.dble.common.sqljob.SQLJob;
+import com.actiontech.dble.common.sqljob.SQLQueryResult;
+import com.actiontech.dble.common.sqljob.SQLQueryResultListener;
 import com.actiontech.dble.common.util.SplitUtil;
 import org.apache.commons.lang.StringUtils;
 

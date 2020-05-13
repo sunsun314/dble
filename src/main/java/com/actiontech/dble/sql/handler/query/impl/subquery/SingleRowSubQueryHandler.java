@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl.subquery;
+package com.actiontech.dble.sql.handler.query.impl.subquery;
 
 import com.actiontech.dble.assistant.backend.BackendConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.HandlerTool;
+import com.actiontech.dble.sql.handler.util.HandlerTool;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
@@ -14,7 +14,7 @@ import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
 import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
 import com.actiontech.dble.sql.route.complex.plan.common.item.ItemString;
 import com.actiontech.dble.sql.route.complex.plan.common.item.subquery.ItemSingleRowSubQuery;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 
 import java.util.Collections;
 import java.util.List;

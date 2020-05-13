@@ -1,10 +1,10 @@
-package com.actiontech.dble.backend.datasource.check;
+package com.actiontech.dble.assistant.backend.datasource.check;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.config.ServerConfig;
-import com.actiontech.dble.config.model.TableConfig;
-import com.actiontech.dble.manager.response.CheckGlobalConsistency;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
+import com.actiontech.dble.common.config.ServerConfig;
+import com.actiontech.dble.common.config.model.TableConfig;
+import com.actiontech.dble.management.response.CheckGlobalConsistency;
 import com.actiontech.dble.singleton.ProxyMeta;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

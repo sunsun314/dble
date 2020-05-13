@@ -3,10 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.cache.impl;
+package com.actiontech.dble.common.cache.impl;
 
-import com.actiontech.dble.cache.CachePool;
-import com.actiontech.dble.cache.CachePoolFactory;
+import com.actiontech.dble.common.cache.CachePool;
+import com.actiontech.dble.common.cache.CachePoolFactory;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;

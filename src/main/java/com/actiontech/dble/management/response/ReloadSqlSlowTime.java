@@ -6,7 +6,7 @@
 package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.management.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.assistant.statistic.stat.UserStat;
 import com.actiontech.dble.assistant.statistic.stat.UserStatAnalyzer;

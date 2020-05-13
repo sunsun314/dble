@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.util;
+package com.actiontech.dble.common.util;
 
 
-import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.singleton.OnlineStatus;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;

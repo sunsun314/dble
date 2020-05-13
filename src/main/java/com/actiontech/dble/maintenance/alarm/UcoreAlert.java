@@ -6,9 +6,9 @@
 package com.actiontech.dble.maintenance.alarm;
 
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
-import com.actiontech.dble.cluster.ClusterHelper;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.cluster.bean.ClusterAlertBean;
+import com.actiontech.dble.maintenance.cluster.ClusterHelper;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.maintenance.cluster.bean.ClusterAlertBean;
 
 
 public final class UcoreAlert implements Alert {

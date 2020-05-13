@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
-import com.actiontech.dble.meta.protocol.StructureMeta;
-import com.actiontech.dble.plan.node.PlanNode;
-import com.actiontech.dble.util.StringUtil;
+import com.actiontech.dble.sql.meta.protocol.StructureMeta;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
+import com.actiontech.dble.common.util.StringUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

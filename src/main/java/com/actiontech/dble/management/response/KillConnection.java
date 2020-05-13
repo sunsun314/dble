@@ -3,12 +3,12 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.NIOProcessor;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.common.net.NIOProcessor;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.common.util.SplitUtil;
 import org.slf4j.Logger;

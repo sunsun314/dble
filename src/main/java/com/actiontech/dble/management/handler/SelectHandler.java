@@ -3,20 +3,20 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.manager.response.SelectMaxAllowedPacket;
-import com.actiontech.dble.manager.response.SelectSessionTxReadOnly;
-import com.actiontech.dble.manager.response.ShowSingleString;
-import com.actiontech.dble.sql.route.simple.route.parser.ManagerParseSelect;
-import com.actiontech.dble.server.response.SelectVersionComment;
-import com.actiontech.dble.sqlengine.TransformSQLJob;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.management.response.SelectMaxAllowedPacket;
+import com.actiontech.dble.management.response.SelectSessionTxReadOnly;
+import com.actiontech.dble.management.response.ShowSingleString;
+import com.actiontech.dble.service.manager.parser.ManagerParseSelect;
+import com.actiontech.dble.service.server.response.SelectVersionComment;
+import com.actiontech.dble.common.sqljob.TransformSQLJob;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
@@ -31,7 +31,7 @@ import com.alibaba.druid.sql.parser.SQLStatementParser;
 
 import java.util.Iterator;
 
-import static com.actiontech.dble.sql.route.simple.route.parser.ManagerParseSelect.*;
+import static com.actiontech.dble.service.manager.parser.ManagerParseSelect.*;
 
 public final class SelectHandler {
     private SelectHandler() {

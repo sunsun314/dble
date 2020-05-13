@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.transaction;
+package com.actiontech.dble.assistant.transactionlog;
 
 public class TxnBinaryLog {
     private String user;

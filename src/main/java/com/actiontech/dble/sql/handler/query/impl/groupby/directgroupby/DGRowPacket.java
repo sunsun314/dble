@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl.groupby.directgroupby;
+package com.actiontech.dble.sql.handler.query.impl.groupby.directgroupby;
 
 
-import com.actiontech.dble.assistant.backend.mysql.BufferUtil;
-import com.actiontech.dble.assistant.backend.mysql.ByteUtil;
+import com.actiontech.dble.common.mysql.util.BufferUtil;
+import com.actiontech.dble.common.mysql.util.ByteUtil;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
 import com.actiontech.dble.singleton.BufferPoolManager;
 import org.apache.commons.lang.SerializationUtils;

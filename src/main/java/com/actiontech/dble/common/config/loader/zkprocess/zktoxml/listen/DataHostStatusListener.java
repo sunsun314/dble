@@ -1,8 +1,8 @@
-package com.actiontech.dble.config.loader.zkprocess.zktoxml.listen;
+package com.actiontech.dble.common.config.loader.zkprocess.zktoxml.listen;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.HaInfo;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.HaInfo;
 import com.actiontech.dble.singleton.HaConfigManager;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;

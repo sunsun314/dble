@@ -1,9 +1,9 @@
-package com.actiontech.dble.manager.dump;
+package com.actiontech.dble.management.dump;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.TableConfig;
-import com.actiontech.dble.manager.dump.handler.DefaultHandler;
+import com.actiontech.dble.management.dump.handler.DefaultHandler;
 
 import java.util.ArrayList;
 import java.util.List;

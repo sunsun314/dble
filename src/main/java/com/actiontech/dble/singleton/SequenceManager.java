@@ -1,7 +1,7 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.route.sequence.handler.*;
+import com.actiontech.dble.common.config.model.SystemConfig;
+import com.actiontech.dble.sql.route.simple.sequence.handler.*;
 
 /**
  * Created by szf on 2019/9/19.

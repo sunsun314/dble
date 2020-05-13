@@ -6,7 +6,7 @@
 package com.actiontech.dble.common.mysql.packet;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.backend.mysql.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
 import org.apache.commons.lang.StringUtils;
 
 public class CharsetNames {

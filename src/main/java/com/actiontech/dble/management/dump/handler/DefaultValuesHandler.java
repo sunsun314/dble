@@ -1,6 +1,6 @@
-package com.actiontech.dble.manager.dump.handler;
+package com.actiontech.dble.management.dump.handler;
 
-import com.actiontech.dble.manager.dump.DumpFileContext;
+import com.actiontech.dble.management.dump.DumpFileContext;
 import com.alibaba.druid.sql.ast.SQLExpr;
 
 import java.sql.SQLNonTransientException;

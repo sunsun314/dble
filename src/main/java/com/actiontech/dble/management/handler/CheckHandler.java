@@ -2,15 +2,15 @@
  * Copyright (C) 2016-2020 ActionTech.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.manager.response.CheckFullMetaData;
-import com.actiontech.dble.manager.response.CheckGlobalConsistency;
-import com.actiontech.dble.manager.response.ShowTime;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.management.response.CheckFullMetaData;
+import com.actiontech.dble.management.response.CheckGlobalConsistency;
+import com.actiontech.dble.management.response.ShowTime;
 import com.actiontech.dble.singleton.ProxyMeta;
-import com.actiontech.dble.sql.route.simple.route.parser.ManagerParseCheck;
+import com.actiontech.dble.service.manager.parser.ManagerParseCheck;
 
 /**
  * @author huqing.yan

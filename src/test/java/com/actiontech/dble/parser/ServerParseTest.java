@@ -5,8 +5,8 @@
 
 package com.actiontech.dble.parser;
 
-import com.actiontech.dble.route.parser.util.ParseUtil;
-import com.actiontech.dble.server.parser.ServerParse;
+import com.actiontech.dble.common.util.ParseUtil;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -3,23 +3,23 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.xmltozk.listen;
+package com.actiontech.dble.common.config.loader.zkprocess.xmltozk.listen;
 
-import com.actiontech.dble.config.loader.console.ZookeeperPath;
-import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZookeeperProcessListen;
-import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datanode.DataNode;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.schema.Schema;
-import com.actiontech.dble.config.loader.zkprocess.parse.ParseJsonServiceInf;
-import com.actiontech.dble.config.loader.zkprocess.parse.ParseXmlServiceInf;
-import com.actiontech.dble.config.loader.zkprocess.parse.XmlProcessBase;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.json.DataHostJsonParse;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.json.DataNodeJsonParse;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.json.SchemaJsonParse;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
+import com.actiontech.dble.common.config.loader.console.ZookeeperPath;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.NotifyService;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZookeeperProcessListen;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.Schemas;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.DataHost;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datanode.DataNode;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.schema.Schema;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.ParseJsonServiceInf;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.ParseXmlServiceInf;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.XmlProcessBase;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.schema.json.DataHostJsonParse;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.schema.json.DataNodeJsonParse;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.schema.json.SchemaJsonParse;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
 import com.actiontech.dble.common.util.KVPathUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;

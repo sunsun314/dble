@@ -5,7 +5,7 @@
 */
 package com.actiontech.dble.model;
 
-import com.actiontech.dble.util.ExecutorUtil;
+import com.actiontech.dble.common.util.ExecutorUtil;
 import jsr166y.LinkedTransferQueue;
 
 import java.util.concurrent.BlockingQueue;

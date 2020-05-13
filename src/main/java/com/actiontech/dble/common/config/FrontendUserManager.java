@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config;
+package com.actiontech.dble.common.config;
 
-import com.actiontech.dble.config.model.UserConfig;
+import com.actiontech.dble.common.config.model.UserConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static com.actiontech.dble.config.FrontendUserManager.CheckStatus.OK;
-import static com.actiontech.dble.config.FrontendUserManager.CheckStatus.SERVER_MAX;
-import static com.actiontech.dble.config.FrontendUserManager.CheckStatus.USER_MAX;
+import static com.actiontech.dble.common.config.FrontendUserManager.CheckStatus.OK;
+import static com.actiontech.dble.common.config.FrontendUserManager.CheckStatus.SERVER_MAX;
+import static com.actiontech.dble.common.config.FrontendUserManager.CheckStatus.USER_MAX;
 
 /**
  * Created by szf on 2018/6/27.

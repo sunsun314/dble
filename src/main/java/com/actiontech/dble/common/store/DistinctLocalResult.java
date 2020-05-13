@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.store;
+package com.actiontech.dble.common.store;
 
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.RowDataComparator;
-import com.actiontech.dble.assistant.backend.mysql.store.diskbuffer.DistinctResultDiskBuffer;
-import com.actiontech.dble.assistant.backend.mysql.store.result.ResultExternal;
+import com.actiontech.dble.sql.handler.util.RowDataComparator;
+import com.actiontech.dble.common.store.diskbuffer.DistinctResultDiskBuffer;
+import com.actiontech.dble.common.store.result.ResultExternal;
 import com.actiontech.dble.common.buffer.BufferPool;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
 import com.actiontech.dble.common.util.RBTreeList;

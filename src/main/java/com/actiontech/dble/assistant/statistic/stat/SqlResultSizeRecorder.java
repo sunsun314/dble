@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.statistic.stat;
+package com.actiontech.dble.assistant.statistic.stat;
 
 import com.alibaba.druid.sql.visitor.ParameterizedOutputVisitorUtils;
 

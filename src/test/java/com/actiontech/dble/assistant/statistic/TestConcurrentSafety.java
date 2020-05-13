@@ -3,13 +3,13 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.statistic;
+package com.actiontech.dble.assistant.statistic;
 
-import com.actiontech.dble.server.parser.ServerParse;
-import com.actiontech.dble.statistic.stat.QueryConditionAnalyzer;
-import com.actiontech.dble.statistic.stat.QueryResult;
-import com.actiontech.dble.statistic.stat.SqlFrequency;
-import com.actiontech.dble.statistic.stat.UserSqlHighStat;
+import com.actiontech.dble.service.server.parser.ServerParse;
+import com.actiontech.dble.assistant.statistic.stat.QueryConditionAnalyzer;
+import com.actiontech.dble.assistant.statistic.stat.QueryResult;
+import com.actiontech.dble.assistant.statistic.stat.SqlFrequency;
+import com.actiontech.dble.assistant.statistic.stat.UserSqlHighStat;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

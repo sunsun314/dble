@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.field.string;
+package com.actiontech.dble.sql.route.complex.plan.common.field.string;
 
-import com.actiontech.dble.plan.common.item.FieldTypes;
+import com.actiontech.dble.sql.route.complex.plan.common.item.FieldTypes;
 
 public class FieldVarstring extends FieldString {
     public FieldVarstring(String name, String dbName, String table, String orgTable, int charsetIndex, int fieldLength, int decimals, long flags) {

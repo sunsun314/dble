@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
-import com.actiontech.dble.route.RouteResultset;
-import com.actiontech.dble.server.ServerConnection;
-import com.actiontech.dble.util.ExecutorUtil;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.common.util.ExecutorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static com.actiontech.dble.config.ErrorCode.ER_YES;
+import static com.actiontech.dble.common.config.ErrorCode.ER_YES;
 
 /**
  * Created by szf on 2018/7/17.

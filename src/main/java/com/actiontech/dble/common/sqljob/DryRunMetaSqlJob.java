@@ -3,13 +3,13 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sqlengine;
+package com.actiontech.dble.common.sqljob;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.ResponseHandler;
+import com.actiontech.dble.sql.handler.ResponseHandler;
 import com.actiontech.dble.common.config.ErrorInfo;
 import com.actiontech.dble.common.mysql.packet.ErrorPacket;
 import org.slf4j.Logger;
@@ -22,9 +22,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by szf on 2018/9/20.
  */
-public class DryRunSqlJob extends SQLJob {
+public class DryRunMetaSqlJob extends SQLJob {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(DryRunSqlJob.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(DryRunMetaSqlJob.class);
 
     private final SQLJobHandler jobHandler;
     private final ResponseHandler sqlJob;
@@ -34,7 +34,7 @@ public class DryRunSqlJob extends SQLJob {
     private final List<ErrorInfo> list;
     private final AtomicBoolean finished;
 
-    public DryRunSqlJob(String sql, String schema, SQLJobHandler jobHandler, PhysicalDataSource ds, List<ErrorInfo> list) {
+    public DryRunMetaSqlJob(String sql, String schema, SQLJobHandler jobHandler, PhysicalDataSource ds, List<ErrorInfo> list) {
         super(sql, schema, jobHandler, ds);
         this.jobHandler = jobHandler;
         this.ds = ds;

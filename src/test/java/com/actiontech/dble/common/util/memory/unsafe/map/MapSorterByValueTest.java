@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.memory.unsafe.map;
+package com.actiontech.dble.common.util.memory.unsafe.map;
 
 import org.junit.Test;
 

@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.xa;
+package com.actiontech.dble.sql.xa;
 
 /**
  * Created by zhangchao on 2016/10/17.

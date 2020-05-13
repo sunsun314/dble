@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.external;
+package com.actiontech.dble.sql.route.complex.plan.common.external;
 
-import com.actiontech.dble.net.mysql.RowDataPacket;
+import com.actiontech.dble.common.mysql.packet.RowDataPacket;
 
 public interface ResultStore {
     /* add a new row */

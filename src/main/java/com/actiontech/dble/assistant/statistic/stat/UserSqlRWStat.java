@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.statistic.stat;
+package com.actiontech.dble.assistant.statistic.stat;
 
-import com.actiontech.dble.server.parser.ServerParse;
+import com.actiontech.dble.service.server.parser.ServerParse;
 
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicLong;

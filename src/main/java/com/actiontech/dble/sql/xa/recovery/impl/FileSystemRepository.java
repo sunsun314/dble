@@ -3,16 +3,16 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.xa.recovery.impl;
+package com.actiontech.dble.sql.xa.recovery.impl;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.maintenance.alarm.AlarmCode;
 import com.actiontech.dble.maintenance.alarm.Alert;
 import com.actiontech.dble.maintenance.alarm.AlertUtil;
 import com.actiontech.dble.maintenance.alarm.ToResolveContainer;
-import com.actiontech.dble.assistant.backend.mysql.xa.*;
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.DeserializationException;
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.Repository;
+import com.actiontech.dble.sql.xa.*;
+import com.actiontech.dble.sql.xa.recovery.DeserializationException;
+import com.actiontech.dble.sql.xa.recovery.Repository;
 import com.actiontech.dble.common.config.model.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.actiontech.dble.assistant.backend.mysql.xa.XAStateLog.XA_ALERT_FLAG;
+import static com.actiontech.dble.sql.xa.XAStateLog.XA_ALERT_FLAG;
 
 /**
  * Created by zhangchao on 2016/10/13.

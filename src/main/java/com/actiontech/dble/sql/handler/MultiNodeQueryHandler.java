@@ -3,26 +3,26 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.assistant.backend.mysql.nio.handler;
+package com.actiontech.dble.sql.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.assistant.backend.mysql.LoadDataUtil;
+import com.actiontech.dble.service.server.handler.loaddata.LoadDataUtil;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.transaction.AutoCommitHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.transaction.AutoTxOperation;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.transaction.TransactionHandler;
+import com.actiontech.dble.sql.handler.transaction.AutoCommitHandler;
+import com.actiontech.dble.sql.handler.transaction.AutoTxOperation;
+import com.actiontech.dble.sql.handler.transaction.TransactionHandler;
 import com.actiontech.dble.common.cache.LayerCachePool;
 import com.actiontech.dble.common.mysql.packet.*;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.FlowCotrollerConfig;
 import com.actiontech.dble.assistant.transactionlog.TxnLogHelper;
-import com.actiontech.dble.sql.route.simple.route.RouteResultset;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
-import com.actiontech.dble.service.NonBlockingSession;
-import com.actiontech.dble.service.ServerConnection;
-import com.actiontech.dble.sql.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.service.server.NonBlockingSession;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import com.actiontech.dble.singleton.CacheService;
 import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.singleton.WriteQueueFlowController;

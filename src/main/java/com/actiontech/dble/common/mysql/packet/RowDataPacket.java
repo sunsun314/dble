@@ -3,15 +3,15 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.net.mysql;
+package com.actiontech.dble.common.mysql.packet;
 
-import com.actiontech.dble.backend.mysql.BufferUtil;
-import com.actiontech.dble.backend.mysql.ByteUtil;
-import com.actiontech.dble.backend.mysql.MySQLMessage;
-import com.actiontech.dble.backend.mysql.nio.handler.util.RowDataComparator;
-import com.actiontech.dble.buffer.BufferPool;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.common.mysql.util.BufferUtil;
+import com.actiontech.dble.common.mysql.util.ByteUtil;
+import com.actiontech.dble.common.mysql.util.MySQLMessage;
+import com.actiontech.dble.sql.handler.util.RowDataComparator;
+import com.actiontech.dble.common.buffer.BufferPool;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.singleton.BufferPoolManager;
 
 import java.nio.ByteBuffer;

@@ -3,16 +3,16 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.loader.xml;
+package com.actiontech.dble.common.config.loader.xml;
 
-import com.actiontech.dble.config.ProblemReporter;
-import com.actiontech.dble.config.Versions;
-import com.actiontech.dble.config.model.rule.RuleConfig;
-import com.actiontech.dble.config.model.rule.TableRuleConfig;
-import com.actiontech.dble.config.util.ConfigException;
-import com.actiontech.dble.config.util.ConfigUtil;
-import com.actiontech.dble.config.util.ParameterMapping;
-import com.actiontech.dble.sql.route.simple.route.function.*;
+import com.actiontech.dble.common.config.ProblemReporter;
+import com.actiontech.dble.common.config.Versions;
+import com.actiontech.dble.common.config.model.rule.RuleConfig;
+import com.actiontech.dble.common.config.model.rule.TableRuleConfig;
+import com.actiontech.dble.common.config.util.ConfigException;
+import com.actiontech.dble.common.config.util.ConfigUtil;
+import com.actiontech.dble.common.config.util.ParameterMapping;
+import com.actiontech.dble.sql.route.simple.function.*;
 import com.actiontech.dble.common.util.ResourceUtil;
 import com.actiontech.dble.common.util.SplitUtil;
 import com.actiontech.dble.common.util.StringUtil;

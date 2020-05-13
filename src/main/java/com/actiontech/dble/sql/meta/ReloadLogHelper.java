@@ -1,4 +1,4 @@
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

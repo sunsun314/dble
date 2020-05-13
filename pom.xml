@@ -416,8 +416,8 @@
                             <goal>replace</goal>
                         </goals>
                         <configuration>
-                            <file>${project.basedir}/src/main/java/com/actiontech/dble/config/Versions.template</file>
-                            <outputFile>${project.basedir}/src/main/java/com/actiontech/dble/config/Versions.java
+                            <file>${project.basedir}/src/main/java/com/actiontech/dble/common/config/Versions.template</file>
+                            <outputFile>${project.basedir}/src/main/java/com/actiontech/dble/common/config/Versions.java
                             </outputFile>
                             <replacements>
                                 <replacement>
@@ -522,7 +522,7 @@
                     <daemons>
                         <daemon>
                             <id>dble</id>
-                            <mainClass>com.actiontech.dble.DbleStartup</mainClass>
+                            <mainClass>com.actiontech.dble.bootstrap.DbleStartup</mainClass>
                             <commandLineArguments>
                                 <commandLineArgument>start</commandLineArgument>
                             </commandLineArguments>

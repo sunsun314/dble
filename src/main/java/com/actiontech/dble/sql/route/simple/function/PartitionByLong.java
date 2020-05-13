@@ -3,10 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.sql.route.simple.route.function;
+package com.actiontech.dble.sql.route.simple.function;
 
 import com.actiontech.dble.common.config.model.rule.RuleAlgorithm;
-import com.actiontech.dble.sql.route.simple.route.util.PartitionUtil;
+import com.actiontech.dble.sql.route.simple.util.PartitionUtil;
 import com.actiontech.dble.common.util.SplitUtil;
 
 

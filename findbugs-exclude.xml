@@ -7,31 +7,31 @@
 
     <!-- protocol:ignore -->
     <Match>
-        <Class name="com.actiontech.dble.meta.protocol.StructureMeta"/>
+        <Class name="com.actiontech.dble.sql.meta.protocol.StructureMeta"/>
     </Match>
     <Match>
-        <Class name="com.actiontech.dble.meta.protocol.StructureMeta$ColumnMeta"/>
+        <Class name="com.actiontech.dble.sql.meta.protocol.StructureMeta$ColumnMeta"/>
     </Match>
     <Match>
-        <Class name="com.actiontech.dble.meta.protocol.StructureMeta$IndexMeta"/>
+        <Class name="com.actiontech.dble.sql.meta.protocol.StructureMeta$IndexMeta"/>
     </Match>
     <Match>
-        <Class name="com.actiontech.dble.meta.protocol.StructureMeta$TableMeta"/>
+        <Class name="com.actiontech.dble.sql.meta.protocol.StructureMeta$TableMeta"/>
     </Match>
     <Match>
-        <Class name="com.actiontech.dble.meta.protocol.StructureMeta$ColumnMeta$Builder"/>
+        <Class name="com.actiontech.dble.sql.meta.protocol.StructureMeta$ColumnMeta$Builder"/>
     </Match>
     <Match>
-        <Class name="com.actiontech.dble.meta.protocol.StructureMeta$IndexMeta$Builder"/>
+        <Class name="com.actiontech.dble.sql.meta.protocol.StructureMeta$IndexMeta$Builder"/>
     </Match>
 	<Match>
-        <Class name="com.actiontech.dble.meta.protocol.StructureMeta$TableMeta$Builder"/>
+        <Class name="com.actiontech.dble.sql.meta.protocol.StructureMeta$TableMeta$Builder"/>
     </Match>
     <Match>
-        <Package name="com.actiontech.dble.cluster.impl.ushard"/>
+        <Package name="com.actiontech.dble.maintenance.cluster.impl.ushard"/>
     </Match>
     <Match>
-        <Package name="com.actiontech.dble.alarm"/>
+        <Package name="com.actiontech.dble.maintenance.alarm"/>
     </Match>
     <Match>
         <Class name="com.actiontech.dble.log.AlarmAppender"/>
@@ -39,7 +39,7 @@
     <!-- protocol:ignore -->
 
     <Match>
-        <Package name="com.actiontech.dble.util.dataMigrator.dataIOImpl"/>
+        <Package name="com.actiontech.dble.common.util.dataMigrator.dataIOImpl"/>
     </Match>
     <!--MALICIOUS_CODE ,need refactor?  -->
     <Match>
@@ -58,7 +58,7 @@
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="DLS_DEAD_LOCAL_STORE"/>
-        <Class name="com.actiontech.dble.plan.common.item.function.timefunc.ItemTemporalHybridFunc"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.common.item.function.timefunc.ItemTemporalHybridFunc"/>
     </Match>
 
 
@@ -66,43 +66,43 @@
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
-        <Class name="com.actiontech.dble.plan.common.time.MySQLTimeStatus"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.common.time.MySQLTimeStatus"/>
     </Match>
     <!-- need refactor -->
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="DLS_DEAD_LOCAL_STORE"/>
-        <Class name="com.actiontech.dble.plan.common.time.MyTime"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.common.time.MyTime"/>
     </Match>
     <!-- need refactor -->
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
-        <Class name="com.actiontech.dble.backend.mysql.BindValue"/>
+        <Class name="com.actiontech.dble.common.mysql.util.BindValue"/>
     </Match>
     <!-- need refactor -->
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
-        <Class name="com.actiontech.dble.net.mysql.ExecutePacket"/>
+        <Class name="com.actiontech.dble.common.mysql.packet.ExecutePacket"/>
     </Match>
     <!-- need refactor -->
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
-        <Class name="com.actiontech.dble.server.parser.ServerParseSelect"/>
+        <Class name="com.actiontech.dble.service.server.parser.ServerParseSelect"/>
     </Match>
 
     <!-- use enum? -->
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
-        <Class name="com.actiontech.dble.backend.heartbeat.MySQLHeartbeat"/>
+        <Class name="com.actiontech.dble.assistant.backend.heartbeat.MySQLHeartbeat"/>
     </Match>
     <Match>
         <Bug category="STYLE"/>
         <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
-        <Class name="com.actiontech.dble.server.response.SessionIsolation"/>
+        <Class name="com.actiontech.dble.service.server.response.SessionIsolation"/>
     </Match>
     <!-- always throw new exception-->
     <Match>
@@ -116,7 +116,7 @@
     </Match>
     <Match>
         <Bug category="STYLE"/>
-        <Class name="com.actiontech.dble.plan.common.time.MyTime"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.common.time.MyTime"/>
         <Method name="extractDateTime"/>
         <Bug pattern="SF_SWITCH_FALLTHROUGH"/>
     </Match>
@@ -128,7 +128,7 @@
     </Match>
     <Match>
         <Bug category="STYLE"/>
-        <Class name="com.actiontech.dble.net.mysql.BinaryRowDataPacket"/>
+        <Class name="com.actiontech.dble.common.mysql.packet.BinaryRowDataPacket"/>
         <Method name="read"/>
         <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE"/>
     </Match>
@@ -143,25 +143,25 @@
     <!-- need refactor -->
     <Match>
         <Bug category="PERFORMANCE"/>
-        <Class name="com.actiontech.dble.plan.common.locale.MyLocale"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.common.locale.MyLocale"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <!-- need refactor -->
     <Match>
         <Bug category="PERFORMANCE"/>
-        <Class name="com.actiontech.dble.plan.common.locale.MyLocaleErrMsgs"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.common.locale.MyLocaleErrMsgs"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <!-- need refactor -->
     <Match>
         <Bug category="PERFORMANCE"/>
-        <Class name="com.actiontech.dble.plan.common.typelib.TypeLib"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.common.typelib.TypeLib"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <!-- need refactor -->
     <Match>
         <Bug category="PERFORMANCE"/>
-        <Class name="com.actiontech.dble.route.sequence.handler.SequenceVal"/>
+        <Class name="com.actiontech.dble.sql.route.simple.sequence.handler.SequenceVal"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <!-- PERFORMANCE end -->
@@ -169,7 +169,7 @@
     <!-- CORRECTNESS start -->
     <Match>
         <Bug category="CORRECTNESS"/>
-        <Class name="com.actiontech.dble.plan.node.JoinNode"/>
+        <Class name="com.actiontech.dble.sql.route.complex.plan.node.JoinNode"/>
         <Method name="setRightNode"/>
         <Bug pattern="NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS"/>
     </Match>
@@ -178,41 +178,41 @@
     <!-- MT_CORRECTNESS -->
     <Match>
         <Bug category="MT_CORRECTNESS"/>
-        <Class name="com.actiontech.dble.DbleServer"/>
+        <Class name="com.actiontech.dble.bootstrap.DbleServer"/>
         <Method name="genXaTxId"/>
         <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER"/>
     </Match>
     <Match>
         <Bug category="MT_CORRECTNESS"/>
-        <Class name="com.actiontech.dble.statistic.stat.QueryTimeCostContainer"/>
+        <Class name="com.actiontech.dble.assistant.statistic.stat.QueryTimeCostContainer"/>
         <Method name="add"/>
         <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER"/>
     </Match>
     <Match>
         <Bug category="MT_CORRECTNESS"/>
-        <Class name="com.actiontech.dble.backend.mysql.xa.recovery.impl.FileSystemRepository"/>
+        <Class name="com.actiontech.dble.sql.xa.recovery.impl.FileSystemRepository"/>
         <Bug pattern="IS2_INCONSISTENT_SYNC"/>
     </Match>
     <Match>
         <Bug category="MT_CORRECTNESS"/>
-        <Class name="com.actiontech.dble.server.handler.ServerLoadDataInfileHandler"/>
+        <Class name="com.actiontech.dble.service.server.handler.loaddata.ServerLoadDataInfileHandler"/>
         <Bug pattern="IS2_INCONSISTENT_SYNC"/>
     </Match>
 	<Match>
         <Bug category="MT_CORRECTNESS"/>
-        <Class name="com.actiontech.dble.backend.mysql.nio.handler.NewConnectionRespHandler"/>
+        <Class name="com.actiontech.dble.sql.handler.NewConnectionRespHandler"/>
 		<Method name="getBackConn"/>
         <Bug pattern="WA_AWAIT_NOT_IN_LOOP"/>
     </Match>
 	<Match>
         <Bug category="MT_CORRECTNESS"/>
-        <Class name="com.actiontech.dble.backend.mysql.nio.handler.transaction.xa.XACommitNodesHandler"/>
+        <Class name="com.actiontech.dble.sql.handler.transaction.xa.XACommitNodesHandler"/>
 		<Method name="waitUntilSendFinish"/>
         <Bug pattern="WA_AWAIT_NOT_IN_LOOP"/>
     </Match>
     <Match>
         <Bug category="MT_CORRECTNESS"/>
-        <Class name="com.actiontech.dble.backend.mysql.nio.handler.transaction.xa.XARollbackNodesHandler"/>
+        <Class name="com.actiontech.dble.sql.handler.transaction.xa.XARollbackNodesHandler"/>
         <Method name="waitUntilSendFinish"/>
         <Bug pattern="WA_AWAIT_NOT_IN_LOOP"/>
     </Match>
@@ -225,7 +225,7 @@
     </Match>
 	<Match>
         <Bug category="BAD_PRACTICE"/>
-        <Class name="com.actiontech.dble.server.handler.SetInnerHandler"/>
+        <Class name="com.actiontech.dble.service.server.handler.SetInnerHandler"/>
         <Method name="isSwitchOn"/>
         <Bug pattern="NP_BOOLEAN_RETURN_NULL"/>
     </Match>

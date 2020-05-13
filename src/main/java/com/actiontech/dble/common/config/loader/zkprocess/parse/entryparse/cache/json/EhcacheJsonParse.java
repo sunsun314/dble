@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.parse.entryparse.cache.json;
+package com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.cache.json;
 
-import com.actiontech.dble.config.loader.zkprocess.entity.cache.Ehcache;
-import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
-import com.actiontech.dble.config.loader.zkprocess.parse.ParseJsonServiceInf;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.cache.Ehcache;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.JsonProcessBase;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.ParseJsonServiceInf;
 
 /**
  * EhcacheJsonParse

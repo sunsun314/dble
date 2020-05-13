@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.common.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResultSetHeaderPacket;
@@ -15,8 +15,8 @@ import com.actiontech.dble.common.util.LongUtil;
 
 import java.nio.ByteBuffer;
 
-import static com.actiontech.dble.assistant.backend.mysql.PacketUtil.getField;
-import static com.actiontech.dble.assistant.backend.mysql.PacketUtil.getHeader;
+import static com.actiontech.dble.common.mysql.util.PacketUtil.getField;
+import static com.actiontech.dble.common.mysql.util.PacketUtil.getHeader;
 
 public final class ShowSingleValue {
     private ShowSingleValue() {

@@ -1,11 +1,11 @@
-package com.actiontech.dble.cluster.response;
+package com.actiontech.dble.maintenance.cluster.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.cluster.ClusterHelper;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.cluster.ClusterPathUtil;
-import com.actiontech.dble.cluster.bean.KvBean;
+import com.actiontech.dble.maintenance.cluster.ClusterHelper;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
+import com.actiontech.dble.maintenance.cluster.bean.KvBean;
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.HaInfo;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.singleton.HaConfigManager;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
-import static com.actiontech.dble.cluster.ClusterPathUtil.DATA_HOST_STATUS;
+import static com.actiontech.dble.maintenance.cluster.ClusterPathUtil.DATA_HOST_STATUS;
 
 /**
  * Created by szf on 2019/10/29.

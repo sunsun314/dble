@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
 import com.actiontech.dble.common.config.ServerConfig;
 import com.actiontech.dble.common.config.model.UserConfig;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.util.StringUtil;
 
 import java.util.Map;

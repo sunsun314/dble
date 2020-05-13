@@ -3,13 +3,13 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.config.Fields;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 
 public final class MysqlProcHandler {
     private MysqlProcHandler() {

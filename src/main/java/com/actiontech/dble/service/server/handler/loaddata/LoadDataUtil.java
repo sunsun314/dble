@@ -3,14 +3,14 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql;
+package com.actiontech.dble.service.server.handler.loaddata;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.common.mysql.packet.BinaryPacket;
 import com.actiontech.dble.common.mysql.util.CharsetUtil;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
 import com.actiontech.dble.singleton.WriteQueueFlowController;
 import com.actiontech.dble.common.bean.LoadData;
 

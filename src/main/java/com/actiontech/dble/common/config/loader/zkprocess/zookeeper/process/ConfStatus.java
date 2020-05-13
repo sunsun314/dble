@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.zookeeper.process;
+package com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process;
 
 /**
  * Created by huqing.yan on 2017/7/10.

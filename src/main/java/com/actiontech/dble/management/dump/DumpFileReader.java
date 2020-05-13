@@ -1,7 +1,7 @@
-package com.actiontech.dble.manager.dump;
+package com.actiontech.dble.management.dump;
 
-import com.actiontech.dble.assistant.backend.mysql.store.fs.FileUtils;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.common.store.fs.FileUtils;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.log.slow;
+package com.actiontech.dble.assistant.slowlog;
 
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
-import com.actiontech.dble.server.trace.TraceResult;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.maintenance.trace.bean.TraceResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

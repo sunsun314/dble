@@ -3,11 +3,11 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.service.response;
+package com.actiontech.dble.service.server.response;
 
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 
 public final class SptDrop {
     private SptDrop() {

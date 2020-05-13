@@ -5,7 +5,7 @@
 */
 package com.actiontech.dble.parser;
 
-import com.actiontech.dble.route.parser.ManagerParse;
+import com.actiontech.dble.service.manager.parser.ManagerParse;
 
 /**
  * @author mycat

@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.parser.druid;
+package com.actiontech.dble.sql.route.simple.parser.druid;
 
-import com.actiontech.dble.sql.route.simple.route.parser.util.Pair;
+import com.actiontech.dble.common.util.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

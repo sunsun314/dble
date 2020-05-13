@@ -3,20 +3,20 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta.table;
+package com.actiontech.dble.sql.meta.table;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.alarm.AlarmCode;
-import com.actiontech.dble.alarm.Alert;
-import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.alarm.ToResolveContainer;
-import com.actiontech.dble.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.meta.ReloadLogHelper;
-import com.actiontech.dble.sqlengine.MultiRowSQLQueryResultHandler;
-import com.actiontech.dble.sqlengine.MultiTablesMetaJob;
-import com.actiontech.dble.sqlengine.SQLQueryResult;
-import com.actiontech.dble.sqlengine.SQLQueryResultListener;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.maintenance.alarm.AlarmCode;
+import com.actiontech.dble.maintenance.alarm.Alert;
+import com.actiontech.dble.maintenance.alarm.AlertUtil;
+import com.actiontech.dble.maintenance.alarm.ToResolveContainer;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.sql.meta.ReloadLogHelper;
+import com.actiontech.dble.common.sqljob.MultiRowSQLQueryResultHandler;
+import com.actiontech.dble.common.sqljob.MultiTablesMetaJob;
+import com.actiontech.dble.common.sqljob.SQLQueryResult;
+import com.actiontech.dble.common.sqljob.SQLQueryResultListener;
 
 import java.util.List;
 import java.util.Map;

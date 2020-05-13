@@ -1,11 +1,11 @@
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl;
+package com.actiontech.dble.sql.handler.query.impl;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
 import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 
 import java.util.List;
 

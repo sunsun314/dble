@@ -1,12 +1,12 @@
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.store.fs.FileUtils;
+import com.actiontech.dble.common.store.fs.FileUtils;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.model.SchemaConfig;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.manager.dump.*;
-import com.actiontech.dble.manager.response.DumpFileError;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.management.dump.*;
+import com.actiontech.dble.management.response.DumpFileError;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.common.util.CollectionUtil;
 import com.actiontech.dble.common.util.StringUtil;

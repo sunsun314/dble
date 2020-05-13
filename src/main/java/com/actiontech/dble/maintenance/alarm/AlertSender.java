@@ -1,6 +1,6 @@
 package com.actiontech.dble.maintenance.alarm;
 
-import com.actiontech.dble.cluster.ClusterController;
+import com.actiontech.dble.maintenance.cluster.ClusterController;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.singleton.AlertGeneralConfig;
 import org.slf4j.Logger;

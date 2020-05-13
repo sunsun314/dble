@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.item.function.operator.cmpfunc.util;
+package com.actiontech.dble.sql.route.complex.plan.common.item.function.operator.cmpfunc.util;
 
 
-import com.actiontech.dble.plan.common.field.Field;
-import com.actiontech.dble.plan.common.item.FieldTypes;
-import com.actiontech.dble.plan.common.item.Item;
-import com.actiontech.dble.plan.common.item.ItemField;
-import com.actiontech.dble.plan.common.ptr.BoolPtr;
-import com.actiontech.dble.plan.common.time.MyTime;
+import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
+import com.actiontech.dble.sql.route.complex.plan.common.item.FieldTypes;
+import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
+import com.actiontech.dble.sql.route.complex.plan.common.item.ItemField;
+import com.actiontech.dble.sql.route.complex.plan.common.ptr.BoolPtr;
+import com.actiontech.dble.sql.route.complex.plan.common.time.MyTime;
 
 /*
  Retrieves YEAR value of 19XX-00-00 00:00:00 form from given item.

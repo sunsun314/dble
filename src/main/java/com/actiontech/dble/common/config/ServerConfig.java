@@ -3,21 +3,21 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config;
+package com.actiontech.dble.common.config;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.alarm.AlarmCode;
-import com.actiontech.dble.alarm.Alert;
-import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.backend.datasource.PhysicalDataHostDiff;
-import com.actiontech.dble.config.model.*;
-import com.actiontech.dble.config.util.ConfigException;
-import com.actiontech.dble.config.util.ConfigUtil;
-import com.actiontech.dble.sql.route.simple.route.parser.ManagerParseConfig;
-import com.actiontech.dble.sql.route.simple.route.parser.util.Pair;
-import com.actiontech.dble.server.variables.SystemVariables;
+import com.actiontech.dble.maintenance.alarm.AlarmCode;
+import com.actiontech.dble.maintenance.alarm.Alert;
+import com.actiontech.dble.maintenance.alarm.AlertUtil;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHostDiff;
+import com.actiontech.dble.common.config.model.*;
+import com.actiontech.dble.common.config.util.ConfigException;
+import com.actiontech.dble.common.config.util.ConfigUtil;
+import com.actiontech.dble.service.manager.parser.ManagerParseConfig;
+import com.actiontech.dble.common.util.Pair;
+import com.actiontech.dble.common.mysql.variables.SystemVariables;
 import com.actiontech.dble.singleton.*;
 import com.actiontech.dble.common.util.StringUtil;
 import com.actiontech.dble.common.util.TimeUtil;

@@ -3,16 +3,17 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl;
+package com.actiontech.dble.sql.handler.query.impl;
 
 import com.actiontech.dble.assistant.backend.BackendConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.BaseDMLHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.HandlerTool;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
+import com.actiontech.dble.sql.handler.query.BaseDMLHandler;
+import com.actiontech.dble.sql.handler.query.DMLResponseHandler;
+import com.actiontech.dble.sql.handler.util.HandlerTool;
 import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
 import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +40,8 @@ public class HavingHandler extends BaseDMLHandler {
     private ReentrantLock lock = new ReentrantLock();
 
     @Override
-    public HandlerType type() {
-        return HandlerType.HAVING;
+    public DMLResponseHandler.HandlerType type() {
+        return DMLResponseHandler.HandlerType.HAVING;
     }
 
     public void fieldEofResponse(byte[] headerNull, List<byte[]> fieldsNull, final List<FieldPacket> fieldPackets,

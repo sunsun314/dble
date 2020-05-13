@@ -1,8 +1,8 @@
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.manager.response.*;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.management.response.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

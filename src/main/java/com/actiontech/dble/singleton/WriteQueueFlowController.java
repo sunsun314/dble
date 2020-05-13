@@ -1,7 +1,7 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.config.FlowCotrollerConfig;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.common.config.FlowCotrollerConfig;
 
 /**
  * Created by szf on 2020/4/9.

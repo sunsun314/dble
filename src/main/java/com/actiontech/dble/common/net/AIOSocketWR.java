@@ -3,11 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.common.net.aio;
+package com.actiontech.dble.common.net;
 
 import com.actiontech.dble.common.util.TimeUtil;
-import com.actiontech.dble.common.net.AbstractConnection;
-import com.actiontech.dble.common.net.SocketWR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

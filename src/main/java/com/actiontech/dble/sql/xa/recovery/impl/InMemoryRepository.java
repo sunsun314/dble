@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.xa.recovery.impl;
+package com.actiontech.dble.sql.xa.recovery.impl;
 
-import com.actiontech.dble.assistant.backend.mysql.xa.CoordinatorLogEntry;
-import com.actiontech.dble.assistant.backend.mysql.xa.TxState;
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.Repository;
+import com.actiontech.dble.sql.xa.CoordinatorLogEntry;
+import com.actiontech.dble.sql.xa.TxState;
+import com.actiontech.dble.sql.xa.recovery.Repository;
 
 import java.util.Collection;
 import java.util.Map;

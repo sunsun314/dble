@@ -5,15 +5,15 @@
 */
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.route.RouteResultset;
-import com.actiontech.dble.config.Versions;
-import com.actiontech.dble.config.model.SchemaConfig;
-import com.actiontech.dble.route.factory.RouteStrategyFactory;
-import com.actiontech.dble.route.handler.HintHandler;
-import com.actiontech.dble.route.handler.HintHandlerFactory;
-import com.actiontech.dble.route.handler.HintSQLHandler;
-import com.actiontech.dble.server.ServerConnection;
-import com.actiontech.dble.server.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.common.config.Versions;
+import com.actiontech.dble.common.config.model.SchemaConfig;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
+import com.actiontech.dble.sql.route.simple.handler.HintHandler;
+import com.actiontech.dble.sql.route.simple.handler.HintHandlerFactory;
+import com.actiontech.dble.sql.route.simple.handler.HintSQLHandler;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

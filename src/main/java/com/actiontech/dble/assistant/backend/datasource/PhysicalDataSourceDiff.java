@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.backend.datasource;
+package com.actiontech.dble.assistant.backend.datasource;
 
 /**
  * Created by szf on 2018/7/23.

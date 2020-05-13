@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.net;
+package com.actiontech.dble.common.net;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

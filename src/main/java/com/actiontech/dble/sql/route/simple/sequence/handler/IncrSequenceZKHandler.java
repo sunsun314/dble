@@ -3,11 +3,11 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.sql.route.simple.route.sequence.handler;
+package com.actiontech.dble.sql.route.simple.sequence.handler;
 
 
 import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
-import com.actiontech.dble.sql.route.simple.route.util.PropertiesUtil;
+import com.actiontech.dble.sql.route.simple.util.PropertiesUtil;
 import com.actiontech.dble.common.util.KVPathUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;

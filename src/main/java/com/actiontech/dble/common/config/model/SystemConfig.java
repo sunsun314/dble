@@ -3,12 +3,12 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.model;
+package com.actiontech.dble.common.config.model;
 
-import com.actiontech.dble.backend.mysql.CharsetUtil;
-import com.actiontech.dble.config.Isolations;
-import com.actiontech.dble.config.ProblemReporter;
-import com.actiontech.dble.memory.unsafe.Platform;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
+import com.actiontech.dble.common.config.Isolations;
+import com.actiontech.dble.common.config.ProblemReporter;
+import com.actiontech.dble.common.util.memory.unsafe.Platform;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 
 import java.io.File;

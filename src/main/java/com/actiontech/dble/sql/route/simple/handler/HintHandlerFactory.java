@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.handler;
+package com.actiontech.dble.sql.route.simple.handler;
 
 import java.util.HashMap;
 import java.util.Map;

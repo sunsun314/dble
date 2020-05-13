@@ -1,4 +1,4 @@
-package com.actiontech.dble.cluster.bean;
+package com.actiontech.dble.maintenance.cluster.bean;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.alibaba.fastjson.JSONObject;

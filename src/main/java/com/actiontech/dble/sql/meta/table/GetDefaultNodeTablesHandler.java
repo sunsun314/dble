@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta.table;
+package com.actiontech.dble.sql.meta.table;
 
-import com.actiontech.dble.config.model.SchemaConfig;
+import com.actiontech.dble.common.config.model.SchemaConfig;
 
 import java.util.Collections;
 import java.util.HashSet;

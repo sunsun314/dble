@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 import com.actiontech.dble.assistant.transactionlog.TxnLogHelper;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 
 public final class RollBackHandler {
     private RollBackHandler() {

@@ -5,7 +5,7 @@
 */
 package com.actiontech.dble.sql.route.simple.parser;
 
-import com.actiontech.dble.sql.route.simple.parser.util.Pair;
+import com.actiontech.dble.common.util.Pair;
 import com.actiontech.dble.common.util.SplitUtil;
 
 /**

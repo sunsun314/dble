@@ -1,9 +1,9 @@
-package com.actiontech.dble.manager.dump.handler;
+package com.actiontech.dble.management.dump.handler;
 
 import com.actiontech.dble.common.config.model.TableConfig;
-import com.actiontech.dble.manager.dump.DumpException;
-import com.actiontech.dble.manager.dump.DumpFileContext;
-import com.actiontech.dble.sql.route.simple.route.factory.RouteStrategyFactory;
+import com.actiontech.dble.management.dump.DumpException;
+import com.actiontech.dble.management.dump.DumpFileContext;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLCharacterDataType;

@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.store.diskbuffer;
+package com.actiontech.dble.common.store.diskbuffer;
 
 import com.actiontech.dble.common.buffer.BufferPool;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;

@@ -3,21 +3,21 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sqlengine;
+package com.actiontech.dble.common.sqljob;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.ResetConnHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.ResponseHandler;
+import com.actiontech.dble.sql.handler.ResetConnHandler;
+import com.actiontech.dble.sql.handler.ResponseHandler;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.mysql.packet.ErrorPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResetConnectionPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
-import com.actiontech.dble.server.ServerConnection;
-import com.actiontech.dble.server.handler.SetCallBack;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.handler.SetCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

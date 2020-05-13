@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.maintenance.cluster.*;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.Fields;
@@ -16,20 +16,20 @@ import com.actiontech.dble.maintenance.cluster.kVtoXml.ClusterToXml;
 import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
 import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.BinlogPause;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.NIOProcessor;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.common.net.NIOProcessor;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResultSetHeaderPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
-import com.actiontech.dble.server.NonBlockingSession;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.service.server.NonBlockingSession;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
-import com.actiontech.dble.sqlengine.OneRawSQLQueryResultHandler;
-import com.actiontech.dble.sqlengine.SQLJob;
-import com.actiontech.dble.sqlengine.SQLQueryResult;
-import com.actiontech.dble.sqlengine.SQLQueryResultListener;
+import com.actiontech.dble.common.sqljob.OneRawSQLQueryResultHandler;
+import com.actiontech.dble.common.sqljob.SQLJob;
+import com.actiontech.dble.common.sqljob.SQLQueryResult;
+import com.actiontech.dble.common.sqljob.SQLQueryResultListener;
 import com.actiontech.dble.common.util.KVPathUtil;
 import com.actiontech.dble.common.util.StringUtil;
 import com.actiontech.dble.common.util.TimeUtil;

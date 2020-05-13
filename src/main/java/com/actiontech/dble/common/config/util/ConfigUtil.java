@@ -3,15 +3,15 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.util;
+package com.actiontech.dble.common.config.util;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.config.ProblemReporter;
-import com.actiontech.dble.config.helper.GetAndSyncDataSourceKeyVariables;
-import com.actiontech.dble.config.helper.KeyVariables;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.common.config.ProblemReporter;
+import com.actiontech.dble.common.config.helper.GetAndSyncDataSourceKeyVariables;
+import com.actiontech.dble.common.config.helper.KeyVariables;
 import com.actiontech.dble.common.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.util.Strings;

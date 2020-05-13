@@ -3,21 +3,21 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl;
+package com.actiontech.dble.sql.handler.query.impl;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.OwnThreadDMLHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.RowDataComparator;
-import com.actiontech.dble.assistant.backend.mysql.store.LocalResult;
-import com.actiontech.dble.assistant.backend.mysql.store.SortedLocalResult;
+import com.actiontech.dble.sql.handler.query.OwnThreadDMLHandler;
+import com.actiontech.dble.sql.handler.util.RowDataComparator;
+import com.actiontech.dble.common.store.LocalResult;
+import com.actiontech.dble.common.store.SortedLocalResult;
 import com.actiontech.dble.common.buffer.BufferPool;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
 import com.actiontech.dble.sql.route.complex.plan.Order;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 import com.actiontech.dble.singleton.BufferPoolManager;
 import com.actiontech.dble.common.util.TimeUtil;
 import org.slf4j.Logger;

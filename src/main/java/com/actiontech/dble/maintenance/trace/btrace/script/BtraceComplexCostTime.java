@@ -1,4 +1,4 @@
-package com.actiontech.dble.btrace.script;
+package com.actiontech.dble.maintenance.trace.btrace.script;
 
 import com.sun.btrace.BTraceUtils;
 import com.sun.btrace.Profiler;
@@ -21,7 +21,7 @@ public final class BtraceComplexCostTime {
     static Profiler profiler = BTraceUtils.Profiling.newProfiler();
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.CostTimeProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.CostTimeProvider",
             method = "beginRequest"
     )
     public static void beginRequest(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {
@@ -29,7 +29,7 @@ public final class BtraceComplexCostTime {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.CostTimeProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.CostTimeProvider",
             method = "startProcess"
     )
     public static void startProcess(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {
@@ -42,7 +42,7 @@ public final class BtraceComplexCostTime {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.CostTimeProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.CostTimeProvider",
             method = "endParse"
     )
     public static void endParse(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {
@@ -55,7 +55,7 @@ public final class BtraceComplexCostTime {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ComplexQueryProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ComplexQueryProvider",
             method = "endRoute"
     )
     public static void endRoute(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {
@@ -69,7 +69,7 @@ public final class BtraceComplexCostTime {
 
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ComplexQueryProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ComplexQueryProvider",
             method = "endComplexExecute"
     )
     public static void endExecute(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {
@@ -83,7 +83,7 @@ public final class BtraceComplexCostTime {
 
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.CostTimeProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.CostTimeProvider",
             method = "resFromBack"
     )
     public static void firstBackendResponse(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {
@@ -97,7 +97,7 @@ public final class BtraceComplexCostTime {
 
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ComplexQueryProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ComplexQueryProvider",
             method = "endComplexExecute"
     )
     public static void firstBackendEof(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {
@@ -110,7 +110,7 @@ public final class BtraceComplexCostTime {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.CostTimeProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.CostTimeProvider",
             method = "beginResponse"
     )
     public static void complexOutput(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, long arg) {

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.actiontech.dble.memory.environment;
+package com.actiontech.dble.common.util.memory.environment;
 
 
 /**

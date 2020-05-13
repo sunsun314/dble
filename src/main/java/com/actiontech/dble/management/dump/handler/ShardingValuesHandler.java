@@ -1,8 +1,8 @@
-package com.actiontech.dble.manager.dump.handler;
+package com.actiontech.dble.management.dump.handler;
 
-import com.actiontech.dble.manager.dump.DumpFileContext;
+import com.actiontech.dble.management.dump.DumpFileContext;
 import com.actiontech.dble.sql.route.complex.plan.common.ptr.LongPtr;
-import com.actiontech.dble.sql.route.simple.route.function.AbstractPartitionAlgorithm;
+import com.actiontech.dble.sql.route.simple.function.AbstractPartitionAlgorithm;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLCharExpr;
 import com.alibaba.druid.sql.ast.expr.SQLIntegerExpr;

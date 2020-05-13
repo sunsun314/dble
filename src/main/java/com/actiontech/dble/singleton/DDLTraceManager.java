@@ -1,9 +1,9 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DDLTraceInfo;
-import com.actiontech.dble.server.ServerConnection;
-import com.actiontech.dble.util.TimeUtil;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.DDLTraceInfo;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.common.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

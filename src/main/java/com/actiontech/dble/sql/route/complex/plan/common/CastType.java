@@ -6,7 +6,7 @@
 /**
  *
  */
-package com.actiontech.dble.plan.common;
+package com.actiontech.dble.sql.route.complex.plan.common;
 
 public class CastType {
     private CastTarget target;

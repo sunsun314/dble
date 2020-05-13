@@ -3,13 +3,13 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.loader.xml;
+package com.actiontech.dble.common.config.loader.xml;
 
-import com.actiontech.dble.config.model.FirewallConfig;
-import com.actiontech.dble.config.model.UserConfig;
-import com.actiontech.dble.config.util.ConfigException;
-import com.actiontech.dble.config.util.ConfigUtil;
-import com.actiontech.dble.config.util.ParameterMapping;
+import com.actiontech.dble.common.config.model.FirewallConfig;
+import com.actiontech.dble.common.config.model.UserConfig;
+import com.actiontech.dble.common.config.util.ConfigException;
+import com.actiontech.dble.common.config.util.ConfigUtil;
+import com.actiontech.dble.common.config.util.ParameterMapping;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.wall.WallConfig;
 import org.w3c.dom.Element;

@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.comm;
+package com.actiontech.dble.common.config.loader.zkprocess.comm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

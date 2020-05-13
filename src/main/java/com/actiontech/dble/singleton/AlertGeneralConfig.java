@@ -1,8 +1,8 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.alarm.Alert;
-import com.actiontech.dble.alarm.NoAlert;
-import com.actiontech.dble.util.ResourceUtil;
+import com.actiontech.dble.maintenance.alarm.Alert;
+import com.actiontech.dble.maintenance.alarm.NoAlert;
+import com.actiontech.dble.common.util.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

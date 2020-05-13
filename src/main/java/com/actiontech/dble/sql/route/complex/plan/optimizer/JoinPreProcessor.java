@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.optimizer;
+package com.actiontech.dble.sql.route.complex.plan.optimizer;
 
-import com.actiontech.dble.plan.node.PlanNode;
-import com.actiontech.dble.plan.node.JoinNode;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
+import com.actiontech.dble.sql.route.complex.plan.node.JoinNode;
 
 public final class JoinPreProcessor {
     private JoinPreProcessor() {

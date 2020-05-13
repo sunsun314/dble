@@ -3,14 +3,14 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta.table;
+package com.actiontech.dble.sql.meta.table;
 
-import com.actiontech.dble.config.ServerConfig;
-import com.actiontech.dble.config.model.SchemaConfig;
-import com.actiontech.dble.meta.ProxyMetaManager;
-import com.actiontech.dble.meta.ReloadLogHelper;
-import com.actiontech.dble.meta.ReloadManager;
-import com.actiontech.dble.util.CollectionUtil;
+import com.actiontech.dble.common.config.ServerConfig;
+import com.actiontech.dble.common.config.model.SchemaConfig;
+import com.actiontech.dble.sql.meta.ProxyMetaManager;
+import com.actiontech.dble.sql.meta.ReloadLogHelper;
+import com.actiontech.dble.sql.meta.ReloadManager;
+import com.actiontech.dble.common.util.CollectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

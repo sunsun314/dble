@@ -1,4 +1,4 @@
-package com.actiontech.dble.assistant.backend.mysql.xa;
+package com.actiontech.dble.sql.xa;
 
 import com.actiontech.dble.maintenance.alarm.AlarmCode;
 import com.actiontech.dble.maintenance.alarm.Alert;

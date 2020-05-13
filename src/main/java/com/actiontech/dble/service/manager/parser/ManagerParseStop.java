@@ -3,10 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.sql.route.simple.parser;
+package com.actiontech.dble.service.manager.parser;
 
-import com.actiontech.dble.sql.route.simple.parser.util.Pair;
-import com.actiontech.dble.sql.route.simple.parser.util.ParseUtil;
+import com.actiontech.dble.common.util.Pair;
+import com.actiontech.dble.common.util.ParseUtil;
 import com.actiontech.dble.common.util.SplitUtil;
 
 /**

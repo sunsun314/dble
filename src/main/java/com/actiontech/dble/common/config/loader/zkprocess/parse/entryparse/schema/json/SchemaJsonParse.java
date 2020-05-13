@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.json;
+package com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.schema.json;
 
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.schema.Schema;
-import com.actiontech.dble.config.loader.zkprocess.parse.JsonProcessBase;
-import com.actiontech.dble.config.loader.zkprocess.parse.ParseJsonServiceInf;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.schema.Schema;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.JsonProcessBase;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.ParseJsonServiceInf;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;

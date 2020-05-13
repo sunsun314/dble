@@ -1,9 +1,9 @@
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.common.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.sql.meta.ReloadManager;
 import com.actiontech.dble.sql.meta.ReloadStatus;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;

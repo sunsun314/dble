@@ -3,18 +3,18 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.loader.xml;
+package com.actiontech.dble.common.config.loader.xml;
 
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.config.ProblemReporter;
-import com.actiontech.dble.config.Versions;
-import com.actiontech.dble.config.loader.SchemaLoader;
-import com.actiontech.dble.config.model.*;
-import com.actiontech.dble.config.model.TableConfig.TableTypeEnum;
-import com.actiontech.dble.config.model.rule.TableRuleConfig;
-import com.actiontech.dble.config.util.ConfigException;
-import com.actiontech.dble.config.util.ConfigUtil;
-import com.actiontech.dble.sql.route.simple.route.function.AbstractPartitionAlgorithm;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.common.config.ProblemReporter;
+import com.actiontech.dble.common.config.Versions;
+import com.actiontech.dble.common.config.loader.SchemaLoader;
+import com.actiontech.dble.common.config.model.*;
+import com.actiontech.dble.common.config.model.TableConfig.TableTypeEnum;
+import com.actiontech.dble.common.config.model.rule.TableRuleConfig;
+import com.actiontech.dble.common.config.util.ConfigException;
+import com.actiontech.dble.common.config.util.ConfigUtil;
+import com.actiontech.dble.sql.route.simple.function.AbstractPartitionAlgorithm;
 import com.actiontech.dble.common.util.DecryptUtil;
 import com.actiontech.dble.common.util.ResourceUtil;
 import com.actiontech.dble.common.util.SplitUtil;
@@ -28,8 +28,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static com.actiontech.dble.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_DEFAULT;
-import static com.actiontech.dble.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_DEFAULT_CRON;
+import static com.actiontech.dble.assistant.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_DEFAULT;
+import static com.actiontech.dble.assistant.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_DEFAULT_CRON;
 
 /**
  * @author mycat

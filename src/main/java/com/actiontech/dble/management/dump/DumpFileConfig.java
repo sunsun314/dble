@@ -1,4 +1,4 @@
-package com.actiontech.dble.manager.dump;
+package com.actiontech.dble.management.dump;
 
 import java.io.File;
 

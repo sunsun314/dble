@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.server.util;
+package com.actiontech.dble.service.util;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.common.config.ErrorCode;
@@ -12,9 +12,9 @@ import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.UserConfig;
 import com.actiontech.dble.sql.route.complex.plan.common.item.function.ItemCreate;
 import com.actiontech.dble.sql.route.complex.plan.common.ptr.StringPtr;
-import com.actiontech.dble.sql.route.simple.route.parser.druid.ServerSchemaStatVisitor;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.sql.route.simple.parser.druid.ServerSchemaStatVisitor;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;

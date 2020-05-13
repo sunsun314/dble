@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query;
+package com.actiontech.dble.sql.handler.query;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

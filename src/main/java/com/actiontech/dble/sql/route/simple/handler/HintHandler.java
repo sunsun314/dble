@@ -8,7 +8,7 @@ package com.actiontech.dble.sql.route.simple.handler;
 import com.actiontech.dble.common.cache.LayerCachePool;
 import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.sql.route.simple.RouteResultset;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 
 import java.sql.SQLException;
 import java.util.Map;

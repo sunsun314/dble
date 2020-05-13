@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.field;
+package com.actiontech.dble.sql.route.complex.plan.common.field;
 
-import com.actiontech.dble.plan.common.item.FieldTypes;
+import com.actiontech.dble.sql.route.complex.plan.common.item.FieldTypes;
 
 import java.util.List;
 

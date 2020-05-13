@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.item;
+package com.actiontech.dble.sql.route.complex.plan.common.item;
 
 public enum FieldTypes {
     MYSQL_TYPE_DECIMAL(0), MYSQL_TYPE_TINY(1), MYSQL_TYPE_SHORT(2), MYSQL_TYPE_LONG(3), MYSQL_TYPE_FLOAT(

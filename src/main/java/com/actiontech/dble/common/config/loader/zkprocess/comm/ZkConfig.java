@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.comm;
+package com.actiontech.dble.common.config.loader.zkprocess.comm;
 
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.config.loader.zkprocess.zktoxml.ZktoXmlMain;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.common.config.loader.zkprocess.zktoxml.ZktoXmlMain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

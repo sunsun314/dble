@@ -3,12 +3,12 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.loader;
+package com.actiontech.dble.common.config.loader;
 
-import com.actiontech.dble.config.model.DataHostConfig;
-import com.actiontech.dble.config.model.DataNodeConfig;
-import com.actiontech.dble.config.model.ERTable;
-import com.actiontech.dble.config.model.SchemaConfig;
+import com.actiontech.dble.common.config.model.DataHostConfig;
+import com.actiontech.dble.common.config.model.DataNodeConfig;
+import com.actiontech.dble.common.config.model.ERTable;
+import com.actiontech.dble.common.config.model.SchemaConfig;
 
 import java.util.Map;
 import java.util.Set;

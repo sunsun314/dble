@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.field.string;
+package com.actiontech.dble.sql.route.complex.plan.common.field.string;
 
-import com.actiontech.dble.plan.common.MySQLcom;
-import com.actiontech.dble.plan.common.field.Field;
-import com.actiontech.dble.plan.common.item.Item.ItemResult;
+import com.actiontech.dble.sql.route.complex.plan.common.MySQLcom;
+import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
+import com.actiontech.dble.sql.route.complex.plan.common.item.Item.ItemResult;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;

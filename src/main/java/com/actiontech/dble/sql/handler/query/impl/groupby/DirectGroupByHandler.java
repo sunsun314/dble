@@ -3,19 +3,19 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl.groupby;
+package com.actiontech.dble.sql.handler.query.impl.groupby;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.OwnThreadDMLHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl.groupby.directgroupby.DGRowPacket;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl.groupby.directgroupby.GroupByBucket;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.HandlerTool;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.RowDataComparator;
-import com.actiontech.dble.assistant.backend.mysql.store.GroupByLocalResult;
-import com.actiontech.dble.assistant.backend.mysql.store.LocalResult;
+import com.actiontech.dble.sql.handler.query.OwnThreadDMLHandler;
+import com.actiontech.dble.sql.handler.query.impl.groupby.directgroupby.DGRowPacket;
+import com.actiontech.dble.sql.handler.query.impl.groupby.directgroupby.GroupByBucket;
+import com.actiontech.dble.sql.handler.util.HandlerTool;
+import com.actiontech.dble.sql.handler.util.RowDataComparator;
+import com.actiontech.dble.common.store.GroupByLocalResult;
+import com.actiontech.dble.common.store.LocalResult;
 import com.actiontech.dble.common.buffer.BufferPool;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
@@ -24,7 +24,7 @@ import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
 import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
 import com.actiontech.dble.sql.route.complex.plan.common.item.function.sumfunc.Aggregator;
 import com.actiontech.dble.sql.route.complex.plan.common.item.function.sumfunc.ItemSum;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 import com.actiontech.dble.singleton.BufferPoolManager;
 import com.actiontech.dble.common.util.TimeUtil;
 import org.slf4j.Logger;

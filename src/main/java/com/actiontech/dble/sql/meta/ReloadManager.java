@@ -1,6 +1,6 @@
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ConfStatus;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ConfStatus;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

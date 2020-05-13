@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.item.function.strfunc;
+package com.actiontech.dble.sql.route.complex.plan.common.item.function.strfunc;
 
-import com.actiontech.dble.plan.common.field.Field;
-import com.actiontech.dble.plan.common.item.Item;
-import com.actiontech.dble.plan.common.item.function.ItemFunc;
+import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
+import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.ItemFunc;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 

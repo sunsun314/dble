@@ -3,14 +3,14 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route;
+package com.actiontech.dble.sql.route.simple;
 
 import com.actiontech.dble.SimpleCachePool;
 import com.actiontech.dble.common.cache.LayerCachePool;
 import com.actiontech.dble.common.config.ServerConfig;
 import com.actiontech.dble.common.config.model.SchemaConfig;
-import com.actiontech.dble.sql.route.simple.route.factory.RouteStrategyFactory;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLName;

@@ -3,20 +3,20 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.config.ErrorCode;
-import com.actiontech.dble.meta.protocol.StructureMeta;
-import com.actiontech.dble.plan.common.item.Item;
-import com.actiontech.dble.plan.node.MergeNode;
-import com.actiontech.dble.plan.node.PlanNode;
-import com.actiontech.dble.plan.node.QueryNode;
-import com.actiontech.dble.plan.node.TableNode;
-import com.actiontech.dble.plan.visitor.MySQLPlanNodeVisitor;
-import com.actiontech.dble.route.factory.RouteStrategyFactory;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.common.config.ErrorCode;
+import com.actiontech.dble.sql.meta.protocol.StructureMeta;
+import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
+import com.actiontech.dble.sql.route.complex.plan.node.MergeNode;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
+import com.actiontech.dble.sql.route.complex.plan.node.QueryNode;
+import com.actiontech.dble.sql.route.complex.plan.node.TableNode;
+import com.actiontech.dble.sql.route.complex.plan.visitor.MySQLPlanNodeVisitor;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
 import com.actiontech.dble.singleton.ProxyMeta;
-import com.actiontech.dble.util.StringUtil;
+import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 
 import java.sql.SQLException;

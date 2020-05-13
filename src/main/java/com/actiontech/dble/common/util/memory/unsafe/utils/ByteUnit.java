@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.actiontech.dble.memory.unsafe.utils;
+package com.actiontech.dble.common.util.memory.unsafe.utils;
 
 public enum ByteUnit {
     BYTE(1),

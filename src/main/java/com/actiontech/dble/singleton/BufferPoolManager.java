@@ -1,9 +1,9 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.buffer.BufferPool;
-import com.actiontech.dble.buffer.DirectByteBufferPool;
-import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.memory.unsafe.Platform;
+import com.actiontech.dble.common.buffer.BufferPool;
+import com.actiontech.dble.common.buffer.DirectByteBufferPool;
+import com.actiontech.dble.common.config.model.SystemConfig;
+import com.actiontech.dble.common.util.memory.unsafe.Platform;
 
 import java.io.IOException;
 

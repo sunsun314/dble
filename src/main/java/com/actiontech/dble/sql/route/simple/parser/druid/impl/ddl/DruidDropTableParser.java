@@ -3,17 +3,17 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.parser.druid.impl.ddl;
+package com.actiontech.dble.sql.route.simple.parser.druid.impl.ddl;
 
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.DDLInfo;
 import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.TableConfig;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
-import com.actiontech.dble.sql.route.simple.route.RouteResultset;
-import com.actiontech.dble.sql.route.simple.route.parser.druid.ServerSchemaStatVisitor;
-import com.actiontech.dble.sql.route.simple.route.parser.druid.impl.DefaultDruidParser;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.parser.druid.ServerSchemaStatVisitor;
+import com.actiontech.dble.sql.route.simple.parser.druid.impl.DefaultDruidParser;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.service.util.SchemaUtil.SchemaInfo;
 import com.alibaba.druid.sql.ast.SQLStatement;

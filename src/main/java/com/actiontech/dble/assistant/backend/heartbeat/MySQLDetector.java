@@ -3,22 +3,21 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.backend.heartbeat;
+package com.actiontech.dble.assistant.backend.heartbeat;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.alarm.AlarmCode;
-import com.actiontech.dble.alarm.Alert;
-import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.alarm.ToResolveContainer;
-import com.actiontech.dble.backend.BackendConnection;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
-import com.actiontech.dble.config.helper.GetAndSyncDataSourceKeyVariables;
-import com.actiontech.dble.config.helper.KeyVariables;
-import com.actiontech.dble.sqlengine.HeartbeatSQLJob;
-import com.actiontech.dble.sqlengine.OneRawSQLQueryResultHandler;
-import com.actiontech.dble.sqlengine.SQLQueryResult;
-import com.actiontech.dble.sqlengine.SQLQueryResultListener;
+import com.actiontech.dble.maintenance.alarm.AlarmCode;
+import com.actiontech.dble.maintenance.alarm.Alert;
+import com.actiontech.dble.maintenance.alarm.AlertUtil;
+import com.actiontech.dble.maintenance.alarm.ToResolveContainer;
+import com.actiontech.dble.assistant.backend.BackendConnection;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLDataSource;
+import com.actiontech.dble.common.config.helper.GetAndSyncDataSourceKeyVariables;
+import com.actiontech.dble.common.config.helper.KeyVariables;
+import com.actiontech.dble.common.sqljob.OneRawSQLQueryResultHandler;
+import com.actiontech.dble.common.sqljob.SQLQueryResult;
+import com.actiontech.dble.common.sqljob.SQLQueryResultListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

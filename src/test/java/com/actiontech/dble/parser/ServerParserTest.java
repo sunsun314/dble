@@ -5,10 +5,10 @@
 */
 package com.actiontech.dble.parser;
 
-import com.actiontech.dble.server.parser.ServerParse;
-import com.actiontech.dble.server.parser.ServerParseSelect;
-import com.actiontech.dble.server.parser.ServerParseShow;
-import com.actiontech.dble.server.parser.ServerParseStart;
+import com.actiontech.dble.service.server.parser.ServerParse;
+import com.actiontech.dble.service.server.parser.ServerParseSelect;
+import com.actiontech.dble.service.server.parser.ServerParseShow;
+import com.actiontech.dble.service.server.parser.ServerParseStart;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

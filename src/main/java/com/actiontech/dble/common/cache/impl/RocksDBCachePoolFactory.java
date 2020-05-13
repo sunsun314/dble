@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.cache.impl;
+package com.actiontech.dble.common.cache.impl;
 
-import com.actiontech.dble.cache.CachePool;
-import com.actiontech.dble.cache.CachePoolFactory;
+import com.actiontech.dble.common.cache.CachePool;
+import com.actiontech.dble.common.cache.CachePoolFactory;
 import org.rocksdb.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -3,17 +3,17 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResultSetHeaderPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
-import com.actiontech.dble.server.NonBlockingSession;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.service.server.NonBlockingSession;
 import com.actiontech.dble.singleton.XASessionCheck;
 import com.actiontech.dble.common.util.StringUtil;
 

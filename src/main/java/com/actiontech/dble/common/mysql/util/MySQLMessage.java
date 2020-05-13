@@ -3,9 +3,8 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.common.mysql;
+package com.actiontech.dble.common.mysql.util;
 
-import com.actiontech.dble.common.mysql.util.CharsetUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;

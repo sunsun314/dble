@@ -3,7 +3,7 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.maintenance.alarm.AlertUtil;
@@ -11,11 +11,11 @@ import com.actiontech.dble.singleton.CustomMySQLHa;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.manager.response.*;
-import com.actiontech.dble.sql.route.simple.route.parser.ManagerParseShow;
-import com.actiontech.dble.server.status.SlowQueryLog;
-import com.actiontech.dble.sqlengine.TransformSQLJob;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.management.response.*;
+import com.actiontech.dble.service.manager.parser.ManagerParseShow;
+import com.actiontech.dble.assistant.slowlog.SlowQueryLog;
+import com.actiontech.dble.common.sqljob.TransformSQLJob;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlShowVariantsStatement;

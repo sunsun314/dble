@@ -1,19 +1,19 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.backend.datasource.HaChangeStatus;
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.config.loader.console.ZookeeperPath;
-import com.actiontech.dble.config.loader.zkprocess.entity.Schemas;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.ReadHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.WriteHost;
-import com.actiontech.dble.config.loader.zkprocess.parse.XmlProcessBase;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.HaInfo;
-import com.actiontech.dble.config.util.SchemaWriteJob;
-import com.actiontech.dble.util.ResourceUtil;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.assistant.backend.datasource.HaChangeStatus;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.common.config.loader.console.ZookeeperPath;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.Schemas;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.DataHost;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.ReadHost;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.WriteHost;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.XmlProcessBase;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.schema.xml.SchemasParseXmlImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.DataSourceStatus;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.HaInfo;
+import com.actiontech.dble.common.config.util.SchemaWriteJob;
+import com.actiontech.dble.common.util.ResourceUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static com.actiontech.dble.backend.datasource.PhysicalDataHost.*;
+import static com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost.*;
 
 /**
  * Created by szf on 2019/10/23.

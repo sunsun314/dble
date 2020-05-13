@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.statistic.stat;
+package com.actiontech.dble.assistant.statistic.stat;
 
-import com.actiontech.dble.sql.route.simple.route.parser.druid.ServerSchemaStatVisitor;
-import com.actiontech.dble.server.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.parser.druid.ServerSchemaStatVisitor;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.stat.TableStat.Condition;

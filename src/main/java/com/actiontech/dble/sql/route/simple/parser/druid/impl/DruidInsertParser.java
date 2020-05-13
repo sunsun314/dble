@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.parser.druid.impl;
+package com.actiontech.dble.sql.route.simple.parser.druid.impl;
 
 import com.actiontech.dble.common.config.ServerPrivileges;
 import com.actiontech.dble.common.config.ServerPrivileges.CheckType;
@@ -11,13 +11,13 @@ import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.TableConfig;
 import com.actiontech.dble.sql.meta.protocol.StructureMeta;
 import com.actiontech.dble.sql.route.complex.plan.common.ptr.StringPtr;
-import com.actiontech.dble.sql.route.simple.route.RouteResultset;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
-import com.actiontech.dble.sql.route.simple.route.function.AbstractPartitionAlgorithm;
-import com.actiontech.dble.sql.route.simple.route.parser.druid.ServerSchemaStatVisitor;
-import com.actiontech.dble.sql.route.simple.route.parser.util.Pair;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.common.util.Pair;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.function.AbstractPartitionAlgorithm;
+import com.actiontech.dble.sql.route.simple.parser.druid.ServerSchemaStatVisitor;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.service.util.SchemaUtil.SchemaInfo;
 import com.actiontech.dble.singleton.ProxyMeta;

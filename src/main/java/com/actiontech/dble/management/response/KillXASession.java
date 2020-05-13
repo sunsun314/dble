@@ -3,11 +3,11 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
-import com.actiontech.dble.server.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 import com.actiontech.dble.singleton.XASessionCheck;
 import com.actiontech.dble.common.util.SplitUtil;
 

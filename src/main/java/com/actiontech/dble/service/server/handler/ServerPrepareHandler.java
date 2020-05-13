@@ -3,21 +3,21 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
-import com.actiontech.dble.assistant.backend.mysql.BindValue;
-import com.actiontech.dble.assistant.backend.mysql.ByteUtil;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
-import com.actiontech.dble.assistant.backend.mysql.PreparedStatement;
+import com.actiontech.dble.common.mysql.util.BindValue;
+import com.actiontech.dble.common.mysql.util.ByteUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.PreparedStatement;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.Fields;
-import com.actiontech.dble.net.handler.FrontendPrepareHandler;
 import com.actiontech.dble.common.mysql.packet.ExecutePacket;
 import com.actiontech.dble.common.mysql.packet.LongDataPacket;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.common.mysql.packet.ResetPacket;
-import com.actiontech.dble.service.ServerConnection;
-import com.actiontech.dble.service.response.PreparedStmtResponse;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.handler.FrontendPrepareHandler;
+import com.actiontech.dble.service.server.response.PreparedStmtResponse;
 import com.actiontech.dble.common.util.HexFormatUtil;
 import com.google.common.escape.Escaper;
 import com.google.common.escape.Escapers;

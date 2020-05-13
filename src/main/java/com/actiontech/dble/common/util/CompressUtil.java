@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.util;
+package com.actiontech.dble.common.util;
 
-import com.actiontech.dble.backend.mysql.BufferUtil;
-import com.actiontech.dble.backend.mysql.MySQLMessage;
-import com.actiontech.dble.net.AbstractConnection;
+import com.actiontech.dble.common.mysql.util.BufferUtil;
+import com.actiontech.dble.common.mysql.util.MySQLMessage;
+import com.actiontech.dble.common.net.AbstractConnection;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

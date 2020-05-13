@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.optimizer;
+package com.actiontech.dble.sql.route.complex.plan.optimizer;
 
-import com.actiontech.dble.plan.node.PlanNode;
-import com.actiontech.dble.plan.node.JoinNode;
-import com.actiontech.dble.plan.util.PlanUtil;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
+import com.actiontech.dble.sql.route.complex.plan.node.JoinNode;
+import com.actiontech.dble.sql.route.complex.plan.util.PlanUtil;
 
 public final class JoinStrategyProcessor {
     public static final String NEED_REPLACE = "{NEED_TO_REPLACE}";

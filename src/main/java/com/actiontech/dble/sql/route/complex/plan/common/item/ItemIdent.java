@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.item;
+package com.actiontech.dble.sql.route.complex.plan.common.item;
 
-import com.actiontech.dble.DbleServer;
+import com.actiontech.dble.bootstrap.DbleServer;
 import org.apache.commons.lang.StringUtils;
 
 public abstract class ItemIdent extends Item {

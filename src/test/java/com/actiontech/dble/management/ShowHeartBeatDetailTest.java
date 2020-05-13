@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager;
+package com.actiontech.dble.management;
 
-import com.actiontech.dble.sql.route.simple.route.parser.ManagerParseHeartbeat;
-import com.actiontech.dble.sql.route.simple.route.parser.util.Pair;
+import com.actiontech.dble.service.manager.parser.ManagerParseHeartbeat;
+import com.actiontech.dble.common.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 

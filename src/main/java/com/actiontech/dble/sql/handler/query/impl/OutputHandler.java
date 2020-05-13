@@ -3,17 +3,17 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl;
+package com.actiontech.dble.sql.handler.query.impl;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.BaseDMLHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.HandlerTool;
+import com.actiontech.dble.sql.handler.query.BaseDMLHandler;
+import com.actiontech.dble.sql.handler.util.HandlerTool;
 import com.actiontech.dble.common.mysql.packet.*;
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.service.NonBlockingSession;
-import com.actiontech.dble.service.ServerConnection;
-import com.actiontech.dble.sql.parser.ServerParse;
+import com.actiontech.dble.service.server.NonBlockingSession;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import com.actiontech.dble.assistant.statistic.stat.QueryResult;
 import com.actiontech.dble.assistant.statistic.stat.QueryResultDispatcher;
 import org.slf4j.Logger;

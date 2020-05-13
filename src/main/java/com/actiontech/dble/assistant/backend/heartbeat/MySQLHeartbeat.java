@@ -3,14 +3,14 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.backend.heartbeat;
+package com.actiontech.dble.assistant.backend.heartbeat;
 
-import com.actiontech.dble.alarm.AlarmCode;
-import com.actiontech.dble.alarm.Alert;
-import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
-import com.actiontech.dble.statistic.DataSourceSyncRecorder;
-import com.actiontech.dble.statistic.HeartbeatRecorder;
+import com.actiontech.dble.maintenance.alarm.AlarmCode;
+import com.actiontech.dble.maintenance.alarm.Alert;
+import com.actiontech.dble.maintenance.alarm.AlertUtil;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLDataSource;
+import com.actiontech.dble.assistant.statistic.DataSourceSyncRecorder;
+import com.actiontech.dble.assistant.statistic.HeartbeatRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

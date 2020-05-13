@@ -3,14 +3,14 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.net.mysql;
+package com.actiontech.dble.common.mysql.packet;
 
 
-import com.actiontech.dble.backend.mysql.BufferUtil;
-import com.actiontech.dble.buffer.BufferPool;
-import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.common.mysql.util.BufferUtil;
+import com.actiontech.dble.common.buffer.BufferPool;
+import com.actiontech.dble.common.config.Fields;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.util.ByteUtil;
 import com.actiontech.dble.common.util.DateUtil;
 import org.slf4j.Logger;

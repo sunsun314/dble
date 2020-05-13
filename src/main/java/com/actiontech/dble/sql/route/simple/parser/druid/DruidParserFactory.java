@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.parser.druid;
+package com.actiontech.dble.sql.route.simple.parser.druid;
 
-import com.actiontech.dble.sql.route.simple.route.parser.druid.impl.*;
-import com.actiontech.dble.sql.route.simple.route.parser.druid.impl.ddl.*;
-import com.actiontech.dble.sql.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.parser.druid.impl.*;
+import com.actiontech.dble.sql.route.simple.parser.druid.impl.ddl.*;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.*;

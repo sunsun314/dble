@@ -3,17 +3,15 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.common.net.nio;
+package com.actiontech.dble.common.net;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.transaction.xa.stage.XAStage;
-import com.actiontech.dble.assistant.backend.mysql.xa.TxState;
+import com.actiontech.dble.sql.handler.transaction.xa.stage.XAStage;
+import com.actiontech.dble.sql.xa.TxState;
 import com.actiontech.dble.common.buffer.BufferPool;
-import com.actiontech.dble.common.net.AbstractConnection;
-import com.actiontech.dble.common.net.FrontendConnection;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.singleton.XASessionCheck;
 import com.actiontech.dble.assistant.statistic.CommandCount;
 import com.actiontech.dble.common.util.TimeUtil;

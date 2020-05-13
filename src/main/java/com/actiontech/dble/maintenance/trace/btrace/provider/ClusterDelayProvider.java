@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.btrace.provider;
+package com.actiontech.dble.maintenance.trace.btrace.provider;
 
 /**
  * Created by szf on 2018/3/28.

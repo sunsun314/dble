@@ -3,13 +3,13 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.log.transaction;
+package com.actiontech.dble.assistant.transactionlog;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.config.ServerConfig;
-import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.log.DailyRotateLogStore;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.common.config.ServerConfig;
+import com.actiontech.dble.common.config.model.SystemConfig;
+import com.actiontech.dble.common.tools.DailyRotateLogStore;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

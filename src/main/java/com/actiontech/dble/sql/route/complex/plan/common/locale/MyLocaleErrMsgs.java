@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.locale;
+package com.actiontech.dble.sql.route.complex.plan.common.locale;
 
 public class MyLocaleErrMsgs {
 

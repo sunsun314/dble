@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.MysqlCreateViewHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.MysqlDropViewHandler;
+import com.actiontech.dble.sql.handler.MysqlCreateViewHandler;
+import com.actiontech.dble.sql.handler.MysqlDropViewHandler;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.sql.meta.ProxyMetaManager;
 import com.actiontech.dble.sql.meta.ViewMeta;
@@ -15,10 +15,10 @@ import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
 import com.actiontech.dble.sql.route.complex.plan.node.QueryNode;
 import com.actiontech.dble.sql.route.complex.plan.node.TableNode;
-import com.actiontech.dble.sql.route.simple.route.RouteResultset;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
-import com.actiontech.dble.service.ServerConnection;
-import com.actiontech.dble.sql.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.statement.SQLDropViewStatement;

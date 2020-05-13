@@ -1,6 +1,6 @@
 package com.actiontech.dble.parser;
 
-import com.actiontech.dble.meta.ViewMetaParser;
+import com.actiontech.dble.sql.meta.ViewMetaParser;
 import org.junit.Assert;
 import org.junit.Test;
 

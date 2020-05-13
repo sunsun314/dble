@@ -3,17 +3,17 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.util;
+package com.actiontech.dble.sql.route.complex.plan.util;
 
-import com.actiontech.dble.plan.common.item.Item;
-import com.actiontech.dble.plan.common.item.ItemInt;
-import com.actiontech.dble.plan.common.item.function.ItemFunc.Functype;
-import com.actiontech.dble.plan.common.item.function.operator.cmpfunc.*;
-import com.actiontech.dble.plan.common.item.function.operator.logic.ItemCond;
-import com.actiontech.dble.plan.common.item.function.operator.logic.ItemCondAnd;
-import com.actiontech.dble.plan.common.item.function.operator.logic.ItemCondOr;
-import com.actiontech.dble.plan.node.PlanNode;
-import com.actiontech.dble.plan.node.TableNode;
+import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
+import com.actiontech.dble.sql.route.complex.plan.common.item.ItemInt;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.ItemFunc.Functype;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.operator.cmpfunc.*;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.operator.logic.ItemCond;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.operator.logic.ItemCondAnd;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.operator.logic.ItemCondOr;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
+import com.actiontech.dble.sql.route.complex.plan.node.TableNode;
 
 import java.util.*;
 

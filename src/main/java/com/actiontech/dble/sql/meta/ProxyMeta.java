@@ -1,7 +1,7 @@
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
-import com.actiontech.dble.config.ServerConfig;
-import com.actiontech.dble.util.CollectionUtil;
+import com.actiontech.dble.common.config.ServerConfig;
+import com.actiontech.dble.common.util.CollectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

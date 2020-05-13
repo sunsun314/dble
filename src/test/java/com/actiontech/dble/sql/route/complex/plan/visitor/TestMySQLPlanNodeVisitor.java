@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.visitor;
+package com.actiontech.dble.sql.route.complex.plan.visitor;
 
-import com.actiontech.dble.plan.node.PlanNode;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;

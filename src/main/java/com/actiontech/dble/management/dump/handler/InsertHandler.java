@@ -1,10 +1,10 @@
-package com.actiontech.dble.manager.dump.handler;
+package com.actiontech.dble.management.dump.handler;
 
 import com.actiontech.dble.common.config.model.TableConfig;
-import com.actiontech.dble.manager.dump.DumpException;
-import com.actiontech.dble.manager.dump.DumpFileContext;
+import com.actiontech.dble.management.dump.DumpException;
+import com.actiontech.dble.management.dump.DumpFileContext;
 import com.actiontech.dble.sql.meta.protocol.StructureMeta;
-import com.actiontech.dble.sql.route.simple.route.factory.RouteStrategyFactory;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.singleton.SequenceManager;
 import com.actiontech.dble.common.util.CollectionUtil;

@@ -1,4 +1,4 @@
-package com.actiontech.dble.manager.dump;
+package com.actiontech.dble.management.dump;
 
 public class DumpException extends RuntimeException {
 

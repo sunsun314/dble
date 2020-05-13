@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta.table;
+package com.actiontech.dble.sql.meta.table;
 
-import com.actiontech.dble.meta.ViewMeta;
-import com.actiontech.dble.meta.protocol.StructureMeta;
+import com.actiontech.dble.sql.meta.ViewMeta;
+import com.actiontech.dble.sql.meta.protocol.StructureMeta;
 
 import java.util.Set;
 

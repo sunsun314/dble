@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.backend.mysql.nio.handler.builder.sqlvisitor;
+package com.actiontech.dble.sql.route.complex.builder.sqlvisitor;
 
-import com.actiontech.dble.plan.common.ptr.StringPtr;
+import com.actiontech.dble.sql.route.complex.plan.common.ptr.StringPtr;
 
 import java.util.ArrayList;
 import java.util.List;

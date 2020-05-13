@@ -1,8 +1,8 @@
-package com.actiontech.dble.service.response;
+package com.actiontech.dble.service.server.response;
 
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
-import com.actiontech.dble.service.ServerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.btrace.script;
+package com.actiontech.dble.maintenance.trace.btrace.script;
 
 import com.sun.btrace.BTraceUtils;
 import com.sun.btrace.annotations.BTrace;
@@ -20,7 +20,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterGetLock"
     )
     public static void delayAfterGetLock(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -31,7 +31,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterViewSetKey"
     )
     public static void delayAfterViewSetKey(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -41,7 +41,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterViewNotic"
     )
     public static void delayAfterViewNotic(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -51,7 +51,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayWhenReponseViewNotic"
     )
     public static void delayWhenReponseViewNotic(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -61,7 +61,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeReponseGetView"
     )
     public static void delayBeforeReponseGetView(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -71,7 +71,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeReponseView"
     )
     public static void delayBeforeReponseView(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -80,7 +80,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "beforeDeleteViewNotic"
     )
     public static void beforeDeleteViewNotic(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -90,7 +90,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "beforeReleaseViewLock"
     )
     public static void beforeReleaseViewLock(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -100,7 +100,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterDdlLockMeta"
     )
     public static void delayAfterDdlLockMeta(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -110,7 +110,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterDdlExecuted"
     )
     public static void delayAfterDdlExecuted(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -120,7 +120,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeDdlNotice"
     )
     public static void delayBeforeDdlNotice(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -131,7 +131,7 @@ public final class BtraceClusterDelay {
 
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterDdlNotice"
     )
     public static void delayAfterDdlNotice(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -141,7 +141,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeDdlNoticeDeleted"
     )
     public static void delayBeforeDdlNoticeDeleted(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -152,7 +152,7 @@ public final class BtraceClusterDelay {
 
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeDdlLockRelease"
     )
     public static void delayBeforeDdlLockRelease(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -163,7 +163,7 @@ public final class BtraceClusterDelay {
 
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterReloadLock"
     )
     public static void delayAfterReloadLock(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -173,7 +173,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterGetNotice"
     )
     public static void delayAfterGetNotice(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -183,7 +183,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterMasterLoad"
     )
     public static void delayAfterMasterLoad(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -193,7 +193,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeSlaveReload"
     )
     public static void delayBeforeSlaveReload(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -203,7 +203,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterSlaveReload"
     )
     public static void delayAfterSlaveReload(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -213,7 +213,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeDeleteReloadLock"
     )
     public static void delayBeforeDeleteReloadLock(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -223,7 +223,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterMasterRollback"
     )
     public static void delayAfterMasterRollback(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -233,7 +233,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeSlaveRollback"
     )
     public static void delayBeforeSlaveRollback(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -243,7 +243,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayAfterSlaveRollback"
     )
     public static void delayAfterSlaveRollback(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {
@@ -253,7 +253,7 @@ public final class BtraceClusterDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.ClusterDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider",
             method = "delayBeforeDeleterollbackLock"
     )
     public static void delayBeforeDeleterollbackLock(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod) throws Exception {

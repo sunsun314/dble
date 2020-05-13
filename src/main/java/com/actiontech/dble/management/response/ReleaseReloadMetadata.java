@@ -1,7 +1,7 @@
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.sql.meta.ReloadManager;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import org.slf4j.Logger;

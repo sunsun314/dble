@@ -5,8 +5,8 @@
 */
 package com.actiontech.dble;
 
-import com.actiontech.dble.cache.CacheStatic;
-import com.actiontech.dble.cache.LayerCachePool;
+import com.actiontech.dble.common.cache.CacheStatic;
+import com.actiontech.dble.common.cache.LayerCachePool;
 
 import java.util.HashMap;
 import java.util.Map;

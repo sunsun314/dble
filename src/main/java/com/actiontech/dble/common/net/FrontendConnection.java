@@ -3,20 +3,19 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.net;
+package com.actiontech.dble.common.net;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
-import com.actiontech.dble.assistant.backend.mysql.MySQLMessage;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.MySQLMessage;
 import com.actiontech.dble.common.mysql.packet.*;
 import com.actiontech.dble.common.config.Capabilities;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.Versions;
 import com.actiontech.dble.common.config.util.AuthUtil;
-import com.actiontech.dble.common.net.nio.NIOProcessor;
-import com.actiontech.dble.management.ManagerConnection;
-import com.actiontech.dble.net.handler.*;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.handler.*;
 import com.actiontech.dble.singleton.FrontendUserManager;
 import com.actiontech.dble.singleton.SerializableLock;
 import com.actiontech.dble.common.util.CompressUtil;

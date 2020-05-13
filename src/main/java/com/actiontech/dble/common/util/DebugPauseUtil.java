@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.util;
+package com.actiontech.dble.common.util;
 
-import com.actiontech.dble.config.model.SystemConfig;
+import com.actiontech.dble.common.config.model.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

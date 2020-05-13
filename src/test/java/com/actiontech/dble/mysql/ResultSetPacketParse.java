@@ -5,8 +5,8 @@
 */
 package com.actiontech.dble.mysql;
 
-import com.actiontech.dble.util.FormatUtil;
-import com.actiontech.dble.util.SplitUtil;
+import com.actiontech.dble.common.util.FormatUtil;
+import com.actiontech.dble.common.util.SplitUtil;
 
 /**
  * @author mycat

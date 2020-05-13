@@ -3,22 +3,22 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config;
+package com.actiontech.dble.common.config;
 
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
-import com.actiontech.dble.config.helper.TestSchemasTask;
-import com.actiontech.dble.config.helper.TestTask;
-import com.actiontech.dble.config.loader.SchemaLoader;
-import com.actiontech.dble.config.loader.xml.XMLSchemaLoader;
-import com.actiontech.dble.config.loader.xml.XMLServerLoader;
-import com.actiontech.dble.config.model.*;
-import com.actiontech.dble.config.util.ConfigException;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLDataSource;
+import com.actiontech.dble.common.config.helper.TestSchemasTask;
+import com.actiontech.dble.common.config.helper.TestTask;
+import com.actiontech.dble.common.config.loader.SchemaLoader;
+import com.actiontech.dble.common.config.loader.xml.XMLSchemaLoader;
+import com.actiontech.dble.common.config.loader.xml.XMLServerLoader;
+import com.actiontech.dble.common.config.model.*;
+import com.actiontech.dble.common.config.util.ConfigException;
 import com.actiontech.dble.sql.route.complex.plan.common.ptr.BoolPtr;
-import com.actiontech.dble.sql.route.simple.route.parser.util.Pair;
-import com.actiontech.dble.sql.route.simple.route.sequence.handler.IncrSequenceMySQLHandler;
+import com.actiontech.dble.common.util.Pair;
+import com.actiontech.dble.sql.route.simple.sequence.handler.IncrSequenceMySQLHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

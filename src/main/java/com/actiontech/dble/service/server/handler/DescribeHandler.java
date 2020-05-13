@@ -3,13 +3,13 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.sql.route.simple.route.factory.RouteStrategyFactory;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
-import com.actiontech.dble.service.ServerConnection;
-import com.actiontech.dble.sql.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.service.util.SchemaUtil.SchemaInfo;
 import com.alibaba.druid.sql.ast.SQLStatement;

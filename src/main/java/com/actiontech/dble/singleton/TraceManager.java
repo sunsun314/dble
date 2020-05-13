@@ -1,14 +1,12 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.server.NonBlockingSession;
+import com.actiontech.dble.common.net.FrontendConnection;
 import io.jaegertracing.internal.JaegerTracer;
 import io.jaegertracing.internal.metrics.Metrics;
 import io.jaegertracing.internal.metrics.NoopMetricsFactory;
 import io.jaegertracing.internal.reporters.CompositeReporter;
 import io.jaegertracing.internal.reporters.LoggingReporter;
 import io.jaegertracing.internal.reporters.RemoteReporter;
-import io.jaegertracing.internal.samplers.ConstSampler;
 import io.jaegertracing.internal.samplers.ProbabilisticSampler;
 import io.jaegertracing.thrift.internal.senders.HttpSender;
 import io.opentracing.Span;
@@ -23,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by szf on 2020/5/9.
  */
-public class TraceManager {
+public final class TraceManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheService.class);
     private static final TraceManager INSTANCE = new TraceManager();
     private final JaegerTracer tracer;
@@ -34,19 +32,19 @@ public class TraceManager {
         final String endPoint = "http://10.186.60.96:14268/api/traces";
 
         final CompositeReporter compositeReporter = new CompositeReporter(
-                new RemoteReporter.Builder()
-                        .withSender(new HttpSender.Builder(endPoint).build())
-                        .build(),
+                new RemoteReporter.Builder().
+                        withSender(new HttpSender.Builder(endPoint).build()).
+                        build(),
                 new LoggingReporter()
         );
 
         final Metrics metrics = new Metrics(new NoopMetricsFactory());
 
-        JaegerTracer.Builder builder = new JaegerTracer.Builder("DBLE")
-                .withReporter(compositeReporter)
-                .withMetrics(metrics)
-                .withExpandExceptionLogs()
-                .withSampler(new ProbabilisticSampler(0.5));
+        JaegerTracer.Builder builder = new JaegerTracer.Builder("DBLE").
+                withReporter(compositeReporter).
+                withMetrics(metrics).
+                withExpandExceptionLogs().
+                withSampler(new ProbabilisticSampler(0.5));
 
         tracer = builder.build();
     }

@@ -3,14 +3,14 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.cluster.response;
+package com.actiontech.dble.maintenance.cluster.response;
 
-import com.actiontech.dble.assistant.backend.mysql.view.Repository;
+import com.actiontech.dble.sql.view.Repository;
 import com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider;
-import com.actiontech.dble.cluster.ClusterHelper;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.cluster.ClusterPathUtil;
-import com.actiontech.dble.cluster.bean.KvBean;
+import com.actiontech.dble.maintenance.cluster.ClusterHelper;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
+import com.actiontech.dble.maintenance.cluster.bean.KvBean;
 import com.actiontech.dble.sql.meta.ViewMeta;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.singleton.ProxyMeta;
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-import static com.actiontech.dble.cluster.ClusterPathUtil.SEPARATOR;
+import static com.actiontech.dble.maintenance.cluster.ClusterPathUtil.SEPARATOR;
 
 /**
  * Created by szf on 2018/2/5.

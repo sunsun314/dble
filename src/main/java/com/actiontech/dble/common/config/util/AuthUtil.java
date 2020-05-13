@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.util;
+package com.actiontech.dble.common.config.util;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.backend.mysql.SecurityUtil;
-import com.actiontech.dble.config.ErrorCode;
+import com.actiontech.dble.common.mysql.util.SecurityUtil;
+import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.singleton.FrontendUserManager;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.handler.FrontendPrivileges;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.service.handler.FrontendPrivileges;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

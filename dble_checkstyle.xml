@@ -151,7 +151,7 @@
 
         <module name="UncommentedMain">
             <property name="excludedClasses"
-                      value="(com\.actiontech\.dble\.DbleStartup)|(com\.actiontech\.dble\.config\.loader\.zkprocess\.xmltozk\.XmltoZkMain)|(com\.actiontech\.dble\.util\.DecryptUtil)|(com\.actiontech\.dble\.util\.dataMigrator\.DataMigrator)|(com\.actiontech\.dble\.cluster\.xmltoKv\.XmltoCluster)"/>
+                      value="(com\.actiontech\.dble\.bootstrap\.DbleStartup)|(com\.actiontech\.dble\.common\.config\.loader\.zkprocess\.xmltozk\.XmltoZkMain)|(com\.actiontech\.dble\.common\.util\.DecryptUtil)|(com\.actiontech\.dble\.util\.dataMigrator\.DataMigrator)|(com\.actiontech\.dble\.maintenance\.cluster\.xmltoKv\.XmltoCluster)"/>
         </module>
         <module name="Indentation">
             <property name="arrayInitIndent" value="8"/>

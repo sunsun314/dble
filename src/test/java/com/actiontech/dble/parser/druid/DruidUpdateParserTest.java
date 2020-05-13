@@ -5,10 +5,10 @@
 
 package com.actiontech.dble.parser.druid;
 
-import com.actiontech.dble.config.model.SchemaConfig;
-import com.actiontech.dble.config.model.TableConfig;
-import com.actiontech.dble.route.RouteResultset;
-import com.actiontech.dble.route.parser.druid.impl.DruidUpdateParser;
+import com.actiontech.dble.common.config.model.SchemaConfig;
+import com.actiontech.dble.common.config.model.TableConfig;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.parser.druid.impl.DruidUpdateParser;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.SQLBinaryOpExpr;

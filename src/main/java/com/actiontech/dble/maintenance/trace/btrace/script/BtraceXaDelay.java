@@ -1,4 +1,4 @@
-package com.actiontech.dble.btrace.script;
+package com.actiontech.dble.maintenance.trace.btrace.script;
 
 import com.sun.btrace.BTraceUtils;
 import com.sun.btrace.annotations.BTrace;
@@ -12,7 +12,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "delayBeforeXaStart"
     )
     public static void delayBeforeXaStart(String rrnName, String xaId) throws Exception {
@@ -21,7 +21,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "delayBeforeXaEnd"
     )
     public static void delayBeforeXaEnd(String rrnName, String xaId) throws Exception {
@@ -31,7 +31,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "delayBeforeXaPrepare"
     )
     public static void delayBeforeXaPrepare(String rrnName, String xaId) throws Exception {
@@ -40,7 +40,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "delayBeforeXaCommit"
     )
     public static void delayBeforeXaCommit(String rrnName, String xaId) throws Exception {
@@ -49,7 +49,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "delayBeforeXaRollback"
     )
     public static void delayBeforeXaRollback(String rrnName, String xaId) throws Exception {
@@ -58,7 +58,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "beforeAddXaToQueue"
     )
     public static void beforeAddXaToQueue(int count, String xaId) throws Exception {
@@ -67,7 +67,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "afterAddXaToQueue"
     )
     public static void afterAddXaToQueue(int count, String xaId) throws Exception {
@@ -76,7 +76,7 @@ public final class BtraceXaDelay {
     }
 
     @OnMethod(
-            clazz = "com.actiontech.dble.btrace.provider.XaDelayProvider",
+            clazz = "com.actiontech.dble.maintenance.trace.btrace.provider.XaDelayProvider",
             method = "beforeInnerRetry"
     )
     public static void beforeInnerRetry(int count, String xaId) throws Exception {

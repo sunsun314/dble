@@ -3,9 +3,8 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.common.net.nio;
+package com.actiontech.dble.common.net;
 
-import com.actiontech.dble.common.net.ClosableConnection;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

@@ -1,4 +1,4 @@
-package com.actiontech.dble.btrace.provider;
+package com.actiontech.dble.maintenance.trace.btrace.provider;
 
 /**
  * Created by szf on 2019/1/7.

@@ -3,21 +3,21 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.item;
+package com.actiontech.dble.sql.route.complex.plan.common.item;
 
-import com.actiontech.dble.backend.mysql.CharsetUtil;
-import com.actiontech.dble.config.ErrorCode;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.plan.NamedField;
-import com.actiontech.dble.plan.common.context.NameResolutionContext;
-import com.actiontech.dble.plan.common.context.ReferContext;
-import com.actiontech.dble.plan.common.exception.MySQLOutPutException;
-import com.actiontech.dble.plan.common.field.Field;
-import com.actiontech.dble.plan.common.time.MySQLTime;
-import com.actiontech.dble.plan.node.JoinNode;
-import com.actiontech.dble.plan.node.PlanNode;
-import com.actiontech.dble.plan.node.PlanNode.PlanNodeType;
-import com.actiontech.dble.util.StringUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
+import com.actiontech.dble.common.config.ErrorCode;
+import com.actiontech.dble.common.mysql.packet.FieldPacket;
+import com.actiontech.dble.sql.route.complex.plan.NamedField;
+import com.actiontech.dble.sql.route.complex.plan.common.context.NameResolutionContext;
+import com.actiontech.dble.sql.route.complex.plan.common.context.ReferContext;
+import com.actiontech.dble.sql.route.complex.plan.common.exception.MySQLOutPutException;
+import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
+import com.actiontech.dble.sql.route.complex.plan.common.time.MySQLTime;
+import com.actiontech.dble.sql.route.complex.plan.node.JoinNode;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode.PlanNodeType;
+import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;

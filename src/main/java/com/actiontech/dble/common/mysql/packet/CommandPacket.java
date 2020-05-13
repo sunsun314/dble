@@ -3,12 +3,12 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.net.mysql;
+package com.actiontech.dble.common.mysql.packet;
 
-import com.actiontech.dble.backend.mysql.BufferUtil;
-import com.actiontech.dble.backend.mysql.MySQLMessage;
-import com.actiontech.dble.backend.mysql.StreamUtil;
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
+import com.actiontech.dble.common.mysql.util.BufferUtil;
+import com.actiontech.dble.common.mysql.util.MySQLMessage;
+import com.actiontech.dble.common.mysql.util.StreamUtil;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.net.mysql;
+package com.actiontech.dble.common.mysql.packet;
 
 public final class StatusFlags {
     private StatusFlags() {

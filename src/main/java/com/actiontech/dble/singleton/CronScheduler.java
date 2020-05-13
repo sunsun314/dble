@@ -1,10 +1,10 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.backend.datasource.check.AbstractConsistencyChecker;
-import com.actiontech.dble.backend.datasource.check.GlobalCheckJob;
-import com.actiontech.dble.backend.datasource.check.CheckSumChecker;
-import com.actiontech.dble.config.model.SchemaConfig;
-import com.actiontech.dble.config.model.TableConfig;
+import com.actiontech.dble.assistant.backend.datasource.check.AbstractConsistencyChecker;
+import com.actiontech.dble.assistant.backend.datasource.check.GlobalCheckJob;
+import com.actiontech.dble.assistant.backend.datasource.check.CheckSumChecker;
+import com.actiontech.dble.common.config.model.SchemaConfig;
+import com.actiontech.dble.common.config.model.TableConfig;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.actiontech.dble.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_COUNT;
-import static com.actiontech.dble.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_DEFAULT;
+import static com.actiontech.dble.assistant.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_COUNT;
+import static com.actiontech.dble.assistant.backend.datasource.check.GlobalCheckJob.GLOBAL_TABLE_CHECK_DEFAULT;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;

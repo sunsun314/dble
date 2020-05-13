@@ -1,9 +1,9 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.alarm.AlertBlockQueue;
-import com.actiontech.dble.alarm.AlertSender;
-import com.actiontech.dble.alarm.AlertTask;
-import com.actiontech.dble.util.ExecutorUtil;
+import com.actiontech.dble.maintenance.alarm.AlertBlockQueue;
+import com.actiontech.dble.maintenance.alarm.AlertSender;
+import com.actiontech.dble.maintenance.alarm.AlertTask;
+import com.actiontech.dble.common.util.ExecutorUtil;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;

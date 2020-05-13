@@ -3,16 +3,16 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.btrace.provider.ClusterDelayProvider;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DDLInfo;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.DDLInfo.DDLStatus;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.maintenance.trace.btrace.provider.ClusterDelayProvider;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.DDLInfo;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.DDLInfo.DDLStatus;
 import com.actiontech.dble.singleton.ProxyMeta;
-import com.actiontech.dble.util.StringUtil;
+import com.actiontech.dble.common.util.StringUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;

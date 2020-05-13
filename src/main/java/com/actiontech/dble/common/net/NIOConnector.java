@@ -3,15 +3,13 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.common.net.nio;
+package com.actiontech.dble.common.net;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.maintenance.alarm.AlarmCode;
 import com.actiontech.dble.maintenance.alarm.Alert;
 import com.actiontech.dble.maintenance.alarm.AlertUtil;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.common.net.AbstractConnection;
-import com.actiontech.dble.common.net.SocketConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

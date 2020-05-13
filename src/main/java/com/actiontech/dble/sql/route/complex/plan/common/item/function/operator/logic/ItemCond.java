@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.item.function.operator.logic;
+package com.actiontech.dble.sql.route.complex.plan.common.item.function.operator.logic;
 
-import com.actiontech.dble.plan.common.item.FieldTypes;
-import com.actiontech.dble.plan.common.item.Item;
-import com.actiontech.dble.plan.common.item.function.primary.ItemBoolFunc;
+import com.actiontech.dble.sql.route.complex.plan.common.item.FieldTypes;
+import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
+import com.actiontech.dble.sql.route.complex.plan.common.item.function.primary.ItemBoolFunc;
 
 import java.util.ArrayList;
 import java.util.List;

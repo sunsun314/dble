@@ -1,4 +1,4 @@
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
@@ -9,7 +9,7 @@ import com.actiontech.dble.maintenance.cluster.DistributeLock;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.HaInfo;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.singleton.HaConfigManager;

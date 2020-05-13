@@ -3,14 +3,14 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.store;
+package com.actiontech.dble.common.store;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.maintenance.alarm.AlarmCode;
 import com.actiontech.dble.maintenance.alarm.Alert;
 import com.actiontech.dble.maintenance.alarm.AlertUtil;
-import com.actiontech.dble.assistant.backend.mysql.store.fs.FilePath;
-import com.actiontech.dble.assistant.backend.mysql.store.fs.FileUtils;
+import com.actiontech.dble.common.store.fs.FilePath;
+import com.actiontech.dble.common.store.fs.FileUtils;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.exception.TmpFileException;
 import org.slf4j.Logger;

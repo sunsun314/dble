@@ -3,14 +3,14 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.maintenance.cluster.ClusterHelper;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.singleton.DistrbtLockManager;
 import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
 import com.actiontech.dble.common.util.StringUtil;
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.regex.Matcher;
 
-import static com.actiontech.dble.sql.route.simple.route.parser.ManagerParseShow.PATTERN_FOR_TABLE_INFO;
+import static com.actiontech.dble.service.manager.parser.ManagerParseShow.PATTERN_FOR_TABLE_INFO;
 
 /**
  * @author mycat

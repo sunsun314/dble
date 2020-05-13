@@ -3,21 +3,21 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.NIOProcessor;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.common.net.NIOProcessor;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.ResultSetHeaderPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
-import com.actiontech.dble.sql.route.simple.route.factory.RouteStrategyFactory;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.util.IntegerUtil;
 import com.actiontech.dble.common.util.LongUtil;
 import com.actiontech.dble.common.util.StringUtil;

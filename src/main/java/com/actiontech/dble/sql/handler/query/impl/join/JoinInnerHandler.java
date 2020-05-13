@@ -1,8 +1,8 @@
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl.join;
+package com.actiontech.dble.sql.handler.query.impl.join;
 
 import com.actiontech.dble.sql.route.complex.plan.Order;
 import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 
 import java.util.List;
 

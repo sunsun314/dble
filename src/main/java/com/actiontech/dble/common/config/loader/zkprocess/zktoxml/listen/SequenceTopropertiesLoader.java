@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.zktoxml.listen;
+package com.actiontech.dble.common.config.loader.zkprocess.zktoxml.listen;
 
-import com.actiontech.dble.config.loader.zkprocess.comm.ConfFileRWUtils;
-import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZookeeperProcessListen;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.DirectoryInf;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkDataImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkDirectoryImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ConfFileRWUtils;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.NotifyService;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZookeeperProcessListen;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.DirectoryInf;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkDataImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkDirectoryImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
 import com.actiontech.dble.common.util.KVPathUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;

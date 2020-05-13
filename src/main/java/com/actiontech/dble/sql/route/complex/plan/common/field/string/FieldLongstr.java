@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.field.string;
+package com.actiontech.dble.sql.route.complex.plan.common.field.string;
 
 /**
  * base class for Field_string, Field_varstring and Field_blob

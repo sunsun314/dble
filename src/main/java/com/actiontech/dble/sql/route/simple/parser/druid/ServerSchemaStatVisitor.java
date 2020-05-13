@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.parser.druid;
+package com.actiontech.dble.sql.route.simple.parser.druid;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.sql.route.complex.plan.common.item.function.ItemCreate;
-import com.actiontech.dble.sql.route.simple.route.util.ConditionUtil;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
+import com.actiontech.dble.sql.route.simple.util.ConditionUtil;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
 import com.actiontech.dble.common.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLName;

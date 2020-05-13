@@ -5,7 +5,7 @@
 */
 package com.actiontech.dble.mysql;
 
-import com.actiontech.dble.backend.mysql.MySQLMessage;
+import com.actiontech.dble.common.mysql.util.MySQLMessage;
 import org.junit.Assert;
 import org.junit.Test;
 

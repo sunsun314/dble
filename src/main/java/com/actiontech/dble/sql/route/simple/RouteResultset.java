@@ -3,7 +3,7 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.sql.route.simple.route;
+package com.actiontech.dble.sql.route.simple;
 
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.DDLInfo;
 import com.actiontech.dble.common.util.FormatUtil;

@@ -1,10 +1,10 @@
-package com.actiontech.dble.backend.datasource.check;
+package com.actiontech.dble.assistant.backend.datasource.check;
 
-import com.actiontech.dble.alarm.AlarmCode;
-import com.actiontech.dble.alarm.Alert;
-import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.alarm.ToResolveContainer;
-import com.actiontech.dble.sqlengine.SQLQueryResult;
+import com.actiontech.dble.maintenance.alarm.AlarmCode;
+import com.actiontech.dble.maintenance.alarm.Alert;
+import com.actiontech.dble.maintenance.alarm.AlertUtil;
+import com.actiontech.dble.maintenance.alarm.ToResolveContainer;
+import com.actiontech.dble.common.sqljob.SQLQueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

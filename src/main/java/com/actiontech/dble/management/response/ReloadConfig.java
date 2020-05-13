@@ -3,7 +3,7 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
@@ -30,17 +30,17 @@ import com.actiontech.dble.common.config.model.FirewallConfig;
 import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.UserConfig;
 import com.actiontech.dble.common.config.util.ConfigUtil;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.sql.meta.ReloadLogHelper;
 import com.actiontech.dble.sql.meta.ReloadManager;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.NIOProcessor;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.common.net.NIOProcessor;
 import com.actiontech.dble.common.mysql.packet.OkPacket;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
-import com.actiontech.dble.sql.route.simple.route.parser.ManagerParseConfig;
-import com.actiontech.dble.server.ServerConnection;
-import com.actiontech.dble.server.variables.SystemVariables;
-import com.actiontech.dble.server.variables.VarsExtractorHandler;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.service.manager.parser.ManagerParseConfig;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.common.mysql.variables.SystemVariables;
+import com.actiontech.dble.common.mysql.variables.VarsExtractorHandler;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
 import com.actiontech.dble.singleton.CronScheduler;
 import com.actiontech.dble.singleton.FrontendUserManager;

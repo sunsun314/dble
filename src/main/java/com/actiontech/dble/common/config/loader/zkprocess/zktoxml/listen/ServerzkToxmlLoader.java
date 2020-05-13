@@ -3,26 +3,26 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.zktoxml.listen;
+package com.actiontech.dble.common.config.loader.zkprocess.zktoxml.listen;
 
-import com.actiontech.dble.config.loader.console.ZookeeperPath;
-import com.actiontech.dble.config.loader.zkprocess.comm.NotifyService;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZookeeperProcessListen;
-import com.actiontech.dble.config.loader.zkprocess.entity.Server;
-import com.actiontech.dble.config.loader.zkprocess.entity.server.FireWall;
-import com.actiontech.dble.config.loader.zkprocess.entity.server.System;
-import com.actiontech.dble.config.loader.zkprocess.entity.server.User;
-import com.actiontech.dble.config.loader.zkprocess.parse.ParseJsonServiceInf;
-import com.actiontech.dble.config.loader.zkprocess.parse.ParseXmlServiceInf;
-import com.actiontech.dble.config.loader.zkprocess.parse.XmlProcessBase;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.server.json.FireWallJsonParse;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.server.json.SystemJsonParse;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.server.json.UserJsonParse;
-import com.actiontech.dble.config.loader.zkprocess.parse.entryparse.server.xml.ServerParseXmlImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.DataInf;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.DirectoryInf;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkDirectoryImpl;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
+import com.actiontech.dble.common.config.loader.console.ZookeeperPath;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.NotifyService;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZookeeperProcessListen;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.Server;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.server.FireWall;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.server.System;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.server.User;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.ParseJsonServiceInf;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.ParseXmlServiceInf;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.XmlProcessBase;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.server.json.FireWallJsonParse;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.server.json.SystemJsonParse;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.server.json.UserJsonParse;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.server.xml.ServerParseXmlImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.DataInf;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.DirectoryInf;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkDirectoryImpl;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ZkMultiLoader;
 import com.actiontech.dble.common.util.KVPathUtil;
 import com.actiontech.dble.common.util.ResourceUtil;
 import org.apache.curator.framework.CuratorFramework;

@@ -5,15 +5,15 @@
  */
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.cache.CachePool;
-import com.actiontech.dble.cache.CachePoolFactory;
-import com.actiontech.dble.cache.DefaultLayedCachePool;
-import com.actiontech.dble.cache.LayerCachePool;
-import com.actiontech.dble.cache.impl.EnchachePooFactory;
-import com.actiontech.dble.cache.impl.LevelDBCachePooFactory;
-import com.actiontech.dble.cache.impl.MapDBCachePooFactory;
-import com.actiontech.dble.cache.impl.RocksDBCachePoolFactory;
-import com.actiontech.dble.util.ResourceUtil;
+import com.actiontech.dble.common.cache.CachePool;
+import com.actiontech.dble.common.cache.CachePoolFactory;
+import com.actiontech.dble.common.cache.DefaultLayedCachePool;
+import com.actiontech.dble.common.cache.LayerCachePool;
+import com.actiontech.dble.common.cache.impl.EnchachePooFactory;
+import com.actiontech.dble.common.cache.impl.LevelDBCachePooFactory;
+import com.actiontech.dble.common.cache.impl.MapDBCachePooFactory;
+import com.actiontech.dble.common.cache.impl.RocksDBCachePoolFactory;
+import com.actiontech.dble.common.util.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

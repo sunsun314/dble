@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.cluster.DistributeLock;
+import com.actiontech.dble.maintenance.cluster.DistributeLock;
 
 import java.util.HashMap;
 import java.util.Map;

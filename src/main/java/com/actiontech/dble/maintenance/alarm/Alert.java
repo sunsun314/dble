@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.maintenance.alarm;
 
-import com.actiontech.dble.cluster.bean.ClusterAlertBean;
+import com.actiontech.dble.maintenance.cluster.bean.ClusterAlertBean;
 
 
 public interface Alert {

@@ -3,14 +3,14 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl;
+package com.actiontech.dble.sql.handler.query.impl;
 
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.DMLResponseHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.OwnThreadDMLHandler;
+import com.actiontech.dble.sql.handler.query.DMLResponseHandler;
+import com.actiontech.dble.sql.handler.query.OwnThreadDMLHandler;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.sql.route.complex.plan.common.exception.MySQLOutPutException;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.service.server.NonBlockingSession;
 
 import java.util.ArrayList;
 import java.util.List;

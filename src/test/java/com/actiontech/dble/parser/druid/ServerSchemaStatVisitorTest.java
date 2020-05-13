@@ -5,8 +5,8 @@
 
 package com.actiontech.dble.parser.druid;
 
-import com.actiontech.dble.route.parser.druid.ServerSchemaStatVisitor;
-import com.actiontech.dble.route.parser.druid.WhereUnit;
+import com.actiontech.dble.sql.route.simple.parser.druid.ServerSchemaStatVisitor;
+import com.actiontech.dble.sql.route.simple.parser.druid.WhereUnit;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;

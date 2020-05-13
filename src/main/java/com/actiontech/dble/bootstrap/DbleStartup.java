@@ -3,14 +3,14 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble;
+package com.actiontech.dble.bootstrap;
 
 
 import com.actiontech.dble.singleton.CustomMySQLHa;
-import com.actiontech.dble.cluster.ClusterController;
-import com.actiontech.dble.config.Versions;
-import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.manager.handler.ShowServerLog;
+import com.actiontech.dble.maintenance.cluster.ClusterController;
+import com.actiontech.dble.common.config.Versions;
+import com.actiontech.dble.common.config.model.SystemConfig;
+import com.actiontech.dble.management.handler.ShowServerLog;
 import com.actiontech.dble.singleton.OnlineStatus;
 
 /**

@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config;
+package com.actiontech.dble.common.config;
 
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
-import com.actiontech.dble.config.loader.SchemaLoader;
-import com.actiontech.dble.config.loader.xml.XMLConfigLoader;
-import com.actiontech.dble.config.loader.xml.XMLSchemaLoader;
-import com.actiontech.dble.config.model.*;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLDataSource;
+import com.actiontech.dble.common.config.loader.SchemaLoader;
+import com.actiontech.dble.common.config.loader.xml.XMLConfigLoader;
+import com.actiontech.dble.common.config.loader.xml.XMLSchemaLoader;
+import com.actiontech.dble.common.config.model.*;
 import com.actiontech.dble.sql.route.complex.plan.node.JoinNode;
 import com.actiontech.dble.sql.route.complex.plan.optimizer.ERJoinChooser;
 import org.junit.Assert;

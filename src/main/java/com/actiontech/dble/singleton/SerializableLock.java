@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.DbleServer;
+import com.actiontech.dble.bootstrap.DbleServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

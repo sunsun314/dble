@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.server.variables;
+package com.actiontech.dble.common.mysql.variables;
 
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.sqlengine.OneRawSQLQueryResultHandler;
-import com.actiontech.dble.sqlengine.OneTimeConnJob;
+import com.actiontech.dble.common.sqljob.OneRawSQLQueryResultHandler;
+import com.actiontech.dble.common.sqljob.OneTimeConnJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

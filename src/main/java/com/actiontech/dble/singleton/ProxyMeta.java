@@ -1,9 +1,9 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.config.ServerConfig;
-import com.actiontech.dble.meta.ProxyMetaManager;
-import com.actiontech.dble.meta.ReloadManager;
-import com.actiontech.dble.util.CollectionUtil;
+import com.actiontech.dble.common.config.ServerConfig;
+import com.actiontech.dble.sql.meta.ProxyMetaManager;
+import com.actiontech.dble.sql.meta.ReloadManager;
+import com.actiontech.dble.common.util.CollectionUtil;
 
 import java.util.Map;
 import java.util.Set;

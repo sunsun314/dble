@@ -5,7 +5,7 @@
 */
 package com.actiontech.dble;
 
-import com.actiontech.dble.config.ConfigInitializer;
+import com.actiontech.dble.common.config.ConfigInitializer;
 import org.junit.Test;
 
 /**

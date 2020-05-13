@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.buffer;
+package com.actiontech.dble.common.buffer;
 
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Assert;

@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.util;
+package com.actiontech.dble.common.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

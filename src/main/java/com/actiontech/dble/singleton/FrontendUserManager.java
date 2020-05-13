@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.config.model.UserConfig;
+import com.actiontech.dble.common.config.model.UserConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query.impl.groupby;
+package com.actiontech.dble.sql.handler.query.impl.groupby;
 
 import com.actiontech.dble.assistant.backend.BackendConnection;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.BaseDMLHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.HandlerTool;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.util.RowDataComparator;
-import com.actiontech.dble.assistant.backend.mysql.store.DistinctLocalResult;
+import com.actiontech.dble.sql.handler.query.BaseDMLHandler;
+import com.actiontech.dble.sql.handler.util.HandlerTool;
+import com.actiontech.dble.sql.handler.util.RowDataComparator;
+import com.actiontech.dble.common.store.DistinctLocalResult;
 import com.actiontech.dble.common.buffer.BufferPool;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
 import com.actiontech.dble.common.mysql.packet.RowDataPacket;
@@ -21,7 +21,7 @@ import com.actiontech.dble.sql.route.complex.plan.common.field.Field;
 import com.actiontech.dble.sql.route.complex.plan.common.item.Item;
 import com.actiontech.dble.sql.route.complex.plan.common.item.function.sumfunc.Aggregator.AggregatorType;
 import com.actiontech.dble.sql.route.complex.plan.common.item.function.sumfunc.ItemSum;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 import com.actiontech.dble.singleton.BufferPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

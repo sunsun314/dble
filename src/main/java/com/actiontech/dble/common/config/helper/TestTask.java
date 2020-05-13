@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.helper;
+package com.actiontech.dble.common.config.helper;
 
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
 import com.actiontech.dble.sql.route.complex.plan.common.ptr.BoolPtr;
 
 import java.io.IOException;

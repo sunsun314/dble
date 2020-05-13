@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.common.util.exception;
+package com.actiontech.dble.common.exception;
 
 public class NotSupportException extends RuntimeException {
     private static final long serialVersionUID = 7394431636300968222L;

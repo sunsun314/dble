@@ -1,6 +1,6 @@
-package com.actiontech.dble.manager.dump.handler;
+package com.actiontech.dble.management.dump.handler;
 
-import com.actiontech.dble.server.parser.ServerParse;
+import com.actiontech.dble.service.server.parser.ServerParse;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

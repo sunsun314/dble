@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.util;
+package com.actiontech.dble.sql.route.simple.util;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -3,13 +3,13 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.util;
+package com.actiontech.dble.sql.handler.util;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
 import com.actiontech.dble.sql.route.complex.builder.sqlvisitor.MysqlVisitor;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.DMLResponseHandler;
-import com.actiontech.dble.assistant.backend.mysql.nio.handler.query.DMLResponseHandler.HandlerType;
+import com.actiontech.dble.sql.handler.query.DMLResponseHandler;
+import com.actiontech.dble.sql.handler.query.DMLResponseHandler.HandlerType;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.TableConfig;

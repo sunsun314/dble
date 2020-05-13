@@ -3,10 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.model;
+package com.actiontech.dble.common.config.model;
 
-import com.actiontech.dble.config.model.rule.RuleConfig;
-import com.actiontech.dble.sql.route.simple.route.util.RouterUtil;
+import com.actiontech.dble.common.config.model.rule.RuleConfig;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
 import com.actiontech.dble.common.util.SplitUtil;
 
 import java.util.ArrayList;

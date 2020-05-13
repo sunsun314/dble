@@ -1,10 +1,10 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.NIOProcessor;
-import com.actiontech.dble.server.NonBlockingSession;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.common.net.FrontendConnection;
+import com.actiontech.dble.common.net.NIOProcessor;
+import com.actiontech.dble.service.server.NonBlockingSession;
+import com.actiontech.dble.service.server.ServerConnection;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 

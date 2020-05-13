@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.common.locale;
+package com.actiontech.dble.sql.route.complex.plan.common.locale;
 
-import com.actiontech.dble.plan.common.MySQLcom;
-import com.actiontech.dble.plan.common.typelib.TypeLib;
+import com.actiontech.dble.sql.route.complex.plan.common.MySQLcom;
+import com.actiontech.dble.sql.route.complex.plan.common.typelib.TypeLib;
 
 /**
  * only locale_en_us is supported now

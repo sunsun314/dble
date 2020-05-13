@@ -3,13 +3,13 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.util;
+package com.actiontech.dble.sql.route.simple.util;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.common.config.model.TableConfig;
-import com.actiontech.dble.sql.route.simple.route.parser.druid.RouteCalculateUnit;
-import com.actiontech.dble.sql.route.simple.route.parser.druid.WhereUnit;
-import com.actiontech.dble.sql.route.simple.route.parser.util.Pair;
+import com.actiontech.dble.sql.route.simple.parser.druid.RouteCalculateUnit;
+import com.actiontech.dble.common.util.Pair;
+import com.actiontech.dble.sql.route.simple.parser.druid.WhereUnit;
 import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.common.bean.IsValue;
 import com.actiontech.dble.common.bean.RangeValue;

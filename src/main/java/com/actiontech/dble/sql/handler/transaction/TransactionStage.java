@@ -1,4 +1,4 @@
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.transaction;
+package com.actiontech.dble.sql.handler.transaction;
 
 public interface TransactionStage {
 

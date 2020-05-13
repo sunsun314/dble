@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.actiontech.dble.memory.unsafe;
+package com.actiontech.dble.common.util.memory.unsafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

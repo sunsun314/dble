@@ -3,14 +3,14 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.sql.route.simple.route.perf;
+package com.actiontech.dble.sql.route.simple.perf;
 
 import com.actiontech.dble.SimpleCachePool;
 import com.actiontech.dble.common.cache.LayerCachePool;
 import com.actiontech.dble.common.config.loader.SchemaLoader;
 import com.actiontech.dble.common.config.loader.xml.XMLSchemaLoader;
 import com.actiontech.dble.common.config.model.SchemaConfig;
-import com.actiontech.dble.sql.route.simple.route.factory.RouteStrategyFactory;
+import com.actiontech.dble.sql.route.simple.factory.RouteStrategyFactory;
 
 import java.sql.SQLException;
 import java.sql.SQLNonTransientException;

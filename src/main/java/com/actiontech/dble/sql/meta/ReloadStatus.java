@@ -1,8 +1,8 @@
-package com.actiontech.dble.meta;
+package com.actiontech.dble.sql.meta;
 
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.ConfStatus;
-import com.actiontech.dble.meta.table.ServerMetaHandler;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.ConfStatus;
+import com.actiontech.dble.sql.meta.table.ServerMetaHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

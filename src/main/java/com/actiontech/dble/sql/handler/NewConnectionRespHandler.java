@@ -3,7 +3,7 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.assistant.backend.mysql.nio.handler;
+package com.actiontech.dble.sql.handler;
 
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;

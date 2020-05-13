@@ -3,12 +3,12 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.net.mysql;
+package com.actiontech.dble.common.mysql.packet;
 
-import com.actiontech.dble.backend.mysql.BindValue;
-import com.actiontech.dble.backend.mysql.BindValueUtil;
-import com.actiontech.dble.backend.mysql.MySQLMessage;
-import com.actiontech.dble.backend.mysql.PreparedStatement;
+import com.actiontech.dble.common.mysql.util.BindValue;
+import com.actiontech.dble.common.mysql.util.BindValueUtil;
+import com.actiontech.dble.common.mysql.util.MySQLMessage;
+import com.actiontech.dble.common.mysql.util.PreparedStatement;
 
 import java.io.UnsupportedEncodingException;
 

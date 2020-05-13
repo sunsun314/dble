@@ -4,22 +4,22 @@
  */
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.backend.BackendConnection;
-import com.actiontech.dble.cluster.*;
-import com.actiontech.dble.cluster.kVtoXml.ClusterToXml;
-import com.actiontech.dble.cluster.ClusterPathUtil;
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.PauseInfo;
-import com.actiontech.dble.config.model.SchemaConfig;
-import com.actiontech.dble.config.model.TableConfig;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.meta.PauseEndThreadPool;
-import com.actiontech.dble.meta.SchemaMeta;
-import com.actiontech.dble.meta.protocol.StructureMeta;
-import com.actiontech.dble.plan.node.TableNode;
-import com.actiontech.dble.route.RouteResultset;
-import com.actiontech.dble.route.RouteResultsetNode;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.assistant.backend.BackendConnection;
+import com.actiontech.dble.maintenance.cluster.*;
+import com.actiontech.dble.maintenance.cluster.kVtoXml.ClusterToXml;
+import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.PauseInfo;
+import com.actiontech.dble.common.config.model.SchemaConfig;
+import com.actiontech.dble.common.config.model.TableConfig;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.sql.meta.PauseEndThreadPool;
+import com.actiontech.dble.sql.meta.SchemaMeta;
+import com.actiontech.dble.sql.meta.protocol.StructureMeta;
+import com.actiontech.dble.sql.route.complex.plan.node.TableNode;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.service.server.ServerConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static com.actiontech.dble.config.loader.zkprocess.zookeeper.process.PauseInfo.PAUSE;
+import static com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.PauseInfo.PAUSE;
 
 public final class PauseDatanodeManager {
     protected static final Logger LOGGER = LoggerFactory.getLogger(PauseDatanodeManager.class);

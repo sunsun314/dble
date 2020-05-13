@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.view;
+package com.actiontech.dble.sql.view;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.common.config.ServerConfig;

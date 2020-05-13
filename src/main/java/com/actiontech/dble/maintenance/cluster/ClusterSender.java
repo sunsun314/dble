@@ -1,9 +1,9 @@
-package com.actiontech.dble.cluster;
+package com.actiontech.dble.maintenance.cluster;
 
-import com.actiontech.dble.cluster.bean.KvBean;
-import com.actiontech.dble.cluster.bean.ClusterAlertBean;
-import com.actiontech.dble.cluster.bean.SubscribeRequest;
-import com.actiontech.dble.cluster.bean.SubscribeReturnBean;
+import com.actiontech.dble.maintenance.cluster.bean.KvBean;
+import com.actiontech.dble.maintenance.cluster.bean.ClusterAlertBean;
+import com.actiontech.dble.maintenance.cluster.bean.SubscribeRequest;
+import com.actiontech.dble.maintenance.cluster.bean.SubscribeReturnBean;
 
 import java.util.List;
 import java.util.Properties;

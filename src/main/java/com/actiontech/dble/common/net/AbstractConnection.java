@@ -3,23 +3,18 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.net;
+package com.actiontech.dble.common.net;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.BackendConnection;
-import com.actiontech.dble.assistant.backend.mysql.ByteUtil;
-import com.actiontech.dble.assistant.backend.mysql.CharsetUtil;
+import com.actiontech.dble.common.mysql.util.ByteUtil;
+import com.actiontech.dble.common.mysql.util.CharsetUtil;
 import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.common.config.model.SystemConfig;
 import com.actiontech.dble.common.mysql.packet.CharsetNames;
 import com.actiontech.dble.common.mysql.packet.MySQLPacket;
-import com.actiontech.dble.common.net.aio.AIOSocketWR;
-import com.actiontech.dble.common.net.nio.NIOConnection;
-import com.actiontech.dble.common.net.nio.NIOHandler;
-import com.actiontech.dble.common.net.nio.NIOProcessor;
-import com.actiontech.dble.common.net.nio.NIOSocketWR;
-import com.actiontech.dble.server.NonBlockingSession;
-import com.actiontech.dble.server.ServerConnection;
+import com.actiontech.dble.service.server.NonBlockingSession;
+import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.common.util.CompressUtil;
 import com.actiontech.dble.common.util.TimeUtil;
 import com.google.common.base.Strings;
@@ -586,7 +581,7 @@ public abstract class AbstractConnection implements NIOConnection {
         }
     }
 
-    protected synchronized void cleanup() {
+    public synchronized void cleanup() {
 
         if (readBuffer != null) {
             this.recycle(readBuffer);
@@ -763,4 +758,26 @@ public abstract class AbstractConnection implements NIOConnection {
     public abstract void startFlowControl(BackendConnection bcon);
 
     public abstract void stopFlowControl();
+
+
+    public void setReadBuffer(ByteBuffer readBuffer) {
+        this.readBuffer = readBuffer;
+    }
+
+    public ByteBuffer getWriteBuffer() {
+        return writeBuffer;
+    }
+
+    public void setWriteBuffer(ByteBuffer writeBuffer) {
+        this.writeBuffer = writeBuffer;
+    }
+
+    public void setLastWriteTime(long lastWriteTime) {
+        this.lastWriteTime = lastWriteTime;
+    }
+
+    public void setNetOutBytes(long netOutBytes) {
+        this.netOutBytes = netOutBytes;
+    }
+
 }

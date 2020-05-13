@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql;
+package com.actiontech.dble.common.mysql.util;
 
 public final class VersionUtil {
     private VersionUtil() {

@@ -1,16 +1,16 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.cluster.AbstractClusterSender;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.cluster.impl.UcoreSender;
-import com.actiontech.dble.cluster.impl.ushard.UshardSender;
-import com.actiontech.dble.cluster.kVtoXml.ClusterToXml;
-import com.actiontech.dble.config.loader.zkprocess.comm.ZkConfig;
+import com.actiontech.dble.maintenance.cluster.AbstractClusterSender;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.maintenance.cluster.impl.UcoreSender;
+import com.actiontech.dble.maintenance.cluster.impl.ushard.UshardSender;
+import com.actiontech.dble.maintenance.cluster.kVtoXml.ClusterToXml;
+import com.actiontech.dble.common.config.loader.zkprocess.comm.ZkConfig;
 
 import java.util.Properties;
 
-import static com.actiontech.dble.backend.mysql.nio.handler.ResetConnHandler.LOGGER;
-import static com.actiontech.dble.cluster.ClusterController.*;
+import static com.actiontech.dble.sql.handler.ResetConnHandler.LOGGER;
+import static com.actiontech.dble.maintenance.cluster.ClusterController.*;
 
 /**
  * Created by szf on 2019/3/11.

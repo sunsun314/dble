@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.server.variables;
+package com.actiontech.dble.common.mysql.variables;
 
-import com.actiontech.dble.assistant.backend.mysql.VersionUtil;
+import com.actiontech.dble.common.mysql.util.VersionUtil;
 import com.actiontech.dble.common.util.StringUtil;
 
 import java.util.HashMap;

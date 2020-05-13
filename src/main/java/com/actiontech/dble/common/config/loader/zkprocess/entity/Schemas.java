@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.entity;
+package com.actiontech.dble.common.config.loader.zkprocess.entity;
 
-import com.actiontech.dble.config.Versions;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datahost.DataHost;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.datanode.DataNode;
-import com.actiontech.dble.config.loader.zkprocess.entity.schema.schema.Schema;
+import com.actiontech.dble.common.config.Versions;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datahost.DataHost;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.datanode.DataNode;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.schema.schema.Schema;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

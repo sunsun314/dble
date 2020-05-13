@@ -1,4 +1,4 @@
-package com.actiontech.dble.config;
+package com.actiontech.dble.common.config;
 
 public class FlowCotrollerConfig {
 

@@ -3,15 +3,15 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.backend.mysql.nio;
+package com.actiontech.dble.assistant.backend.mysql.nio;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.backend.mysql.SecurityUtil;
-import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
+import com.actiontech.dble.common.mysql.util.SecurityUtil;
+import com.actiontech.dble.sql.handler.ResponseHandler;
 import com.actiontech.dble.common.mysql.packet.*;
-import com.actiontech.dble.config.Capabilities;
-import com.actiontech.dble.net.ConnectionException;
-import com.actiontech.dble.net.NIOHandler;
+import com.actiontech.dble.common.config.Capabilities;
+import com.actiontech.dble.common.net.ConnectionException;
+import com.actiontech.dble.common.net.NIOHandler;
 import com.actiontech.dble.common.util.PasswordAuthPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

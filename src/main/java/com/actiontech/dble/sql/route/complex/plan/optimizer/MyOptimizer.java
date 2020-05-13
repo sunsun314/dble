@@ -3,17 +3,17 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.plan.optimizer;
+package com.actiontech.dble.sql.route.complex.plan.optimizer;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.config.model.SchemaConfig;
-import com.actiontech.dble.plan.common.exception.MySQLOutPutException;
-import com.actiontech.dble.plan.common.item.subquery.ItemSubQuery;
-import com.actiontech.dble.plan.node.PlanNode;
-import com.actiontech.dble.plan.node.TableNode;
-import com.actiontech.dble.plan.util.PlanUtil;
-import com.actiontech.dble.route.util.RouterUtil;
-import com.actiontech.dble.server.util.SchemaUtil;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.common.config.model.SchemaConfig;
+import com.actiontech.dble.sql.route.complex.plan.common.exception.MySQLOutPutException;
+import com.actiontech.dble.sql.route.complex.plan.common.item.subquery.ItemSubQuery;
+import com.actiontech.dble.sql.route.complex.plan.node.PlanNode;
+import com.actiontech.dble.sql.route.complex.plan.node.TableNode;
+import com.actiontech.dble.sql.route.complex.plan.util.PlanUtil;
+import com.actiontech.dble.sql.route.simple.util.RouterUtil;
+import com.actiontech.dble.service.util.SchemaUtil;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;

@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.statistic.stat;
+package com.actiontech.dble.assistant.statistic.stat;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.server.parser.ServerParse;
-import com.actiontech.dble.statistic.SQLRecord;
-import com.actiontech.dble.statistic.SQLRecorder;
+import com.actiontech.dble.service.server.parser.ServerParse;
+import com.actiontech.dble.assistant.statistic.SQLRecord;
+import com.actiontech.dble.assistant.statistic.SQLRecorder;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

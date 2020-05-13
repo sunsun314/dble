@@ -3,10 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.service.handler;
+package com.actiontech.dble.service.server.handler;
 
 import com.actiontech.dble.bootstrap.DbleServer;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.sql.route.complex.builder.BaseHandlerBuilder;
 import com.actiontech.dble.sql.route.complex.builder.HandlerBuilder;
 import com.actiontech.dble.common.config.ErrorCode;
@@ -23,10 +23,10 @@ import com.actiontech.dble.sql.route.complex.plan.util.ComplexQueryPlanUtil;
 import com.actiontech.dble.sql.route.complex.plan.util.PlanUtil;
 import com.actiontech.dble.sql.route.complex.plan.util.ReferenceHandlerInfo;
 import com.actiontech.dble.sql.route.complex.plan.visitor.MySQLPlanNodeVisitor;
-import com.actiontech.dble.sql.route.simple.route.RouteResultset;
-import com.actiontech.dble.sql.route.simple.route.RouteResultsetNode;
-import com.actiontech.dble.service.ServerConnection;
-import com.actiontech.dble.sql.parser.ServerParse;
+import com.actiontech.dble.sql.route.simple.RouteResultset;
+import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
+import com.actiontech.dble.service.server.ServerConnection;
+import com.actiontech.dble.service.server.parser.ServerParse;
 import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.singleton.RouteService;

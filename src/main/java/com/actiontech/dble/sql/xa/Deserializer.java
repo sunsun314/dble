@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.xa;
+package com.actiontech.dble.sql.xa;
 
-import com.actiontech.dble.assistant.backend.mysql.xa.recovery.DeserializationException;
+import com.actiontech.dble.sql.xa.recovery.DeserializationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

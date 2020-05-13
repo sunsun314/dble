@@ -3,7 +3,7 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.config.loader.xml;
+package com.actiontech.dble.common.config.loader.xml;
 
 import org.w3c.dom.Element;
 

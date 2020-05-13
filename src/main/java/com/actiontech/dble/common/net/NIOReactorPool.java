@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.common.net.nio;
+package com.actiontech.dble.common.net;
 
 import java.io.IOException;
 

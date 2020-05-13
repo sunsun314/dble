@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.meta.table;
+package com.actiontech.dble.sql.meta.table;
 
-import com.actiontech.dble.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.backend.datasource.PhysicalDataSource;
-import com.actiontech.dble.config.ErrorInfo;
-import com.actiontech.dble.sqlengine.MultiRowSQLQueryResultHandler;
-import com.actiontech.dble.sqlengine.SQLQueryResult;
-import com.actiontech.dble.sqlengine.SQLQueryResultListener;
-import com.actiontech.dble.sqlengine.SpecialSqlJob;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.common.config.ErrorInfo;
+import com.actiontech.dble.common.sqljob.MultiRowSQLQueryResultHandler;
+import com.actiontech.dble.common.sqljob.SQLQueryResult;
+import com.actiontech.dble.common.sqljob.SQLQueryResultListener;
+import com.actiontech.dble.common.sqljob.DryRunMetaSqlJob;
 
 import java.util.HashSet;
 import java.util.List;
@@ -52,7 +52,7 @@ public class DryRunGetNodeTablesHandler extends GetNodeTablesHandler {
         }
         if (ds != null) {
             MultiRowSQLQueryResultHandler resultHandler = new MultiRowSQLQueryResultHandler(mysqlShowTableCols, new MySQLShowTablesListener(mysqlShowTableCol));
-            SpecialSqlJob sqlJob = new SpecialSqlJob(SQL, phyDataNode.getDatabase(), resultHandler, ds, list);
+            DryRunMetaSqlJob sqlJob = new DryRunMetaSqlJob(SQL, phyDataNode.getDatabase(), resultHandler, ds, list);
             sqlJob.run();
         } else {
             list.add(new ErrorInfo("Backend", "WARNING", "dataNode[" + phyDataNode.getName() + "] has no available writeHost,The table in this dataNode has not checked"));

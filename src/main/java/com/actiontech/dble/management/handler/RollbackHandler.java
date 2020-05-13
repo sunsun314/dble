@@ -3,12 +3,12 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.manager.handler;
+package com.actiontech.dble.management.handler;
 
 import com.actiontech.dble.common.config.ErrorCode;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.manager.response.RollbackConfig;
-import com.actiontech.dble.sql.route.simple.route.parser.ManagerParseRollback;
+import com.actiontech.dble.service.manager.ManagerConnection;
+import com.actiontech.dble.management.response.RollbackConfig;
+import com.actiontech.dble.service.manager.parser.ManagerParseRollback;
 
 /**
  * @author mycat

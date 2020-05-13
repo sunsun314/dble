@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.query;
+package com.actiontech.dble.sql.handler.query;
 
 import com.actiontech.dble.assistant.backend.BackendConnection;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
-import com.actiontech.dble.service.NonBlockingSession;
+import com.actiontech.dble.service.server.NonBlockingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

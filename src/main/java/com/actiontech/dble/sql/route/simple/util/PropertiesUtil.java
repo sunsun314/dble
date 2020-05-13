@@ -3,9 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.util;
+package com.actiontech.dble.sql.route.simple.util;
 
-import com.actiontech.dble.sql.route.simple.route.sequence.handler.IncrSequenceHandler;
+import com.actiontech.dble.sql.route.simple.sequence.handler.IncrSequenceHandler;
 import com.actiontech.dble.common.util.ResourceUtil;
 
 import java.io.IOException;

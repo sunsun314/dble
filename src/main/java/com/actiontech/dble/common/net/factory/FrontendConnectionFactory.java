@@ -3,9 +3,9 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.net.factory;
+package com.actiontech.dble.common.net.factory;
 
-import com.actiontech.dble.net.FrontendConnection;
+import com.actiontech.dble.common.net.FrontendConnection;
 
 import java.io.IOException;
 import java.net.StandardSocketOptions;

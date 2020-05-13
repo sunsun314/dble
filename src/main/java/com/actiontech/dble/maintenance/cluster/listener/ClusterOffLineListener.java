@@ -3,19 +3,19 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.cluster.listener;
+package com.actiontech.dble.maintenance.cluster.listener;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.singleton.ClusterGeneralConfig;
-import com.actiontech.dble.cluster.ClusterHelper;
-import com.actiontech.dble.cluster.ClusterParamCfg;
-import com.actiontech.dble.cluster.ClusterPathUtil;
-import com.actiontech.dble.cluster.bean.KvBean;
-import com.actiontech.dble.cluster.bean.SubscribeRequest;
-import com.actiontech.dble.cluster.bean.SubscribeReturnBean;
-import com.actiontech.dble.cluster.kVtoXml.ClusterToXml;
-import com.actiontech.dble.cluster.response.ClusterXmlLoader;
-import com.actiontech.dble.cluster.response.DdlChildResponse;
+import com.actiontech.dble.maintenance.cluster.ClusterHelper;
+import com.actiontech.dble.maintenance.cluster.ClusterParamCfg;
+import com.actiontech.dble.maintenance.cluster.ClusterPathUtil;
+import com.actiontech.dble.maintenance.cluster.bean.KvBean;
+import com.actiontech.dble.maintenance.cluster.bean.SubscribeRequest;
+import com.actiontech.dble.maintenance.cluster.bean.SubscribeReturnBean;
+import com.actiontech.dble.maintenance.cluster.kVtoXml.ClusterToXml;
+import com.actiontech.dble.maintenance.cluster.response.ClusterXmlLoader;
+import com.actiontech.dble.maintenance.cluster.response.DdlChildResponse;
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.BinlogPause;
 import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.PauseInfo;
 import com.actiontech.dble.singleton.PauseDatanodeManager;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.actiontech.dble.cluster.ClusterPathUtil.SEPARATOR;
+import static com.actiontech.dble.maintenance.cluster.ClusterPathUtil.SEPARATOR;
 
 /**
  * Created by szf on 2018/2/8.

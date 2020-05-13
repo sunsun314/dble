@@ -5,7 +5,7 @@
 */
 package com.actiontech.dble.mpp;
 
-import com.actiontech.dble.util.ByteUtil;
+import com.actiontech.dble.common.util.ByteUtil;
 import org.junit.Assert;
 import org.junit.Test;
 

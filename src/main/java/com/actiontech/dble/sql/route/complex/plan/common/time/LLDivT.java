@@ -6,7 +6,7 @@
 /**
  *
  */
-package com.actiontech.dble.plan.common.time;
+package com.actiontech.dble.sql.route.complex.plan.common.time;
 
 public class LLDivT {
     private long quot;

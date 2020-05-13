@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.parser;
 
-import com.actiontech.dble.server.parser.ServerParseShow;
+import com.actiontech.dble.service.server.parser.ServerParseShow;
 import org.junit.Assert;
 import org.junit.Test;
 

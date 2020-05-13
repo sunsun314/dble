@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.config.loader.zkprocess.parse.entryparse.server.xml;
+package com.actiontech.dble.common.config.loader.zkprocess.parse.entryparse.server.xml;
 
-import com.actiontech.dble.config.loader.zkprocess.entity.Server;
-import com.actiontech.dble.config.loader.zkprocess.parse.ParseXmlServiceInf;
-import com.actiontech.dble.config.loader.zkprocess.parse.XmlProcessBase;
+import com.actiontech.dble.common.config.loader.zkprocess.entity.Server;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.ParseXmlServiceInf;
+import com.actiontech.dble.common.config.loader.zkprocess.parse.XmlProcessBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

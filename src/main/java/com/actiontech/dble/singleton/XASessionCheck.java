@@ -5,8 +5,8 @@
 
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.backend.mysql.nio.handler.transaction.xa.stage.XAStage;
-import com.actiontech.dble.server.NonBlockingSession;
+import com.actiontech.dble.sql.handler.transaction.xa.stage.XAStage;
+import com.actiontech.dble.service.server.NonBlockingSession;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

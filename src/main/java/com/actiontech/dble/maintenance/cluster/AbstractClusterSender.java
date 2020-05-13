@@ -1,10 +1,10 @@
-package com.actiontech.dble.cluster;
+package com.actiontech.dble.maintenance.cluster;
 
-import com.actiontech.dble.assistant.backend.mysql.view.CKVStoreRepository;
-import com.actiontech.dble.assistant.backend.mysql.view.FileSystemRepository;
-import com.actiontech.dble.assistant.backend.mysql.view.Repository;
-import com.actiontech.dble.cluster.bean.KvBean;
-import com.actiontech.dble.cluster.kVtoXml.ClusterToXml;
+import com.actiontech.dble.sql.view.CKVStoreRepository;
+import com.actiontech.dble.sql.view.FileSystemRepository;
+import com.actiontech.dble.sql.view.Repository;
+import com.actiontech.dble.maintenance.cluster.bean.KvBean;
+import com.actiontech.dble.maintenance.cluster.kVtoXml.ClusterToXml;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.singleton.OnlineStatus;
 import org.slf4j.Logger;

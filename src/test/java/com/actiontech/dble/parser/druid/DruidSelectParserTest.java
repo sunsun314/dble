@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.parser.druid;
 
-import com.actiontech.dble.route.parser.druid.impl.DruidSelectParser;
+import com.actiontech.dble.sql.route.simple.parser.druid.impl.DruidSelectParser;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import org.junit.Assert;
@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Hash Zhang on 2016/4/29.

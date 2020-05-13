@@ -1,6 +1,6 @@
-package com.actiontech.dble.backend.datasource;
+package com.actiontech.dble.assistant.backend.datasource;
 
-import com.actiontech.dble.config.loader.zkprocess.zookeeper.process.HaInfo;
+import com.actiontech.dble.common.config.loader.zkprocess.zookeeper.process.HaInfo;
 
 /**
  * Created by szf on 2019/11/1.

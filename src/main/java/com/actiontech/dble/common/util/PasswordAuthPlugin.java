@@ -1,12 +1,12 @@
-package com.actiontech.dble.util;
+package com.actiontech.dble.common.util;
 
-import com.actiontech.dble.backend.mysql.SecurityUtil;
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
-import com.actiontech.dble.net.AbstractConnection;
-import com.actiontech.dble.net.mysql.BinaryPacket;
-import com.actiontech.dble.net.mysql.HandshakeV10Packet;
-import com.actiontech.dble.net.mysql.Reply323Packet;
+import com.actiontech.dble.common.mysql.util.SecurityUtil;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLConnection;
+import com.actiontech.dble.assistant.backend.mysql.nio.MySQLDataSource;
+import com.actiontech.dble.common.net.AbstractConnection;
+import com.actiontech.dble.common.mysql.packet.BinaryPacket;
+import com.actiontech.dble.common.mysql.packet.HandshakeV10Packet;
+import com.actiontech.dble.common.mysql.packet.Reply323Packet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

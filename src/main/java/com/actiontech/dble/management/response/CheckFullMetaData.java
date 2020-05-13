@@ -3,15 +3,15 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.maintenance.alarm.ToResolveContainer;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.Fields;
 import com.actiontech.dble.common.config.model.SchemaConfig;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.sql.meta.SchemaMeta;
 import com.actiontech.dble.sql.meta.ViewMeta;
 import com.actiontech.dble.sql.meta.protocol.StructureMeta;

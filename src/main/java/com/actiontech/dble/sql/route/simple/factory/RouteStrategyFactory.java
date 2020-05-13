@@ -3,10 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.route.factory;
+package com.actiontech.dble.sql.route.simple.factory;
 
-import com.actiontech.dble.sql.route.simple.route.RouteStrategy;
-import com.actiontech.dble.sql.route.simple.route.impl.DefaultRouteStrategy;
+import com.actiontech.dble.sql.route.simple.RouteStrategy;
+import com.actiontech.dble.sql.route.simple.impl.DefaultRouteStrategy;
 
 /**
  * RouteStrategyFactory

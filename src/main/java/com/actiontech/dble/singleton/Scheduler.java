@@ -1,17 +1,17 @@
 package com.actiontech.dble.singleton;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.backend.BackendConnection;
-import com.actiontech.dble.backend.datasource.PhysicalDataHost;
-import com.actiontech.dble.backend.mysql.xa.XAStateLog;
-import com.actiontech.dble.buffer.BufferPool;
-import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.net.NIOProcessor;
-import com.actiontech.dble.statistic.stat.SqlResultSizeRecorder;
-import com.actiontech.dble.statistic.stat.ThreadWorkUsage;
-import com.actiontech.dble.statistic.stat.UserStat;
-import com.actiontech.dble.statistic.stat.UserStatAnalyzer;
-import com.actiontech.dble.util.TimeUtil;
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.assistant.backend.BackendConnection;
+import com.actiontech.dble.assistant.backend.datasource.PhysicalDataHost;
+import com.actiontech.dble.sql.xa.XAStateLog;
+import com.actiontech.dble.common.buffer.BufferPool;
+import com.actiontech.dble.common.config.model.SystemConfig;
+import com.actiontech.dble.common.net.NIOProcessor;
+import com.actiontech.dble.assistant.statistic.stat.SqlResultSizeRecorder;
+import com.actiontech.dble.assistant.statistic.stat.ThreadWorkUsage;
+import com.actiontech.dble.assistant.statistic.stat.UserStat;
+import com.actiontech.dble.assistant.statistic.stat.UserStatAnalyzer;
+import com.actiontech.dble.common.util.TimeUtil;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.Iterator;
@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.actiontech.dble.server.NonBlockingSession.LOGGER;
+import static com.actiontech.dble.service.server.NonBlockingSession.LOGGER;
 
 
 /**

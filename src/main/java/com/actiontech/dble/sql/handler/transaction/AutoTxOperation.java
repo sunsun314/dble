@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.assistant.backend.mysql.nio.handler.transaction;
+package com.actiontech.dble.sql.handler.transaction;
 
 public enum AutoTxOperation {
     COMMIT, ROLLBACK

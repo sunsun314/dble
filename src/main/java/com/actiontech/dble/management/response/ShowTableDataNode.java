@@ -3,17 +3,17 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.manager.response;
+package com.actiontech.dble.management.response;
 
 import com.actiontech.dble.bootstrap.DbleServer;
 import com.actiontech.dble.assistant.backend.datasource.PhysicalDataNode;
-import com.actiontech.dble.assistant.backend.mysql.PacketUtil;
+import com.actiontech.dble.common.mysql.util.PacketUtil;
 import com.actiontech.dble.common.config.ErrorCode;
 import com.actiontech.dble.common.config.Fields;
 import com.actiontech.dble.common.config.model.DataSourceConfig;
 import com.actiontech.dble.common.config.model.SchemaConfig;
 import com.actiontech.dble.common.config.model.TableConfig;
-import com.actiontech.dble.manager.ManagerConnection;
+import com.actiontech.dble.service.manager.ManagerConnection;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.common.mysql.packet.EOFPacket;
 import com.actiontech.dble.common.mysql.packet.FieldPacket;
@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import static com.actiontech.dble.sql.route.simple.route.parser.ManagerParseShow.PATTERN_FOR_TABLE_INFO;
+import static com.actiontech.dble.service.manager.parser.ManagerParseShow.PATTERN_FOR_TABLE_INFO;
 
 public final class ShowTableDataNode {
     private ShowTableDataNode() {

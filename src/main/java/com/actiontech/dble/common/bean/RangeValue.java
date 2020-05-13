@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sqlengine.mpp;
+package com.actiontech.dble.common.bean;
 
 public class RangeValue {
     /*
