@@ -161,7 +161,7 @@
     <!-- need refactor -->
     <Match>
         <Bug category="PERFORMANCE"/>
-        <Class name="com.actiontech.dble.sql.route.simple.sequence.handler.SequenceVal"/>
+        <Class name="com.actiontech.dble.sql.sequence.SequenceVal"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
     <!-- PERFORMANCE end -->

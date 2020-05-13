@@ -14,7 +14,7 @@ public abstract class Versions {
 
     public static final byte PROTOCOL_VERSION = 10;
 
-    private static byte[] serverVersion = "5.6.29-dble-9.9.9.9-f5875f1b277f340814a33932b821e0dd83df091f-20200512174040".getBytes();
+    private static byte[] serverVersion = "5.6.29-dble-9.9.9.9-69c5c3d1aab073a6c4d533b3d99f2f88c8a9b498-20200513132317".getBytes();
     public static final byte[] VERSION_COMMENT = "dble Server (ActionTech)".getBytes();
     public static final String ANNOTATION_NAME = "dble:";
     public static final String ROOT_PREFIX = "dble";

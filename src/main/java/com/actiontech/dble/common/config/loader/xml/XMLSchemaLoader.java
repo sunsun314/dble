@@ -14,7 +14,7 @@ import com.actiontech.dble.common.config.model.TableConfig.TableTypeEnum;
 import com.actiontech.dble.common.config.model.rule.TableRuleConfig;
 import com.actiontech.dble.common.config.util.ConfigException;
 import com.actiontech.dble.common.config.util.ConfigUtil;
-import com.actiontech.dble.sql.route.simple.function.AbstractPartitionAlgorithm;
+import com.actiontech.dble.sql.route.function.AbstractPartitionAlgorithm;
 import com.actiontech.dble.common.util.DecryptUtil;
 import com.actiontech.dble.common.util.ResourceUtil;
 import com.actiontech.dble.common.util.SplitUtil;

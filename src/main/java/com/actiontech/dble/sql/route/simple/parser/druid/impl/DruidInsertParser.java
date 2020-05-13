@@ -14,7 +14,7 @@ import com.actiontech.dble.sql.route.complex.plan.common.ptr.StringPtr;
 import com.actiontech.dble.sql.route.simple.RouteResultsetNode;
 import com.actiontech.dble.common.util.Pair;
 import com.actiontech.dble.sql.route.simple.RouteResultset;
-import com.actiontech.dble.sql.route.simple.function.AbstractPartitionAlgorithm;
+import com.actiontech.dble.sql.route.function.AbstractPartitionAlgorithm;
 import com.actiontech.dble.sql.route.simple.parser.druid.ServerSchemaStatVisitor;
 import com.actiontech.dble.sql.route.simple.util.RouterUtil;
 import com.actiontech.dble.service.server.ServerConnection;

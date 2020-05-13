@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
 
-package com.actiontech.dble.sql.route.simple.sequence.handler;
+package com.actiontech.dble.sql.sequence;
 
 import com.actiontech.dble.sql.route.simple.util.PropertiesUtil;
 import com.actiontech.dble.common.util.DateUtil;

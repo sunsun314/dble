@@ -5,7 +5,7 @@
 */
 package com.actiontech.dble.common.config.model.rule;
 
-import com.actiontech.dble.sql.route.simple.function.AbstractPartitionAlgorithm;
+import com.actiontech.dble.sql.route.function.AbstractPartitionAlgorithm;
 
 import java.io.Serializable;
 

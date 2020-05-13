@@ -26,7 +26,7 @@
 
     <!-- 路由函数定义 -->
     <function name="func1"
-              class="com.actiontech.dble.sql.route.simple.function.PartitionByLong">
+              class="com.actiontech.dble.sql.route.function.PartitionByLong">
         <property name="partitionCount">2</property>
         <property name="partitionLength">512</property>
     </function>

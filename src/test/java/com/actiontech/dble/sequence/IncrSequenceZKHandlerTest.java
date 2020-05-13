@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.sequence;
 
-import com.actiontech.dble.sql.route.simple.sequence.handler.IncrSequenceZKHandler;
+import com.actiontech.dble.sql.sequence.IncrSequenceZKHandler;
 import com.actiontech.dble.sql.route.simple.util.PropertiesUtil;
 import org.junit.Assert;
 import org.apache.curator.test.TestingServer;

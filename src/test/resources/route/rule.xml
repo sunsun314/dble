@@ -50,30 +50,30 @@
     </tableRule>
 
     <function name="func1"
-              class="com.actiontech.dble.sql.route.simple.function.PartitionByFileMap">
+              class="com.actiontech.dble.sql.route.function.PartitionByFileMap">
         <property name="defaultNode">0</property>
         <property name="mapFile">sharding.txt</property>
     </function>
     <function name="func"
-              class="com.actiontech.dble.sql.route.simple.function.PartitionByString">
+              class="com.actiontech.dble.sql.route.function.PartitionByString">
         <property name="partitionCount">128</property>
         <property name="partitionLength">8</property>
         <property name="hashSlice">:8</property>
     </function>
-    <function name="func2" class="com.actiontech.dble.sql.route.simple.function.PartitionByLong">
+    <function name="func2" class="com.actiontech.dble.sql.route.function.PartitionByLong">
         <property name="partitionCount">128</property>
         <property name="partitionLength">8</property>
     </function>
     <function name="rang-long"
-              class="com.actiontech.dble.sql.route.simple.function.AutoPartitionByLong">
+              class="com.actiontech.dble.sql.route.function.AutoPartitionByLong">
         <property name="mapFile">autopartition-long.txt</property>
     </function>
     <function name="rang-long2"
-              class="com.actiontech.dble.sql.route.simple.function.AutoPartitionByLong">
+              class="com.actiontech.dble.sql.route.function.AutoPartitionByLong">
         <property name="mapFile">autopartition-long2.txt</property>
     </function>
     <function name="by-date"
-              class="com.actiontech.dble.sql.route.simple.function.PartitionByDate">
+              class="com.actiontech.dble.sql.route.function.PartitionByDate">
         <property name="sBeginDate">2014-01-01</property>
         <property name="sPartionDay">10</property>
         <property name="dateFormat">yyyy-MM-dd</property>

@@ -5,7 +5,7 @@
 
 package com.actiontech.dble.sql.route.simple.util;
 
-import com.actiontech.dble.sql.route.simple.sequence.handler.IncrSequenceHandler;
+import com.actiontech.dble.sql.sequence.IncrSequenceHandler;
 import com.actiontech.dble.common.util.ResourceUtil;
 
 import java.io.IOException;

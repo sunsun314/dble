@@ -18,7 +18,7 @@ import com.actiontech.dble.common.config.model.*;
 import com.actiontech.dble.common.config.util.ConfigException;
 import com.actiontech.dble.sql.route.complex.plan.common.ptr.BoolPtr;
 import com.actiontech.dble.common.util.Pair;
-import com.actiontech.dble.sql.route.simple.sequence.handler.IncrSequenceMySQLHandler;
+import com.actiontech.dble.sql.sequence.IncrSequenceMySQLHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -12,7 +12,7 @@ import com.actiontech.dble.common.config.model.rule.TableRuleConfig;
 import com.actiontech.dble.common.config.util.ConfigException;
 import com.actiontech.dble.common.config.util.ConfigUtil;
 import com.actiontech.dble.common.config.util.ParameterMapping;
-import com.actiontech.dble.sql.route.simple.function.*;
+import com.actiontech.dble.sql.route.function.*;
 import com.actiontech.dble.common.util.ResourceUtil;
 import com.actiontech.dble.common.util.SplitUtil;
 import com.actiontech.dble.common.util.StringUtil;
