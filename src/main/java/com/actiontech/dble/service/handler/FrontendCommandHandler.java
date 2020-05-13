@@ -19,8 +19,6 @@ import com.actiontech.dble.service.server.ServerConnection;
 import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.assistant.statistic.CommandCount;
 import com.actiontech.dble.common.util.StringUtil;
-import com.google.common.collect.ImmutableMap;
-import io.opentracing.Scope;
 import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,70 +48,60 @@ public class FrontendCommandHandler implements NIOHandler {
 
     @Override
     public void handle(byte[] data) {
-        Span span = TraceManager.getTracer().buildSpan("query-in-dble").start();
-        span.log(ImmutableMap.of("serverConnection", "" + source.getId()));
-        TraceManager.setSpan(source, span);
-        TraceManager.getTracer().scopeManager().activate(span);
-        Span span2 = TraceManager.getTracer().buildSpan("data-offer-in-processor").asChildOf(span).start();
-        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span2)) {
-            if (data.length - MySQLPacket.PACKET_HEADER_SIZE >= DbleServer.getInstance().getConfig().getSystem().getMaxPacketSize()) {
-                MySQLMessage mm = new MySQLMessage(data);
-                mm.readUB3();
-                byte packetId = 0;
-                if (source instanceof ServerConnection) {
-                    NonBlockingSession session = ((ServerConnection) source).getSession2();
-                    if (session != null) {
-                        packetId = (byte) session.getPacketId().get();
-                    }
-                } else {
-                    packetId = mm.read();
-                }
-                ErrorPacket errPacket = new ErrorPacket();
-                errPacket.setErrNo(ErrorCode.ER_NET_PACKET_TOO_LARGE);
-                errPacket.setMessage("Got a packet bigger than 'max_allowed_packet' bytes.".getBytes());
-                //close the mysql connection if error occur
-                errPacket.setPacketId(++packetId);
-                errPacket.write(source);
-                return;
-            }
-            if (source.getLoadDataInfileHandler() != null && source.getLoadDataInfileHandler().isStartLoadData()) {
-                MySQLMessage mm = new MySQLMessage(data);
-                int packetLength = mm.readUB3();
-                if (packetLength + 4 == data.length) {
-                    source.loadDataInfileData(data);
-                }
-                return;
-            }
-
-            if (MySQLPacket.COM_STMT_SEND_LONG_DATA == data[4]) {
-                commands.doStmtSendLongData();
-                blobDataQueue.offer(data);
-                return;
-            } else if (MySQLPacket.COM_STMT_CLOSE == data[4]) {
-                commands.doStmtClose();
-                source.stmtClose(data);
-                return;
-            } else {
-                dataTodo = data;
-                if (MySQLPacket.COM_STMT_RESET == data[4]) {
-                    blobDataQueue.clear();
-                }
-            }
+        if (data.length - MySQLPacket.PACKET_HEADER_SIZE >= DbleServer.getInstance().getConfig().getSystem().getMaxPacketSize()) {
+            MySQLMessage mm = new MySQLMessage(data);
+            mm.readUB3();
+            byte packetId = 0;
             if (source instanceof ServerConnection) {
-                ((ServerConnection) source).getSession2().resetMultiStatementStatus();
+                NonBlockingSession session = ((ServerConnection) source).getSession2();
+                if (session != null) {
+                    packetId = (byte) session.getPacketId().get();
+                }
+            } else {
+                packetId = mm.read();
             }
-            DbleServer.getInstance().getFrontHandlerQueue().offer(this);
-        } finally {
-            span2.finish();
+            ErrorPacket errPacket = new ErrorPacket();
+            errPacket.setErrNo(ErrorCode.ER_NET_PACKET_TOO_LARGE);
+            errPacket.setMessage("Got a packet bigger than 'max_allowed_packet' bytes.".getBytes());
+            //close the mysql connection if error occur
+            errPacket.setPacketId(++packetId);
+            errPacket.write(source);
+            return;
         }
+        if (source.getLoadDataInfileHandler() != null && source.getLoadDataInfileHandler().isStartLoadData()) {
+            MySQLMessage mm = new MySQLMessage(data);
+            int packetLength = mm.readUB3();
+            if (packetLength + 4 == data.length) {
+                source.loadDataInfileData(data);
+            }
+            return;
+        }
+
+        if (MySQLPacket.COM_STMT_SEND_LONG_DATA == data[4]) {
+            commands.doStmtSendLongData();
+            blobDataQueue.offer(data);
+            return;
+        } else if (MySQLPacket.COM_STMT_CLOSE == data[4]) {
+            commands.doStmtClose();
+            source.stmtClose(data);
+            return;
+        } else {
+            dataTodo = data;
+            if (MySQLPacket.COM_STMT_RESET == data[4]) {
+                blobDataQueue.clear();
+            }
+        }
+        if (source instanceof ServerConnection) {
+            ((ServerConnection) source).getSession2().resetMultiStatementStatus();
+        }
+        DbleServer.getInstance().getFrontHandlerQueue().offer(this);
     }
 
     public void handle() {
         try {
             Span fs = TraceManager.popSpan(source, false);
-            Span span = TraceManager.getTracer().buildSpan("query-execute").asChildOf(fs).start();
+            Span span = TraceManager.startSpan("query-execute", true, fs);
             TraceManager.setSpan(source, span);
-            TraceManager.getTracer().scopeManager().activate(span);
             handleData(dataTodo);
         } catch (Throwable e) {
             String msg = e.getMessage();

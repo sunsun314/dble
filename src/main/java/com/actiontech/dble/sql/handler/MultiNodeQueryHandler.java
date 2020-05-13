@@ -30,7 +30,6 @@ import com.actiontech.dble.assistant.statistic.stat.QueryResult;
 import com.actiontech.dble.assistant.statistic.stat.QueryResultDispatcher;
 import com.actiontech.dble.common.util.DebugPauseUtil;
 import com.actiontech.dble.common.util.StringUtil;
-import io.opentracing.Scope;
 import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,8 +101,6 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
     }
 
     public void execute() throws Exception {
-        Span span = TraceManager.getTracer().buildSpan("multi-query-handler").start();
-        TraceManager.setSpan(session.getSource(), span);
         lock.lock();
         try {
             this.reset();
@@ -142,8 +139,8 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
 
     private void innerExecute(BackendConnection conn, RouteResultsetNode node) {
         Span hSpan = TraceManager.popSpan(this.session.getSource(), false);
-        Span span = TraceManager.getTracer().buildSpan("connection-execute").asChildOf(hSpan).start();
-        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
+        Span span = TraceManager.startSpan("connection-execute", false, hSpan);
+        try {
             if (clearIfSessionClosed(session)) {
                 cleanBuffer();
                 return;
@@ -535,7 +532,7 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements LoadDataR
     private void writeEofResult(byte[] eof, ServerConnection source) {
         Span hSpan = TraceManager.popSpan(this.session.getSource(), false);
         final List<Span> slist = TraceManager.popFullList(this.session.getSource());
-        final Span span = TraceManager.getTracer().buildSpan("write-final-to-client").asChildOf(hSpan).start();
+        final Span span = TraceManager.startSpan("write-final-to-client", false, hSpan);
         eof[3] = packetId;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("last packet id:" + packetId);

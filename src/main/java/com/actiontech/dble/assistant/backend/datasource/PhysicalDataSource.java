@@ -16,15 +16,12 @@ import com.actiontech.dble.assistant.backend.ConQueue;
 import com.actiontech.dble.assistant.backend.heartbeat.MySQLHeartbeat;
 import com.actiontech.dble.common.config.model.DataHostConfig;
 import com.actiontech.dble.common.config.model.DataSourceConfig;
-import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.common.util.StringUtil;
 import com.actiontech.dble.common.util.TimeUtil;
 import com.actiontech.dble.sql.handler.ConnectionHeartBeatHandler;
 import com.actiontech.dble.sql.handler.DelegateResponseHandler;
 import com.actiontech.dble.sql.handler.NewConnectionRespHandler;
 import com.actiontech.dble.sql.handler.ResponseHandler;
-import io.opentracing.Scope;
-import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -392,8 +389,6 @@ public abstract class PhysicalDataSource {
 
     private void createNewConnection(final ResponseHandler handler, final Object attachment,
                                      final String schema, final boolean mustWrite) {
-        Span span = TraceManager.getTracer().buildSpan("create-new-connection").start();
-        TraceManager.getTracer().scopeManager().activate(span);
         // aysn create connection
         DbleServer.getInstance().getComplexQueryExecutor().execute(new Runnable() {
             public void run() {
@@ -404,13 +399,11 @@ public abstract class PhysicalDataSource {
                             Map<String, String> labels = AlertUtil.genSingleLabel("data_host", hostConfig.getName() + "-" + config.getHostName());
                             AlertUtil.alert(AlarmCode.CREATE_CONN_FAIL, Alert.AlertLevel.WARN, "createNewConn Error" + e.getMessage(), "mysql", config.getId(), labels);
                             ToResolveContainer.CREATE_CONN_FAIL.add(hostConfig.getName() + "-" + config.getHostName());
-                            span.finish();
                             handler.connectionError(e, conn);
                         }
 
                         @Override
                         public void connectionAcquired(BackendConnection conn) {
-                            span.finish();
                             if (disabled.get()) {
                                 handler.connectionError(new IOException("dataSource disabled"), conn);
                                 conn.close("disabled dataHost");
@@ -422,7 +415,6 @@ public abstract class PhysicalDataSource {
                         }
                     }, schema);
                 } catch (IOException e) {
-                    span.finish();
                     handler.connectionError(e, null);
                 }
             }
@@ -433,36 +425,30 @@ public abstract class PhysicalDataSource {
 
     public void getNewConnection(String schema, final ResponseHandler handler,
                                  final Object attachment, boolean mustWrite, boolean forceCreate) throws IOException {
-        Span span = TraceManager.getTracer().buildSpan("get-connection-from-pool").start();
-        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
-            if (disabled.get()) {
-                throw new IOException("the dataSource is disabled [" + this.name + "]");
-            } else if (!this.createNewCount()) {
-                if (forceCreate) {
-                    this.connectionCount.incrementAndGet();
-                    LOGGER.warn("connection pool [" + hostConfig.getName() + "." + this.name + "] has reached maxCon, but we still try to create new connection for important task");
-                    createNewConnection(handler, attachment, schema, mustWrite);
-                } else {
-                    String maxConError = "the max active Connections size can not be max than maxCon for data host[" + this.getHostConfig().getName() + "." + this.getName() + "]";
-                    LOGGER.warn(maxConError);
-                    Map<String, String> labels = AlertUtil.genSingleLabel("data_host", this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
-                    AlertUtil.alert(AlarmCode.REACH_MAX_CON, Alert.AlertLevel.WARN, maxConError, "dble", this.getConfig().getId(), labels);
-                    ToResolveContainer.REACH_MAX_CON.add(this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
-                    throw new IOException(maxConError);
-                }
-            } else { // create connection
-                if (ToResolveContainer.REACH_MAX_CON.contains(this.getHostConfig().getName() + "-" + this.getConfig().getHostName())) {
-                    Map<String, String> labels = AlertUtil.genSingleLabel("data_host", this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
-                    AlertUtil.alertResolve(AlarmCode.REACH_MAX_CON, Alert.AlertLevel.WARN, "dble", this.getConfig().getId(), labels,
-                            ToResolveContainer.REACH_MAX_CON, this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
-
-                }
-                LOGGER.info("no idle connection in pool [" + hostConfig.getName() + "." + this.name + "],create new connection for  schema: " + schema);
+        if (disabled.get()) {
+            throw new IOException("the dataSource is disabled [" + this.name + "]");
+        } else if (!this.createNewCount()) {
+            if (forceCreate) {
+                this.connectionCount.incrementAndGet();
+                LOGGER.warn("connection pool [" + hostConfig.getName() + "." + this.name + "] has reached maxCon, but we still try to create new connection for important task");
                 createNewConnection(handler, attachment, schema, mustWrite);
+            } else {
+                String maxConError = "the max active Connections size can not be max than maxCon for data host[" + this.getHostConfig().getName() + "." + this.getName() + "]";
+                LOGGER.warn(maxConError);
+                Map<String, String> labels = AlertUtil.genSingleLabel("data_host", this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
+                AlertUtil.alert(AlarmCode.REACH_MAX_CON, Alert.AlertLevel.WARN, maxConError, "dble", this.getConfig().getId(), labels);
+                ToResolveContainer.REACH_MAX_CON.add(this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
+                throw new IOException(maxConError);
             }
-        } catch (IOException e) {
-            span.finish();
-            throw e;
+        } else { // create connection
+            if (ToResolveContainer.REACH_MAX_CON.contains(this.getHostConfig().getName() + "-" + this.getConfig().getHostName())) {
+                Map<String, String> labels = AlertUtil.genSingleLabel("data_host", this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
+                AlertUtil.alertResolve(AlarmCode.REACH_MAX_CON, Alert.AlertLevel.WARN, "dble", this.getConfig().getId(), labels,
+                        ToResolveContainer.REACH_MAX_CON, this.getHostConfig().getName() + "-" + this.getConfig().getHostName());
+
+            }
+            LOGGER.info("no idle connection in pool [" + hostConfig.getName() + "." + this.name + "],create new connection for  schema: " + schema);
+            createNewConnection(handler, attachment, schema, mustWrite);
         }
     }
 

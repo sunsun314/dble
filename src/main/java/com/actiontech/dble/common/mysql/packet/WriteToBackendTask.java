@@ -24,7 +24,7 @@ public class WriteToBackendTask {
     public void execute() {
         Span span = null;
         if (conn.getHandlerSpan() != null) {
-            span = TraceManager.getTracer().buildSpan("Write-To-Backend").asChildOf(conn.getHandlerSpan()).start();
+            span = TraceManager.startSpan("Write-To-Backend", false, conn.getHandlerSpan());
         }
         try {
             int size = packet.calcPacketSize();

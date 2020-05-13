@@ -28,7 +28,6 @@ import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.service.util.SchemaUtil.SchemaInfo;
 import com.actiontech.dble.singleton.CacheService;
 import com.actiontech.dble.singleton.ProxyMeta;
-import com.actiontech.dble.singleton.TraceManager;
 import com.actiontech.dble.common.bean.ColumnRoutePair;
 import com.actiontech.dble.common.bean.LoadData;
 import com.actiontech.dble.common.util.StringUtil;
@@ -36,9 +35,6 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.alibaba.druid.wall.spi.WallVisitorUtils;
-import com.google.common.collect.ImmutableMap;
-import io.opentracing.Scope;
-import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,54 +172,47 @@ public final class RouterUtil {
     public static RouteResultset routeFromParser(DruidParser druidParser, SchemaConfig schema, RouteResultset rrs, SQLStatement statement,
                                                  String originSql, LayerCachePool cachePool, ServerSchemaStatVisitor visitor,
                                                  ServerConnection sc, PlanNode node, boolean isExplain) throws SQLException {
-        Span span = TraceManager.getTracer().buildSpan("simple-route").start();
-        span.log(ImmutableMap.of("druidParser", druidParser.getClass().toString()));
-        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
-            schema = druidParser.parser(schema, rrs, statement, originSql, cachePool, visitor, sc, isExplain);
-            if (rrs.isFinishedExecute()) {
-                return null;
-            }
-            if (rrs.isFinishedRoute()) {
-                return rrs;
-            }
-
-            DruidShardingParseInfo ctx = druidParser.getCtx();
-            if ((ctx.getTables() == null || ctx.getTables().size() == 0) &&
-                    (ctx.getTableAliasMap() == null || ctx.getTableAliasMap().isEmpty())) {
-                if (schema == null) {
-                    schema = DbleServer.getInstance().getConfig().getSchemas().get(SchemaUtil.getRandomDb());
-                }
-                return RouterUtil.routeToSingleNode(rrs, schema.getRandomDataNode());
-            }
-
-            if (druidParser.getCtx().getRouteCalculateUnits().size() == 0) {
-                RouteCalculateUnit routeCalculateUnit = new RouteCalculateUnit();
-                druidParser.getCtx().addRouteCalculateUnit(routeCalculateUnit);
-            }
-
-            SortedSet<RouteResultsetNode> nodeSet = new TreeSet<>();
-            for (RouteCalculateUnit unit : druidParser.getCtx().getRouteCalculateUnits()) {
-                RouteResultset rrsTmp = RouterUtil.tryRouteForTables(schema, druidParser.getCtx(), unit, rrs, isSelect(statement), cachePool, node);
-                if (rrsTmp != null && rrsTmp.getNodes() != null) {
-                    Collections.addAll(nodeSet, rrsTmp.getNodes());
-                    if (rrsTmp.isGlobalTable()) {
-                        break;
-                    }
-                }
-            }
-
-
-            RouteResultsetNode[] nodes = new RouteResultsetNode[nodeSet.size()];
-            int i = 0;
-            for (RouteResultsetNode aNodeSet : nodeSet) {
-                nodes[i] = aNodeSet;
-                i++;
-            }
-            rrs.setNodes(nodes);
-        } finally {
-            span.log(ImmutableMap.of("routeResult-simple", rrs == null ? "" : rrs.toString()));
-            span.finish();
+        schema = druidParser.parser(schema, rrs, statement, originSql, cachePool, visitor, sc, isExplain);
+        if (rrs.isFinishedExecute()) {
+            return null;
         }
+        if (rrs.isFinishedRoute()) {
+            return rrs;
+        }
+
+        DruidShardingParseInfo ctx = druidParser.getCtx();
+        if ((ctx.getTables() == null || ctx.getTables().size() == 0) &&
+                (ctx.getTableAliasMap() == null || ctx.getTableAliasMap().isEmpty())) {
+            if (schema == null) {
+                schema = DbleServer.getInstance().getConfig().getSchemas().get(SchemaUtil.getRandomDb());
+            }
+            return RouterUtil.routeToSingleNode(rrs, schema.getRandomDataNode());
+        }
+
+        if (druidParser.getCtx().getRouteCalculateUnits().size() == 0) {
+            RouteCalculateUnit routeCalculateUnit = new RouteCalculateUnit();
+            druidParser.getCtx().addRouteCalculateUnit(routeCalculateUnit);
+        }
+
+        SortedSet<RouteResultsetNode> nodeSet = new TreeSet<>();
+        for (RouteCalculateUnit unit : druidParser.getCtx().getRouteCalculateUnits()) {
+            RouteResultset rrsTmp = RouterUtil.tryRouteForTables(schema, druidParser.getCtx(), unit, rrs, isSelect(statement), cachePool, node);
+            if (rrsTmp != null && rrsTmp.getNodes() != null) {
+                Collections.addAll(nodeSet, rrsTmp.getNodes());
+                if (rrsTmp.isGlobalTable()) {
+                    break;
+                }
+            }
+        }
+
+
+        RouteResultsetNode[] nodes = new RouteResultsetNode[nodeSet.size()];
+        int i = 0;
+        for (RouteResultsetNode aNodeSet : nodeSet) {
+            nodes[i] = aNodeSet;
+            i++;
+        }
+        rrs.setNodes(nodes);
         return rrs;
     }
 

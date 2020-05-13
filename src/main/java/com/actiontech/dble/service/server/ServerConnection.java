@@ -29,8 +29,6 @@ import com.actiontech.dble.service.server.response.ShowCreateView;
 import com.actiontech.dble.service.util.SchemaUtil;
 import com.actiontech.dble.singleton.*;
 import com.actiontech.dble.common.util.*;
-import io.opentracing.Scope;
-import io.opentracing.Span;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
@@ -344,8 +342,7 @@ public class ServerConnection extends FrontendConnection {
 
     private void routeEndExecuteSQL(String sql, int type, SchemaConfig schema) {
         RouteResultset rrs = null;
-        Span span = TraceManager.getTracer().buildSpan("parse&route").start();
-        try (Scope scope = TraceManager.getTracer().scopeManager().activate(span)) {
+        try {
             if (session.isKilled()) {
                 writeErrMessage(ErrorCode.ER_QUERY_INTERRUPTED, "The query is interrupted.");
                 return;
@@ -372,11 +369,8 @@ public class ServerConnection extends FrontendConnection {
             }
             executeException(e, sql);
             return;
-        } finally {
-            span.finish();
         }
         session.endRoute(rrs);
-
         session.execute(rrs);
     }
 

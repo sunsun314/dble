@@ -1,6 +1,7 @@
 package com.actiontech.dble.singleton;
 
 import com.actiontech.dble.common.net.FrontendConnection;
+import com.google.common.collect.ImmutableMap;
 import io.jaegertracing.internal.JaegerTracer;
 import io.jaegertracing.internal.metrics.Metrics;
 import io.jaegertracing.internal.metrics.NoopMetricsFactory;
@@ -49,8 +50,26 @@ public final class TraceManager {
         tracer = builder.build();
     }
 
-    public static JaegerTracer getTracer() {
-        return INSTANCE.tracer;
+    public static Span activeSpan() {
+        return INSTANCE.tracer.activeSpan();
+    }
+
+    public static Span startSpan(String spanName, boolean activeForThread) {
+        Span span = INSTANCE.tracer.buildSpan(spanName).start();
+        StackTraceElement stack = Thread.currentThread().getStackTrace()[2];
+        span.log(ImmutableMap.of("class", stack.getClassName(), "function", stack.getMethodName()));
+        if (activeForThread) {
+            INSTANCE.tracer.scopeManager().activate(span);
+        }
+        return span;
+    }
+
+    public static Span startSpan(String spanName, boolean activeForThread, Span fSpan) {
+        Span span = INSTANCE.tracer.buildSpan(spanName).asChildOf(fSpan).start();
+        StackTraceElement stack = Thread.currentThread().getStackTrace()[2];
+        span.log(ImmutableMap.of("class", stack.getClassName(), "function", stack.getMethodName()));
+        INSTANCE.tracer.scopeManager().activate(span);
+        return span;
     }
 
     public static void setSpan(FrontendConnection connection, Span newSpan) {
