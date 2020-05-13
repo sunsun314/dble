@@ -1,0 +1,241 @@
+/*
+ * Copyright (C) 2016-2020 ActionTech.
+ * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
+ */
+package com.actiontech.dble.backend.heartbeat;
+
+import com.actiontech.dble.bootstrap.DbleServer;
+import com.actiontech.dble.alarm.AlarmCode;
+import com.actiontech.dble.alarm.Alert;
+import com.actiontech.dble.alarm.AlertUtil;
+import com.actiontech.dble.alarm.ToResolveContainer;
+import com.actiontech.dble.backend.BackendConnection;
+import com.actiontech.dble.backend.datasource.PhysicalDataSource;
+import com.actiontech.dble.backend.mysql.nio.MySQLDataSource;
+import com.actiontech.dble.config.helper.GetAndSyncDataSourceKeyVariables;
+import com.actiontech.dble.config.helper.KeyVariables;
+import com.actiontech.dble.sqlengine.HeartbeatSQLJob;
+import com.actiontech.dble.sqlengine.OneRawSQLQueryResultHandler;
+import com.actiontech.dble.sqlengine.SQLQueryResult;
+import com.actiontech.dble.sqlengine.SQLQueryResultListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+/**
+ * @author mycat
+ */
+public class MySQLDetector implements SQLQueryResultListener<SQLQueryResult<Map<String, String>>> {
+    public static final Logger LOGGER = LoggerFactory.getLogger(MySQLDetector.class);
+    private static final String[] MYSQL_SLAVE_STATUS_COLS = new String[]{
+            "Seconds_Behind_Master",
+            "Slave_IO_Running",
+            "Slave_SQL_Running",
+            "Slave_IO_State",
+            "Master_Host",
+            "Master_User",
+            "Master_Port",
+            "Connect_Retry",
+            "Last_IO_Error"};
+    private static final String[] MYSQL_READ_ONLY_COLS = new String[]{"@@read_only"};
+
+    private final AtomicBoolean isQuit;
+    private MySQLHeartbeat heartbeat;
+    private volatile long lastSendQryTime;
+    private volatile long lastReceivedQryTime;
+    private volatile HeartbeatSQLJob sqlJob;
+    private BackendConnection con;
+
+    public MySQLDetector(MySQLHeartbeat heartbeat) {
+        this.heartbeat = heartbeat;
+        this.isQuit = new AtomicBoolean(false);
+        con = null;
+        try {
+            MySQLDataSource ds = heartbeat.getSource();
+            con = ds.getConnectionForHeartbeat(null);
+        } catch (IOException e) {
+            LOGGER.warn("create heartbeat conn error", e);
+        }
+    }
+
+    boolean isHeartbeatTimeout() {
+        return System.currentTimeMillis() > Math.max(lastSendQryTime, lastReceivedQryTime) + heartbeat.getHeartbeatTimeout();
+    }
+
+    long getLastReceivedQryTime() {
+        return lastReceivedQryTime;
+    }
+
+    public void heartbeat() {
+        if (con == null) {
+            heartbeat.setErrorResult("can't create conn for heartbeat");
+            return;
+        } else if (con.isClosed()) {
+            heartbeat.setErrorResult("conn for heartbeat is closed");
+            return;
+        }
+
+        lastSendQryTime = System.currentTimeMillis();
+        String[] fetchCols = {};
+        if (heartbeat.getSource().getHostConfig().isShowSlaveSql()) {
+            fetchCols = MYSQL_SLAVE_STATUS_COLS;
+        } else if (heartbeat.getSource().getHostConfig().isSelectReadOnlySql()) {
+            fetchCols = MYSQL_READ_ONLY_COLS;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("do heartbeat,conn is " + con);
+        }
+        OneRawSQLQueryResultHandler resultHandler = new OneRawSQLQueryResultHandler(fetchCols, this);
+        sqlJob = new HeartbeatSQLJob(heartbeat, con, resultHandler);
+        sqlJob.execute();
+    }
+
+    public void quit() {
+        if (isQuit.compareAndSet(false, true)) {
+            close();
+        }
+    }
+
+    public boolean isQuit() {
+        return isQuit.get();
+    }
+
+    @Override
+    public void onResult(SQLQueryResult<Map<String, String>> result) {
+        lastReceivedQryTime = System.currentTimeMillis();
+        heartbeat.getRecorder().set((lastReceivedQryTime - lastSendQryTime));
+        if (result.isSuccess()) {
+            PhysicalDataSource source = heartbeat.getSource();
+            Map<String, String> resultResult = result.getResult();
+            if (source.getHostConfig().isShowSlaveSql()) {
+                setStatusBySlave(source, resultResult);
+            } else if (source.getHostConfig().isSelectReadOnlySql()) {
+                setStatusByReadOnly(source, resultResult);
+            } else {
+                setStatusForNormalHeartbeat(source);
+            }
+        }
+    }
+
+    private void setStatusForNormalHeartbeat(PhysicalDataSource source) {
+        if (checkRecoverFail(source)) return;
+        heartbeat.setResult(MySQLHeartbeat.OK_STATUS);
+    }
+
+    /** if recover failed, return true*/
+    private boolean checkRecoverFail(PhysicalDataSource source) {
+        if (heartbeat.isStop()) {
+            return true;
+        }
+        if (heartbeat.getStatus() == MySQLHeartbeat.OK_STATUS) { // ok->ok
+            if (!heartbeat.getSource().isSalveOrRead() && source.isReadOnly()) { // writehost checkRecoverFail read only status is back?
+                GetAndSyncDataSourceKeyVariables task = new GetAndSyncDataSourceKeyVariables(source, true);
+                KeyVariables variables = task.call();
+                if (variables != null) {
+                    source.setReadOnly(variables.isReadOnly());
+                } else {
+                    LOGGER.warn("GetAndSyncDataSourceKeyVariables failed, set heartbeat Error");
+                    heartbeat.setErrorResult("GetAndSyncDataSourceKeyVariables failed");
+                    return true;
+                }
+            }
+        } else if (heartbeat.getStatus() != MySQLHeartbeat.TIMEOUT_STATUS) { //error/init ->ok
+            try {
+                source.testConnection();
+            } catch (Exception e) {
+                LOGGER.warn("testConnection failed, set heartbeat Error");
+                heartbeat.setErrorResult("testConnection failed");
+                return true;
+            }
+            GetAndSyncDataSourceKeyVariables task = new GetAndSyncDataSourceKeyVariables(source, true);
+            KeyVariables variables = task.call();
+            if (variables == null ||
+                    variables.isLowerCase() != DbleServer.getInstance().getSystemVariables().isLowerCaseTableNames() ||
+                    variables.getMaxPacketSize() < DbleServer.getInstance().getConfig().getSystem().getMaxPacketSize()) {
+                String url = con.getHost() + ":" + con.getPort();
+                Map<String, String> labels = AlertUtil.genSingleLabel("data_host", url);
+                String errMsg;
+                if (variables == null) {
+                    errMsg = "GetAndSyncDataSourceKeyVariables failed";
+                } else if (variables.isLowerCase() != DbleServer.getInstance().getSystemVariables().isLowerCaseTableNames()) {
+                    errMsg = "this dataHost[=" + url + "]'s lower_case is wrong";
+                } else {
+                    errMsg = "this dataHost[=" + url + "]'s max_allowed_packet is " + variables.getMaxPacketSize() + ", but dble's is " + DbleServer.getInstance().getConfig().getSystem().getMaxPacketSize();
+                }
+                LOGGER.warn(errMsg + ", set heartbeat Error");
+                if (variables != null) {
+                    AlertUtil.alert(AlarmCode.DATA_HOST_LOWER_CASE_ERROR, Alert.AlertLevel.WARN, errMsg, "mysql", this.heartbeat.getSource().getConfig().getId(), labels);
+                    ToResolveContainer.DATA_HOST_LOWER_CASE_ERROR.add(con.getHost() + ":" + con.getPort());
+                }
+                heartbeat.setErrorResult(errMsg);
+                return true;
+            } else {
+                String url = con.getHost() + ":" + con.getPort();
+                if (ToResolveContainer.DATA_HOST_LOWER_CASE_ERROR.contains(url)) {
+                    Map<String, String> labels = AlertUtil.genSingleLabel("data_host", url);
+                    AlertUtil.alertResolve(AlarmCode.DATA_HOST_LOWER_CASE_ERROR, Alert.AlertLevel.WARN, "mysql", this.heartbeat.getSource().getConfig().getId(), labels,
+                            ToResolveContainer.DATA_HOST_LOWER_CASE_ERROR, url);
+                }
+                if (!source.isSalveOrRead()) { // writehost checkRecoverFail read only
+                    source.setReadOnly(variables.isReadOnly());
+                }
+            }
+        }
+        return false;
+    }
+
+    private void setStatusBySlave(PhysicalDataSource source, Map<String, String> resultResult) {
+        String slaveIoRunning = resultResult != null ? resultResult.get("Slave_IO_Running") : null;
+        String slaveSqlRunning = resultResult != null ? resultResult.get("Slave_SQL_Running") : null;
+        if (slaveIoRunning != null && slaveIoRunning.equals(slaveSqlRunning) && slaveSqlRunning.equals("Yes")) {
+            heartbeat.setDbSynStatus(MySQLHeartbeat.DB_SYN_NORMAL);
+            String secondsBehindMaster = resultResult.get("Seconds_Behind_Master");
+            if (null != secondsBehindMaster && !"".equals(secondsBehindMaster) && !"NULL".equalsIgnoreCase(secondsBehindMaster)) {
+                int behindMaster = Integer.parseInt(secondsBehindMaster);
+                if (behindMaster > source.getHostConfig().getSlaveThreshold()) {
+                    MySQLHeartbeat.LOGGER.warn("found MySQL master/slave Replication delay !!! " + heartbeat.getSource().getConfig() + ", binlog sync time delay: " + behindMaster + "s");
+                }
+                heartbeat.setSlaveBehindMaster(behindMaster);
+            } else {
+                heartbeat.setSlaveBehindMaster(null);
+            }
+        } else if (source.isSalveOrRead()) {
+            //String Last_IO_Error = resultResult != null ? resultResult.get("Last_IO_Error") : null;
+            MySQLHeartbeat.LOGGER.warn("found MySQL master/slave Replication err !!! " +
+                    heartbeat.getSource().getConfig() + ", " + resultResult);
+            heartbeat.setDbSynStatus(MySQLHeartbeat.DB_SYN_ERROR);
+            heartbeat.setSlaveBehindMaster(null);
+        }
+        heartbeat.getAsyncRecorder().setBySlaveStatus(resultResult);
+        if (checkRecoverFail(source)) return;
+        heartbeat.setResult(MySQLHeartbeat.OK_STATUS);
+    }
+
+    private void setStatusByReadOnly(PhysicalDataSource source, Map<String, String> resultResult) {
+        String readonly = resultResult != null ? resultResult.get("@@read_only") : null;
+        if (readonly == null) {
+            heartbeat.setErrorResult("result of select @@read_only is null");
+            return;
+        } else if (readonly.equals("0")) {
+            source.setReadOnly(false);
+        } else {
+            source.setReadOnly(true);
+        }
+        if (checkRecoverFail(source)) return;
+        heartbeat.setResult(MySQLHeartbeat.OK_STATUS);
+    }
+
+
+    public void close() {
+        HeartbeatSQLJob curJob = sqlJob;
+        if (curJob != null) {
+            curJob.terminate();
+            sqlJob = null;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+/*
+* Copyright (C) 2016-2020 ActionTech.
+* based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
+* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
+*/
+package com.actiontech.dble.service.handler;
+
+import com.actiontech.dble.assistant.transactionlog.TxnLogHelper;
+import com.actiontech.dble.service.ServerConnection;
+
+public final class BeginHandler {
+    private BeginHandler() {
+    }
+
+    public static void handle(String stmt, ServerConnection c) {
+        if (c.isTxStart() || !c.isAutocommit()) {
+            c.beginInTx(stmt);
+        } else {
+            c.setTxStart(true);
+            TxnLogHelper.putTxnLog(c, stmt);
+            boolean multiStatementFlag = c.getSession2().getIsMultiStatement().get();
+            c.write(c.writeToBuffer(c.getSession2().getOkByteArray(), c.allocate()));
+            c.getSession2().multiStatementNextSql(multiStatementFlag);
+        }
+    }
+}
