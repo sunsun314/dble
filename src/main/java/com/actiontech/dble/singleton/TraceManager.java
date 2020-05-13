@@ -10,6 +10,7 @@ import io.jaegertracing.internal.reporters.LoggingReporter;
 import io.jaegertracing.internal.reporters.RemoteReporter;
 import io.jaegertracing.internal.samplers.ProbabilisticSampler;
 import io.jaegertracing.thrift.internal.senders.HttpSender;
+import io.opentracing.Scope;
 import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,14 +55,12 @@ public final class TraceManager {
         return INSTANCE.tracer.activeSpan();
     }
 
-    public static Span startSpan(String spanName, boolean activeForThread) {
+    public static Scope startSpan(String spanName, boolean activeForThread) {
         Span span = INSTANCE.tracer.buildSpan(spanName).start();
         StackTraceElement stack = Thread.currentThread().getStackTrace()[2];
         span.log(ImmutableMap.of("class", stack.getClassName(), "function", stack.getMethodName()));
-        if (activeForThread) {
-            INSTANCE.tracer.scopeManager().activate(span);
-        }
-        return span;
+        Scope scope = INSTANCE.tracer.scopeManager().activate(span);
+        return scope;
     }
 
     public static Span startSpan(String spanName, boolean activeForThread, Span fSpan) {

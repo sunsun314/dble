@@ -446,8 +446,7 @@ public class MySQLConnection extends AbstractConnection implements
     }
 
     private void synAndDoExecuteMultiNode(StringBuilder synSQL, RouteResultsetNode rrn, CharsetNames clientCharset) {
-        TraceManager.activeSpan().log(ImmutableMap.of("real-sql-execution", synSQL, "connection-id", this.id, "MySQL-thread-id", this.threadId, "Route-Node", rrn
-        ));
+        //TraceManager.activeSpan().log(ImmutableMap.of("real-sql-execution", synSQL, "connection-id", this.id, "MySQL-thread-id", this.threadId, "Route-Node", rrn));
         if (synSQL == null) {
             // not need syn connection
             if (session != null) {
