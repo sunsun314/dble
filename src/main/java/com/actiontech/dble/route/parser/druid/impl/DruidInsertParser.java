@@ -5,34 +5,46 @@
 
 package com.actiontech.dble.route.parser.druid.impl;
 
+import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.config.ServerPrivileges;
 import com.actiontech.dble.config.ServerPrivileges.CheckType;
 import com.actiontech.dble.config.model.SchemaConfig;
 import com.actiontech.dble.config.model.TableConfig;
 import com.actiontech.dble.meta.TableMeta;
 import com.actiontech.dble.plan.common.ptr.StringPtr;
+import com.actiontech.dble.plan.node.PlanNode;
+import com.actiontech.dble.plan.visitor.MySQLPlanNodeVisitor;
 import com.actiontech.dble.route.RouteResultset;
 import com.actiontech.dble.route.RouteResultsetNode;
 import com.actiontech.dble.route.function.AbstractPartitionAlgorithm;
+import com.actiontech.dble.route.parser.druid.RouteCalculateUnit;
+import com.actiontech.dble.route.parser.druid.RouteTableConfigInfo;
 import com.actiontech.dble.route.parser.druid.ServerSchemaStatVisitor;
+import com.actiontech.dble.route.parser.util.ArrayUtil;
 import com.actiontech.dble.route.parser.util.Pair;
+import com.actiontech.dble.route.util.ConditionUtil;
 import com.actiontech.dble.route.util.RouterUtil;
 import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.server.util.SchemaUtil;
 import com.actiontech.dble.server.util.SchemaUtil.SchemaInfo;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.singleton.SequenceManager;
+import com.actiontech.dble.sqlengine.mpp.ColumnRoute;
+import com.actiontech.dble.util.CollectionUtil;
 import com.actiontech.dble.util.StringUtil;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.SQLBinaryOpExpr;
 import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
+import com.alibaba.druid.sql.ast.statement.SQLInsertInto;
 import com.alibaba.druid.sql.ast.statement.SQLInsertStatement.ValuesClause;
+import com.alibaba.druid.sql.ast.statement.SQLSelect;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
+import com.alibaba.druid.stat.TableStat;
 
 import java.sql.SQLException;
 import java.sql.SQLNonTransientException;
@@ -52,6 +64,317 @@ public class DruidInsertParser extends DruidInsertReplaceParser {
             throw new SQLNonTransientException(msg);
         }
 
+        /*if (insert.getQuery() != null) {
+            // insert into .... select ....
+            insert.getQuery().accept(visitor);
+            String tableName = schemaInfo.getTable();
+            TableConfig tc = schema.getTables().get(tableName);
+
+            if (tc == null || tc.isNoSharding() || (tc.isGlobalTable() && tc.getDataNodes().size() == 1)) {
+                //only require when all the table and the route condition route to same node
+                Map<String, String> tableAliasMap = getTableAliasMap(schemaName, visitor.getAliasMap());
+                ctx.setRouteCalculateUnits(ConditionUtil.buildRouteCalculateUnits(visitor.getAllWhereUnit(), tableAliasMap, schemaName));
+
+                Set<Pair<String, String>> tablesSet = new HashSet<>(ctx.getTables());
+
+                //loop for the tables & conditions
+                for (RouteCalculateUnit routeUnit : ctx.getRouteCalculateUnits()) {
+                    Map<Pair<String, String>, Map<String, ColumnRoute>> tablesAndConditions = routeUnit.getTablesAndConditions();
+                    if (tablesAndConditions != null) {
+                        for (Map.Entry<Pair<String, String>, Map<String, ColumnRoute>> entry : tablesAndConditions.entrySet()) {
+                            Pair<String, String> table = entry.getKey();
+                            String sName = table.getKey();
+                            String tName = table.getValue();
+                            SchemaConfig tSchema = DbleServer.getInstance().getConfig().getSchemas().get(sName);
+                            TableConfig tConfig = tSchema.getTables().get(tName);
+                            if (tConfig != null && tConfig.getRule() != null) {
+                                if (!ArrayUtil.containDuplicate(visitor.getSelectTableList(), tName)) {
+                                    Set<String> tmpResultNodes = new HashSet<>();
+                                    tmpResultNodes.add(tc.getDataNodes().get(0));
+                                    if (!RouterUtil.tryCalcNodeForShardingColumn(rrs, tmpResultNodes, tablesSet, entry, table, tConfig)) {
+                                        String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                        throw new SQLNonTransientException(msg);
+                                    }
+                                } else {
+                                    String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                    throw new SQLNonTransientException(msg);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                for (Pair<String, String> table : tablesSet) {
+                    String sName = table.getKey();
+                    String tName = table.getValue();
+                    SchemaConfig tSchema = DbleServer.getInstance().getConfig().getSchemas().get(sName);
+                    TableConfig tConfig = tSchema.getTables().get(tName);
+                    if (tConfig == null) {
+                        if (tSchema.getDataNode().equals(tc.getDataNodes().get(0))) {
+                            break;
+                        } else {
+                            String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                            throw new SQLNonTransientException(msg);
+                        }
+                    } else if (tConfig.isGlobalTable()) {
+                        if (ArrayUtil.contains(tConfig.getDataNodes().toArray(new String[]{}), tc.getDataNodes().get(0))) {
+                            break;
+                        } else {
+                            String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                            throw new SQLNonTransientException(msg);
+                        }
+                    } else {
+                        String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                        throw new SQLNonTransientException(msg);
+                    }
+                }
+
+                RouterUtil.routeToSingleNode(rrs, tc.getDataNodes().get(0));
+                return schema;
+            } else if (tc.isGlobalTable() && tc.getDataNodes().size() > 1) {
+                //multi-Node global table
+                ArrayList mustContainList = tc.getDataNodes();
+                for (String sTable : visitor.getSelectTableList()) {
+                    TableConfig stc = schema.getTables().get(sTable);
+                    if (stc.isGlobalTable()) {
+                        if (stc != null && ArrayUtil.containAll(stc.getDataNodes(), mustContainList)) {
+                            continue;
+                        } else {
+                            String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                            throw new SQLNonTransientException(msg);
+                        }
+                    }
+                }
+                //route to all the dataNode the tc contain
+                RouterUtil.routeToMultiNode(false, rrs, mustContainList, true);
+                return schema;
+            } else {
+                //the insert table is a sharding table
+                MySQLPlanNodeVisitor pvisitor = new MySQLPlanNodeVisitor(sc.getSchema(), sc.getCharset().getResultsIndex(), ProxyMeta.getInstance().getTmManager(), false, sc.getUsrVariables());
+                pvisitor.visit(insert.getQuery());
+                PlanNode node = pvisitor.getTableNode();
+                node.setSql(rrs.getStatement());
+                node.setUpFields();
+
+                //获取到拆分列的index，从sql或者是其他
+                String partitionColumn = tc.getPartitionColumn();
+                int index = tryGetShardingColIndex(schemaInfo, insert, partitionColumn);
+                try {
+                    RouteTableConfigInfo dataSourceTc = node.findFieldSourceFromIndex(index);
+                    //判断两边的列是不是有ER关系
+                    if (dataSourceTc.getTableConfig() == null) {
+                        //这个里面判断如果是一个固定值的话,直接路由信息
+                        RouteCalculateUnit singleRouteUnit = new RouteCalculateUnit();
+                        singleRouteUnit.addShardingExpr(new Pair<String, String>(dataSourceTc.getSchema(), tableName), tc.getRule().getColumn(), dataSourceTc.getValue());
+                        Set<String> allNodeSet = new HashSet<>();
+                        RouteResultset rrsTmp = RouterUtil.tryRouteForOneTable(schema, singleRouteUnit, tc.getName(), rrs, true);
+                        if (rrsTmp != null && rrsTmp.getNodes() != null) {
+                            for (RouteResultsetNode n : rrsTmp.getNodes()) {
+                                allNodeSet.add(n.getName());
+                            }
+                        }
+                        if (allNodeSet.size() > 1) {
+                            String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                            throw new SQLNonTransientException(msg);
+                        }
+
+                        Set<Pair<String, String>> tablesSet = new HashSet<>(ctx.getTables());
+
+                        //loop for the tables & conditions
+                        for (RouteCalculateUnit routeUnit : ctx.getRouteCalculateUnits()) {
+                            Map<Pair<String, String>, Map<String, ColumnRoute>> tablesAndConditions = routeUnit.getTablesAndConditions();
+                            if (tablesAndConditions != null) {
+                                for (Map.Entry<Pair<String, String>, Map<String, ColumnRoute>> entry : tablesAndConditions.entrySet()) {
+                                    Pair<String, String> table = entry.getKey();
+                                    String sName = table.getKey();
+                                    String tName = table.getValue();
+                                    SchemaConfig tSchema = DbleServer.getInstance().getConfig().getSchemas().get(sName);
+                                    TableConfig tConfig = tSchema.getTables().get(tName);
+                                    if (tConfig != null && tConfig.getRule() != null) {
+                                        if (!ArrayUtil.containDuplicate(visitor.getSelectTableList(), tName)) {
+                                            Set<String> tmpResultNodes = new HashSet<>();
+                                            tmpResultNodes.add(tc.getDataNodes().get(0));
+                                            if (!RouterUtil.tryCalcNodeForShardingColumn(rrs, tmpResultNodes, tablesSet, entry, table, tConfig)) {
+                                                String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                                throw new SQLNonTransientException(msg);
+                                            }
+                                        } else {
+                                            String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                            throw new SQLNonTransientException(msg);
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                        for (Pair<String, String> table : tablesSet) {
+                            String sName = table.getKey();
+                            String tName = table.getValue();
+                            SchemaConfig tSchema = DbleServer.getInstance().getConfig().getSchemas().get(sName);
+                            TableConfig tConfig = tSchema.getTables().get(tName);
+                            if (tConfig == null) {
+                                if (tSchema.getDataNode().equals(tc.getDataNodes().get(0))) {
+                                    break;
+                                } else {
+                                    String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                    throw new SQLNonTransientException(msg);
+                                }
+                            } else if (tConfig.isGlobalTable()) {
+                                if (ArrayUtil.contains(tConfig.getDataNodes().toArray(new String[]{}), tc.getDataNodes().get(0))) {
+                                    break;
+                                } else {
+                                    String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                    throw new SQLNonTransientException(msg);
+                                }
+                            } else {
+                                String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                throw new SQLNonTransientException(msg);
+                            }
+                        }
+
+                        RouterUtil.routeToSingleNode(rrs, rrsTmp.getNodes()[0].getName());
+                        return schema;
+
+                    } else if (dataSourceTc.getTableConfig().getRule() != null && dataSourceTc.getTableConfig().getRule().equals(tc.getRule())) {
+                        //然后先计算这个TABLE_s的涉及路由节点
+                        Map<String, String> tableAliasMap = getTableAliasMap(schemaName, visitor.getAliasMap());
+                        ctx.setRouteCalculateUnits(ConditionUtil.buildRouteCalculateUnits(visitor.getAllWhereUnit(), tableAliasMap, schemaName));
+
+                        //全局的条件，所有的都需要满足这个内容
+                        Map<String, ArrayList<String>> notShardingTableMap = new HashMap<>();
+                        Set<String> allNodeSet = new HashSet<>();
+                        for (RouteCalculateUnit routeUnit : ctx.getRouteCalculateUnits()) {
+                            //不同的OR条件分割，可能存在对于单个OR条件中的列出的relation无法正确识别的情况，认了
+                            Map<Pair<String, String>, Map<String, ColumnRoute>> tablesAndConditions = routeUnit.getTablesAndConditions();
+                            if (tablesAndConditions != null) {
+                                //对于每一个table的条件
+                                //直接按照我们的数据来源主表组成条件
+                                Pair<String, String> key = new Pair<>(dataSourceTc.getSchema(), dataSourceTc.getTableConfig().getName());
+                                if (dataSourceTc.getTableConfig() != null && dataSourceTc.getTableConfig().getRule() != null) {
+                                    if (!ArrayUtil.containDuplicate(visitor.getSelectTableList(), dataSourceTc.getTableConfig().getName())) {
+                                        //其实我们需要考虑的是在每个OR条件中可能出现的状况，所以在这里可能需要对于每个OR条件内部进行判断
+                                        //只要有一个OR条件不符合，就认为整体的情况不符合
+                                        ArrayList<String> partNodeList = new ArrayList<String>();
+                                        //额，这里好像有点毛病，不应该从ctx取值的吧
+                                        if (routeUnit.isAlwaysFalse()) {
+                                            rrs.setAlwaysFalse(true);
+                                        }
+                                        RouteResultset rrsTmp = RouterUtil.tryRouteForOneTable(schema, routeUnit, tc.getName(), rrs, true);
+                                        if (rrsTmp != null && rrsTmp.getNodes() != null) {
+                                            for (RouteResultsetNode n : rrsTmp.getNodes()) {
+                                                partNodeList.add(n.getName());
+                                                allNodeSet.add(n.getName());
+                                            }
+                                        }
+
+                                        //直接对于剩下的所有表进行判断
+                                        //不能直接循环条件，而是要从关键的table list入手
+                                        for (Pair<String, String> tn : ctx.getTables()) {
+                                            if (tn.equals(key)) {
+                                                //如果是上文的source表,跳过这个表的检查
+                                                continue;
+                                            } else if (ArrayUtil.containDuplicate(visitor.getSelectTableList(), dataSourceTc.getTableConfig().getName())) {
+                                                String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                                throw new SQLNonTransientException(msg);
+                                            }
+
+                                            String sName = tn.getKey();
+                                            String tName = tn.getValue();
+                                            SchemaConfig tSchema = DbleServer.getInstance().getConfig().getSchemas().get(sName);
+                                            TableConfig tConfig = tSchema.getTables().get(tName);
+                                            //如果是分片表
+                                            if (tConfig != null && tConfig.getRule() != null) {
+                                                if (dataSourceTc.getTableConfig().getRule().equals(tConfig.getRule())) {
+                                                    //规则相同则要求和来源表以分片键关联
+                                                    //具体怎么做还是要看debug出来的情况
+                                                    boolean hasReleation = false;
+                                                    TableStat.Column sourceColumn = new TableStat.Column(dataSourceTc.getAlias() == null ? dataSourceTc.getTableConfig().getName() : dataSourceTc.getAlias()
+                                                            , dataSourceTc.getTableConfig().getRule().getColumn());
+                                                    ArrayList<String> rsAlias = findAliasByMap(tableAliasMap, tName);
+                                                    List<TableStat.Column> rsColumnList = new ArrayList<>();
+                                                    for (String rsAlia : rsAlias) {
+                                                        rsColumnList.add(new TableStat.Column(rsAlia, tConfig.getRule().getColumn()));
+                                                    }
+                                                    for (TableStat.Relationship rs : visitor.getRelationships()) {
+                                                        if (rs.getLeft().equals(sourceColumn) && rs.getOperator().equals("=")) {
+                                                            for (TableStat.Column rsColumn : rsColumnList) {
+                                                                if (rs.getRight().equals(rsColumn)) {
+                                                                    hasReleation = true;
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                        } else if (rs.getRight().equals(sourceColumn) && rs.getOperator().equals("=")) {
+                                                            for (TableStat.Column rsColumn : rsColumnList) {
+                                                                if (rs.getLeft().equals(rsColumn)) {
+                                                                    hasReleation = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        if (hasReleation) {
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!hasReleation) {
+                                                        String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                                        throw new SQLNonTransientException(msg);
+                                                    }
+                                                } else {
+                                                    //规则不统一直接报错，不商量
+                                                    String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                                    throw new SQLNonTransientException(msg);
+                                                }
+                                            } else if (tConfig != null && tConfig.getParentKey() != null && tConfig.getRule() == null) {
+                                                //如果是ER子表,只需要它的JOINKEY关联回去即可，因为后续会有其他的检查的
+
+                                            } else if (tConfig != null && tConfig.isGlobalTable() && tConfig.getDataNodes().size() > 1) {
+                                                //如果是多节点global表
+                                                notShardingTableMap.put(tConfig.getName(), tConfig.getDataNodes());
+                                                if (!ArrayUtil.containAll(tConfig.getDataNodes(), partNodeList)) {
+                                                    String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                                    throw new SQLNonTransientException(msg);
+                                                }
+                                            } else if (tConfig == null || tConfig.getDataNodes().size() == 1 && tConfig.getRule() == null) {
+                                                //如果是单节点的全局表或者是默认节点的表
+                                                notShardingTableMap.put(tConfig.getName(), tConfig.getDataNodes());
+                                                if (!ArrayUtil.containAll(tConfig.getDataNodes(), partNodeList)) {
+                                                    String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                                    throw new SQLNonTransientException(msg);
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                        throw new SQLNonTransientException(msg);
+                                    }
+                                }
+                            }
+                        }
+
+                        for (Map.Entry<String, ArrayList<String>> entry : notShardingTableMap.entrySet()) {
+                            if (!CollectionUtil.containAll(entry.getValue(), allNodeSet)) {
+                                String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                                throw new SQLNonTransientException(msg);
+                            }
+                        }
+
+                        RouterUtil.routeToMultiNode(false, rrs, allNodeSet, true);
+                        return schema;
+
+                    } else {
+                        throw new Exception("not support");
+                    }
+
+                } catch (Exception e) {
+                    String msg = "This `INSERT ... SELECT Syntax` is not supported!";
+                    throw new SQLNonTransientException(msg);
+                }
+            }
+        }*/
+
         if (insert.getValuesList().isEmpty()) {
             String msg = "Insert syntax error,no values in sql";
             throw new SQLNonTransientException(msg);
@@ -63,12 +386,6 @@ public class DruidInsertParser extends DruidInsertReplaceParser {
             return schema;
         }
 
-        if (insert.getQuery() != null) {
-            // insert into .... select ....
-            String msg = "`INSERT ... SELECT Syntax` is not supported!";
-            LOGGER.info(msg);
-            throw new SQLNonTransientException(msg);
-        }
 
         TableConfig tc = schema.getTables().get(tableName);
         checkTableExists(tc, schema.getName(), tableName, CheckType.INSERT);
@@ -436,5 +753,17 @@ public class DruidInsertParser extends DruidInsertReplaceParser {
             }
         }
         return sb.append(")");
+    }
+
+    @Override
+    SQLSelect acceptVisitor(SQLStatement stmt, ServerSchemaStatVisitor visitor) {
+        MySqlInsertStatement insert = (MySqlInsertStatement) stmt;
+        insert.getQuery().accept(visitor);
+        return insert.getQuery();
+    }
+
+    @Override
+    int tryGetShardingColIndex(SchemaInfo schemaInfo, SQLStatement stmt, String partitionColumn) throws SQLNonTransientException {
+        return tryGetShardingColIndex(schemaInfo, (MySqlInsertStatement) stmt, partitionColumn);
     }
 }

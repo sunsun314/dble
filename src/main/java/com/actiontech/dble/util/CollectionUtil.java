@@ -40,4 +40,20 @@ public final class CollectionUtil {
     public static boolean isEmpty(Map<?, ?> map) {
         return map == null || map.isEmpty();
     }
+
+    public static boolean containAll(Collection<?> collection1, Collection<?> collection2) {
+        for (Object co : collection1) {
+            boolean found = false;
+            for (Object fo : collection2) {
+                if (co.equals(fo)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

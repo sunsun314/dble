@@ -17,6 +17,7 @@ import com.actiontech.dble.plan.common.item.function.ItemFunc;
 import com.actiontech.dble.plan.common.item.function.sumfunc.ItemFuncGroupConcat;
 import com.actiontech.dble.plan.common.item.function.sumfunc.ItemSum;
 import com.actiontech.dble.plan.common.item.subquery.ItemSubQuery;
+import com.actiontech.dble.route.parser.druid.RouteTableConfigInfo;
 import com.alibaba.druid.sql.ast.SQLOrderingSpecification;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 
@@ -199,6 +200,10 @@ public abstract class PlanNode {
             this.orderBys.add(order);
         }
         return this;
+    }
+
+    public RouteTableConfigInfo findFieldSourceFromIndex(int index) throws Exception {
+        throw new Exception("not support");
     }
 
     public void setUpFields() {
