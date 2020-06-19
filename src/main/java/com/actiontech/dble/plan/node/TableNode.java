@@ -133,6 +133,11 @@ public class TableNode extends PlanNode {
     public RouteTableConfigInfo findFieldSourceFromIndex(int index) throws Exception {
         if (columnsSelected.get(index) instanceof ItemBasicConstant) {
             return new RouteTableConfigInfo(schema, null, null, columnsSelected.get(index));
+        } else if (columnsSelected.get(index) instanceof ItemField) {
+            TableConfig tc = DbleServer.getInstance().getConfig().getSchemas().get(schema).getTables().get(tableName);
+            if (!tc.getRule().getColumn().equalsIgnoreCase(columnsSelected.get(index).getItemName())) {
+                return null;
+            }
         }
         return new RouteTableConfigInfo(schema, DbleServer.getInstance().getConfig().getSchemas().get(schema).getTables().get(tableName), alias, null);
     }

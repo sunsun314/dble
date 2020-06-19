@@ -3,7 +3,7 @@
  * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
  */
-package com.actiontech.dble;
+package newbootstrap;
 
 import com.actiontech.dble.alarm.AlertUtil;
 import com.actiontech.dble.backend.datasource.PhysicalDbGroup;
@@ -517,6 +517,9 @@ public final class DbleServer {
         XAStateLog.writeCheckpoint(coordinatorLogEntry.getId());
     }
 
+    /**
+     * covert the collection to array
+     **/
     private CoordinatorLogEntry[] getCoordinatorLogEntries() {
         Repository fileRepository = ClusterConfig.getInstance().isClusterEnable() && ClusterConfig.getInstance().isUseZK() ? new KVStoreRepository() : new FileSystemRepository();
         Collection<CoordinatorLogEntry> allCoordinatorLogEntries = fileRepository.getAllCoordinatorLogEntries(true);
@@ -558,6 +561,12 @@ public final class DbleServer {
     }
 
 
+    /**
+     * get next AsynchronousChannel ,first is exclude if multi
+     * AsynchronousChannelGroups
+     *
+     * @return AsynchronousChannelGroup
+     */
     public AsynchronousChannelGroup getNextAsyncChannelGroup() {
         if (asyncChannelGroups.length == 1) {
             return asyncChannelGroups[0];
@@ -654,4 +663,5 @@ public final class DbleServer {
     public ExecutorService getBackendBusinessExecutor() {
         return backendBusinessExecutor;
     }
+
 }

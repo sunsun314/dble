@@ -3,9 +3,10 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble;
+package newbootstrap;
 
 
+import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.cluster.ClusterController;
 import com.actiontech.dble.config.Versions;
 import com.actiontech.dble.config.loader.SystemConfigLoader;
@@ -14,11 +15,11 @@ import com.actiontech.dble.manager.handler.ShowServerLog;
 import com.actiontech.dble.singleton.CustomMySQLHa;
 import com.actiontech.dble.singleton.OnlineStatus;
 
-public final class DbleStartup {
-    private DbleStartup() {
+public final class DbleBootstrap {
+    private DbleBootstrap() {
     }
 
-   /* public static void main(String[] args) {
+    public static void main(String[] args) {
         try {
             ClusterController.loadClusterProperties();
             //lod system properties
@@ -49,5 +50,5 @@ public final class DbleStartup {
             e.printStackTrace();
             System.exit(-1);
         }
-    }*/
+    }
 }
