@@ -25,7 +25,6 @@ import com.actiontech.dble.log.transaction.TxnLogProcessor;
 import com.actiontech.dble.manager.ManagerConnectionFactory;
 import com.actiontech.dble.meta.ProxyMetaManager;
 import com.actiontech.dble.net.*;
-import com.actiontech.dble.net.handler.*;
 import com.actiontech.dble.net.mysql.WriteToBackendTask;
 import com.actiontech.dble.server.ServerConnectionFactory;
 import com.actiontech.dble.server.status.SlowQueryLog;
@@ -36,6 +35,9 @@ import com.actiontech.dble.statistic.stat.ThreadWorkUsage;
 import com.actiontech.dble.util.ExecutorUtil;
 import com.actiontech.dble.util.TimeUtil;
 import com.actiontech.dble.util.ZKUtils;
+import newcommon.executor.FrontEndHandlerRunnable;
+import newcommon.executor.WriteToBackendRunnable;
+import newcommon.service.ServiceTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,9 +92,9 @@ public final class DbleServer {
     private ExecutorService complexQueryExecutor;
     private ExecutorService timerExecutor;
     private Map<String, ThreadWorkUsage> threadUsedMap = new ConcurrentHashMap<>();
-    private BlockingQueue<FrontendCommandHandler> frontHandlerQueue;
+    private BlockingQueue<ServiceTask> frontHandlerQueue;
     private BlockingQueue<List<WriteToBackendTask>> writeToBackendQueue;
-    private Queue<FrontendCommandHandler> concurrentFrontHandlerQueue;
+    private Queue<ServiceTask> concurrentFrontHandlerQueue;
     private Queue<BackendAsyncHandler> concurrentBackHandlerQueue;
 
     private DbleServer() {
@@ -269,21 +271,10 @@ public final class DbleServer {
     }
 
     private void initTaskQueue() {
-        if (SystemConfig.getInstance().getUsePerformanceMode() == 1) {
-            concurrentFrontHandlerQueue = new ConcurrentLinkedQueue<>();
-            for (int i = 0; i < SystemConfig.getInstance().getProcessorExecutor(); i++) {
-                businessExecutor.execute(new ConcurrentFrontEndHandlerRunnable(concurrentFrontHandlerQueue));
-            }
-
-            concurrentBackHandlerQueue = new ConcurrentLinkedQueue<>();
-            for (int i = 0; i < SystemConfig.getInstance().getBackendProcessorExecutor(); i++) {
-                backendBusinessExecutor.execute(new ConcurrentBackEndHandlerRunnable(concurrentBackHandlerQueue));
-            }
-        } else {
-            frontHandlerQueue = new LinkedBlockingQueue<>();
-            for (int i = 0; i < SystemConfig.getInstance().getProcessorExecutor(); i++) {
-                businessExecutor.execute(new FrontEndHandlerRunnable(frontHandlerQueue));
-            }
+        concurrentFrontHandlerQueue = new ConcurrentLinkedQueue<ServiceTask>();
+        frontHandlerQueue = new LinkedBlockingQueue<ServiceTask>();
+        for (int i = 0; i < SystemConfig.getInstance().getProcessorExecutor(); i++) {
+            businessExecutor.execute(new FrontEndHandlerRunnable(frontHandlerQueue,concurrentFrontHandlerQueue));
         }
 
         writeToBackendQueue = new LinkedBlockingQueue<>();
@@ -331,13 +322,6 @@ public final class DbleServer {
         return threadUsedMap;
     }
 
-    public Queue<FrontendCommandHandler> getFrontHandlerQueue() {
-        if (SystemConfig.getInstance().getUsePerformanceMode() == 1) {
-            return concurrentFrontHandlerQueue;
-        } else {
-            return frontHandlerQueue;
-        }
-    }
 
 
     // check the closed/overtime connection
@@ -395,6 +379,7 @@ public final class DbleServer {
             }
         }
     }
+
     private void pullVarAndMeta() throws IOException {
         ProxyMetaManager tmManager = new ProxyMetaManager();
         ProxyMeta.getInstance().setTmManager(tmManager);

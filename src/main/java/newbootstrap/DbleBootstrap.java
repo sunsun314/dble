@@ -6,7 +6,6 @@
 package newbootstrap;
 
 
-import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.cluster.ClusterController;
 import com.actiontech.dble.config.Versions;
 import com.actiontech.dble.config.loader.SystemConfigLoader;

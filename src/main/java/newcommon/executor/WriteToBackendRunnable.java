@@ -1,31 +1,27 @@
-package newcommon.executor;
+/*
+ * Copyright (C) 2016-2020 ActionTech.
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
+ */
 
+package newcommon.executor;
 
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.config.model.SystemConfig;
+import com.actiontech.dble.net.mysql.WriteToBackendTask;
 import com.actiontech.dble.statistic.stat.ThreadWorkUsage;
-import newcommon.service.ServiceTask;
 
-import java.util.Queue;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-/**
- * Created by szf on 2020/6/18.
- */
-public class FrontEndHandlerRunnable implements Runnable {
+public class WriteToBackendRunnable implements Runnable {
+    private final BlockingQueue<List<WriteToBackendTask>> writeToBackendQueue;
 
-    private final BlockingQueue<ServiceTask> frontNormalTasks;
-    private final Queue<ServiceTask> frontPriorityTasks;
-
-    public FrontEndHandlerRunnable(BlockingQueue<ServiceTask> frontEndTasks, Queue<ServiceTask> frontPriorityTasks) {
-        this.frontNormalTasks = frontEndTasks;
-        this.frontPriorityTasks = frontPriorityTasks;
+    public WriteToBackendRunnable(BlockingQueue<List<WriteToBackendTask>> writeToBackendQueue) {
+        this.writeToBackendQueue = writeToBackendQueue;
     }
-
 
     @Override
     public void run() {
-        ServiceTask task;
         ThreadWorkUsage workUsage = null;
         if (SystemConfig.getInstance().getUseThreadUsageStat() == 1) {
             String threadName = Thread.currentThread().getName();
@@ -34,18 +30,17 @@ public class FrontEndHandlerRunnable implements Runnable {
         }
         while (true) {
             try {
-                task = frontPriorityTasks.poll();
-                if (task == null) {
-                    task = frontNormalTasks.take();
-                }
-
+                List<WriteToBackendTask> tasks = writeToBackendQueue.take();
                 //threadUsageStat start
                 long workStart = 0;
                 if (workUsage != null) {
                     workStart = System.nanoTime();
                 }
-                //handler data
-                task.getService().execute(task);
+
+                //execute the tasks
+                for (WriteToBackendTask task : tasks) {
+                    task.execute();
+                }
 
                 //threadUsageStat end
                 if (workUsage != null) {
@@ -55,7 +50,6 @@ public class FrontEndHandlerRunnable implements Runnable {
                 throw new RuntimeException("FrontendCommandHandler error.", e);
             }
         }
+
     }
-
-
 }
