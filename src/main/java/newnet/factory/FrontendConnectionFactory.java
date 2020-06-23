@@ -6,6 +6,7 @@
 package newnet.factory;
 
 
+import newnet.SocketWR;
 import newnet.connection.FrontendConnection;
 
 import java.io.IOException;
@@ -16,13 +17,13 @@ import java.nio.channels.NetworkChannel;
  * @author mycat
  */
 public abstract class FrontendConnectionFactory {
-    protected abstract FrontendConnection getConnection(NetworkChannel channel)
+    protected abstract FrontendConnection getConnection(NetworkChannel channel, SocketWR socketWR)
             throws IOException;
 
-    public FrontendConnection make(NetworkChannel channel) throws IOException {
+    public FrontendConnection make(NetworkChannel channel,SocketWR socketWR) throws IOException {
         channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
         channel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
-        FrontendConnection c = getConnection(channel);
+        FrontendConnection c = getConnection(channel,socketWR);
         c.setSocketParams(true);
         return c;
     }

@@ -5,6 +5,8 @@
 
 package newnet;
 
+import newnet.connection.AbstractConnection;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 

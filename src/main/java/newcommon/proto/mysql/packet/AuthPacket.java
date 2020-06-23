@@ -34,7 +34,6 @@ import java.nio.ByteBuffer;
  * n (Length Coded Binary)      scramble_buff (1 + x bytes)
  * n (Null-Terminated String)   databasename (optional)
  *
- * @see http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol#Client_Authentication_Packet
  * </pre>
  *
  * @author mycat
@@ -148,7 +147,6 @@ public class AuthPacket extends MySQLPacket {
         }
     }
 
-    @Override
     public void write(MySQLConnection c) {
         ByteBuffer buffer = c.allocate();
         BufferUtil.writeUB3(buffer, calcPacketSize());

@@ -35,7 +35,6 @@ public class HeartbeatPacket extends MySQLPacket {
         id = mm.readLength();
     }
 
-    @Override
     public void write(MySQLConnection c) {
         ByteBuffer buffer = c.allocate();
         BufferUtil.writeUB3(buffer, calcPacketSize());

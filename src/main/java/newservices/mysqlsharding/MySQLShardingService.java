@@ -1,16 +1,15 @@
 package newservices.mysqlsharding;
 
 import com.actiontech.dble.backend.mysql.CharsetUtil;
-import com.actiontech.dble.backend.mysql.nio.MySQLConnectionAuthenticator;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.net.mysql.ChangeUserPacket;
 import com.actiontech.dble.net.mysql.MySQLPacket;
 import com.actiontech.dble.server.ServerConnection;
 import newcommon.service.AbstractService;
 import newcommon.service.ServiceTask;
-import newnet.AbstractConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import newnet.connection.AbstractConnection;
+
+import java.io.IOException;
 
 /**
  * Created by szf on 2020/6/18.
@@ -21,9 +20,8 @@ public class MySQLShardingService extends AbstractService {
         super(connection);
     }
 
-
     @Override
-    public void handleData(ServiceTask task) {
+    public void handleData(ServiceTask task) {/*
         byte[] data = task.getOrgData();
         ServerConnection sc = (ServerConnection) source;
         sc.startProcess();
@@ -74,5 +72,12 @@ public class MySQLShardingService extends AbstractService {
             default:
                 sc.writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR, "Unknown command");
         }
+    */
+    }
+
+
+    @Override
+    public void register() throws IOException {
+
     }
 }

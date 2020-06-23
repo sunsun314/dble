@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.NetworkChannel;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -34,6 +33,13 @@ public abstract class AbstractConnection implements Connection {
     private volatile AbstractService service;
 
     protected IOProcessor processor;
+
+
+    //真实的net层级的信息
+    protected String host;
+    protected int localPort;
+    protected int port;
+
 
     protected long id;
 
@@ -268,6 +274,10 @@ public abstract class AbstractConnection implements Connection {
     }
 
 
+    public void onConnectFailed(Throwable e) {
+
+    }
+
     protected synchronized void cleanup() {
 
         if (readBuffer != null) {
@@ -307,7 +317,7 @@ public abstract class AbstractConnection implements Connection {
         this.service.register();
     }
 
-    public Queue getWriteQueue() {
+    public ConcurrentLinkedQueue<ByteBuffer> getWriteQueue() {
         return writeQueue;
     }
 
@@ -343,4 +353,29 @@ public abstract class AbstractConnection implements Connection {
     public abstract void startFlowControl(BackendConnection bcon);
 
     public abstract void stopFlowControl();
+
+
+    public int getLocalPort() {
+        return localPort;
+    }
+
+    public void setLocalPort(int localPort) {
+        this.localPort = localPort;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
 }

@@ -94,8 +94,8 @@ public final class ShowSysParam {
         paramValues.add(new ParamInfo("bindIp", sysConfig.getBindIp() + "", "The host where the server is running. The default is 0.0.0.0"));
         paramValues.add(new ParamInfo("serverPort", sysConfig.getServerPort() + "", "User connection port. The default number is 8066"));
         paramValues.add(new ParamInfo("managerPort", sysConfig.getManagerPort() + "", "Manager connection port. The default number is 9066"));
-        paramValues.add(new ParamInfo("processors", sysConfig.getProcessors() + "", "The size of frontend NIOProcessor, the default value is the number of processors available to the Java virtual machine"));
-        paramValues.add(new ParamInfo("backendProcessors", sysConfig.getBackendProcessors() + "", "The size of backend NIOProcessor, the default value is the number of processors available to the Java virtual machine"));
+        paramValues.add(new ParamInfo("processors", sysConfig.getProcessors() + "", "The size of frontend IOProcessor, the default value is the number of processors available to the Java virtual machine"));
+        paramValues.add(new ParamInfo("backendProcessors", sysConfig.getBackendProcessors() + "", "The size of backend IOProcessor, the default value is the number of processors available to the Java virtual machine"));
         paramValues.add(new ParamInfo("processorExecutor", sysConfig.getProcessorExecutor() + "", "The size of fixed thread pool named of frontend businessExecutor,the default value is the number of processors available to the Java virtual machine * 2"));
         paramValues.add(new ParamInfo("backendProcessorExecutor", sysConfig.getBackendProcessorExecutor() + "", "The size of fixed thread pool named of backend businessExecutor,the default value is the number of processors available to the Java virtual machine * 2"));
         paramValues.add(new ParamInfo("complexExecutor", sysConfig.getComplexExecutor() + "", "The size of fixed thread pool named of writeToBackendExecutor,the default is the number of processors available to the Java virtual machine * 2"));

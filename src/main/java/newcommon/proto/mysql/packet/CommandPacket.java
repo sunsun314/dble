@@ -51,7 +51,7 @@ import java.nio.ByteBuffer;
  *               0x12   COM_BINLOG_DUMP     sent by the slave IO thread to request a binlog
  *               0x13   COM_TABLE_DUMP      LOAD TABLE ... FROM MASTER (deprecated)
  *               0x14   COM_CONNECT_OUT     (none, this is an internal thread state)
- *               0x15   COM_REGISTER_SLAVE  sent by the slave to register with the master (optional)
+ *               0x15   COM_REGISTER_SLAVE  sent by the slave to greeting with the master (optional)
  *               0x16   COM_STMT_PREPARE    mysql_stmt_prepare
  *               0x17   COM_STMT_EXECUTE    mysql_stmt_execute
  *               0x18   COM_STMT_SEND_LONG_DATA mysql_stmt_send_long_data
@@ -92,7 +92,6 @@ public class CommandPacket extends MySQLPacket {
         out.write(arg);
     }
 
-    @Override
     public void write(MySQLConnection c) {
         ByteBuffer buffer = c.allocate();
         try {

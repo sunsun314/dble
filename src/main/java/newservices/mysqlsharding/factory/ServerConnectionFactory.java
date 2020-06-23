@@ -3,19 +3,22 @@
 * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
 */
-package com.actiontech.dble.server;
+package newservices.mysqlsharding.factory;
 
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.net.factory.FrontendConnectionFactory;
+
+import newnet.SocketWR;
+import newnet.connection.FrontendConnection;
+import newnet.factory.FrontendConnectionFactory;
 
 import java.io.IOException;
 import java.nio.channels.NetworkChannel;
 
+
 public class ServerConnectionFactory extends FrontendConnectionFactory {
 
     @Override
-    protected FrontendConnection getConnection(NetworkChannel channel) throws IOException {
-        ServerConnection c = new ServerConnection(channel);
+    protected FrontendConnection getConnection(NetworkChannel channel, SocketWR socketWR) throws IOException {
+        FrontendConnection c = new FrontendConnection(channel, socketWR);
         return c;
     }
 

@@ -1,20 +1,24 @@
 package newservices.mysqlauthenticate;
 
 import com.actiontech.dble.config.Capabilities;
+import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.model.SystemConfig;
 import com.actiontech.dble.config.model.user.UserConfig;
 import newcommon.proto.mysql.packet.*;
+import newcommon.service.AuthResultInfo;
 import newcommon.service.AuthService;
 import newcommon.service.ServiceTask;
-import newnet.AbstractConnection;
+import newnet.connection.AbstractConnection;
 import newservices.mysqlauthenticate.plugin.CachingSHA2Pwd;
-import newservices.mysqlauthenticate.plugin.MySQL323;
 import newservices.mysqlauthenticate.plugin.MySQLAuthPlugin;
 import newservices.mysqlauthenticate.plugin.NativePwd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+
+import static newservices.mysqlauthenticate.PluginName.caching_sha2_password;
+import static newservices.mysqlauthenticate.PluginName.mysql_native_password;
 
 /**
  * Created by szf on 2020/6/18.
@@ -27,6 +31,9 @@ public class MySQLFrontAuthService extends AuthService {
 
     private volatile MySQLAuthPlugin plugin;
 
+    private volatile byte[] seed;
+
+    private volatile boolean hasAuthSwitched;
 
     public MySQLFrontAuthService(AbstractConnection connection) {
         super(connection);
@@ -38,7 +45,7 @@ public class MySQLFrontAuthService extends AuthService {
     @Override
     public void register() throws IOException {
         //让验证插件自己 写出握手包
-        plugin.register();
+        seed = plugin.greeting();
     }
 
     @Override
@@ -48,40 +55,55 @@ public class MySQLFrontAuthService extends AuthService {
             connection.close("quit packet");
         } else if (data.length == PingPacket.PING.length && data[4] == PingPacket.COM_PING) {
             pingResponse();
-        } else if (true) {
-            pluginSwitch();
         } else {
-
-            //如果需要进行插件的切换的话
-            if(!plugin.handleData(data)){
-                if(isPluginSupported()){
-
-                }else{
-                    NotifyClientChangePlugin();
-                }
-            }
-            AuthPacket auth = new AuthPacket();
-            auth.read(data);
-            if (isPluginSupported(auth.getAuthPlugin())) {
-
-                if (config != null) {
-                    String errMsg = checkUserRights(config);
-                    if (errMsg == null) {
-                        connection.setConnProperties(plugin.getInfo());
-                        connection.write(AUTH_OK);
-                    }
+            if (hasAuthSwitched) {
+                //if got the switch response,check the result
+                plugin.handleSwitchData(data);
+                checkForResult(plugin.getInfo());
+            } else {
+                switch (plugin.handleData(data)) {
+                    case caching_sha2_password:
+                        hasAuthSwitched = true;
+                        requestToSwitch(caching_sha2_password);
+                        break;
+                    case mysql_native_password:
+                        hasAuthSwitched = true;
+                        requestToSwitch(mysql_native_password);
+                        break;
+                    case plugin_same_with_default:
+                        checkForResult(plugin.getInfo());
+                        break;
+                    default:
+                        //try to switch plugin to the default
+                        requestToSwitch(plugin.getName());
                 }
             }
         }
     }
 
+    private void checkForResult(AuthResultInfo info) {
+        if (info.isSuccess()) {
+            String errMsg = checkUserRights(info.getUserConfig());
+            if (errMsg != null) {
+                writeOutErrorMessage(errMsg);
+            } else {
+                connection.setConnProperties(info);
+                MySQLPacket packet = new OkPacket();
+                packet.write(connection);
+            }
+        } else {
+            writeOutErrorMessage(info.getErrorMsg());
+        }
+    }
 
-    private void NotifyClientChangePlugin() {
-        AuthSwitchRequestPackage authSwitch = new AuthSwitchRequestPackage(plugin.getName().getBytes(), plugin.getSeed());
+    private void writeOutErrorMessage(String errorMsg) {
+        this.writeErrMessage(ErrorCode.ER_ACCESS_DENIED_ERROR, errorMsg);
+    }
+
+    private void requestToSwitch(PluginName name) {
+        AuthSwitchRequestPackage authSwitch = new AuthSwitchRequestPackage(name.toString().getBytes(), seed);
         authSwitch.setPacketId(this.nextPacketId());
         authSwitch.write(connection);
-        plugin.
-        return;
     }
 
     private boolean isPluginSupported(String authPlugin) {
@@ -91,9 +113,6 @@ public class MySQLFrontAuthService extends AuthService {
 
     private String checkUserRights(UserConfig config) {
         return null;
-    }
-
-    private void pluginSwitch() {
     }
 
     private void pingResponse() {
@@ -142,8 +161,7 @@ public class MySQLFrontAuthService extends AuthService {
             return new NativePwd(this.connection);
         } else if (authPluginName.equals(new String(HandshakeV10Packet.CACHING_SHA2_PASSWORD_PLUGIN))) {
             return new CachingSHA2Pwd();
-        } else {
-            return new MySQL323();
         }
+        return null;
     }
 }

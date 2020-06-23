@@ -64,7 +64,6 @@ public class BinaryPacket extends MySQLPacket {
         return buffer;
     }
 
-    @Override
     public void write(MySQLConnection c) {
         ByteBuffer buffer = c.allocate();
         buffer = c.checkWriteBuffer(buffer, PACKET_HEADER_SIZE + calcPacketSize(), false);

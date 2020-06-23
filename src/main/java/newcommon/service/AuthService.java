@@ -1,6 +1,6 @@
 package newcommon.service;
 
-import newnet.AbstractConnection;
+import newnet.connection.AbstractConnection;
 
 import java.io.IOException;
 

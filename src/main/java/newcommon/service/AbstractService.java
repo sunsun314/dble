@@ -1,9 +1,12 @@
 package newcommon.service;
 
+import com.actiontech.dble.util.StringUtil;
 import newcommon.proto.handler.ProtoHandler;
 import newcommon.proto.handler.ProtoHandlerResult;
-import newnet.AbstractConnection;
+import newcommon.proto.mysql.packet.ErrorPacket;
+import newnet.connection.AbstractConnection;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -80,10 +83,24 @@ public abstract class AbstractService implements Service {
         }
     }
 
+    public abstract void register() throws IOException;
 
     public abstract void handleData(ServiceTask task);
 
     public int nextPacketId() {
         return ++packetId;
+    }
+
+    public void writeErrMessage(int vendorCode, String msg) {
+        writeErrMessage(vendorCode, "HY000", msg);
+    }
+
+    protected void writeErrMessage(int vendorCode, String sqlState, String msg) {
+        ErrorPacket err = new ErrorPacket();
+        err.setPacketId(nextPacketId());
+        err.setErrNo(vendorCode);
+        //err.setSqlState(StringUtil.encode(sqlState, charsetName.getResults()));
+        //err.setMessage(StringUtil.encode(msg, charsetName.getResults()));
+        err.write(connection);
     }
 }

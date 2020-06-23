@@ -5,8 +5,9 @@ import com.actiontech.dble.config.Versions;
 import com.actiontech.dble.config.model.SystemConfig;
 import com.actiontech.dble.util.RandomUtil;
 import newcommon.proto.mysql.packet.HandshakeV10Packet;
-import newcommon.service.AuthSuccessInfo;
-import newnet.AbstractConnection;
+import newcommon.service.AuthResultInfo;
+import newnet.connection.AbstractConnection;
+import newservices.mysqlauthenticate.PluginName;
 
 /**
  * Created by szf on 2020/6/18.
@@ -26,12 +27,17 @@ public class NativePwd extends MySQLAuthPlugin {
     }
 
     @Override
-    public boolean handleData(byte[] data) {
-        return true;
+    public PluginName handleData(byte[] data) {
+        return null;
     }
 
     @Override
-    public void register() {
+    public void handleSwitchData(byte[] data) {
+
+    }
+
+    @Override
+    public byte[] greeting() {
         // generate auth data
         byte[] rand1 = RandomUtil.randomBytes(8);
         byte[] rand2 = RandomUtil.randomBytes(12);
@@ -56,15 +62,16 @@ public class NativePwd extends MySQLAuthPlugin {
 
         //write out
         hs.write(connection);
+        return seed;
     }
 
     @Override
-    public String getName() {
+    public PluginName getName() {
         return null;
     }
 
     @Override
-    public AuthSuccessInfo getInfo() {
+    public AuthResultInfo getInfo() {
         return null;
     }
 }

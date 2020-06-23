@@ -5,8 +5,8 @@
 */
 package newcommon.proto.mysql.packet;
 
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.net.FrontendConnection;
+import newnet.connection.AbstractConnection;
 
 import java.nio.ByteBuffer;
 
@@ -120,7 +120,7 @@ public abstract class MySQLPacket {
     public static final byte COM_CONNECT_OUT = 20;
 
     /**
-     * used by slave to register to master
+     * used by slave to greeting to master
      */
     public static final byte COM_REGISTER_SLAVE = 21;
 
@@ -186,11 +186,8 @@ public abstract class MySQLPacket {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * write to backend connection
-     */
-    public void write(MySQLConnection c) {
-        throw new UnsupportedOperationException();
+    public void write(AbstractConnection c) {
+
     }
 
     /**

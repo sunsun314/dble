@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class NIOProcessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("NIOProcessor");
+    private static final Logger LOGGER = LoggerFactory.getLogger("IOProcessor");
 
     private final String name;
     private final BufferPool bufferPool;

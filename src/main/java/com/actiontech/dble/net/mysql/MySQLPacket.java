@@ -120,7 +120,7 @@ public abstract class MySQLPacket {
     public static final byte COM_CONNECT_OUT = 20;
 
     /**
-     * used by slave to register to master
+     * used by slave to greeting to master
      */
     public static final byte COM_REGISTER_SLAVE = 21;
 

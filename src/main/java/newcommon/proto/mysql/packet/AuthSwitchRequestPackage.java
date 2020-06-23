@@ -6,8 +6,7 @@
 package newcommon.proto.mysql.packet;
 
 import com.actiontech.dble.backend.mysql.BufferUtil;
-import com.actiontech.dble.net.FrontendConnection;
-import newnet.AbstractConnection;
+import newnet.connection.AbstractConnection;
 
 import java.nio.ByteBuffer;
 

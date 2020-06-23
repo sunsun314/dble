@@ -5,9 +5,11 @@
 */
 package newnet.impl.nio;
 
-import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.net.factory.FrontendConnectionFactory;
+import newbootstrap.DbleServer;
+import newnet.IOProcessor;
 import newnet.SocketAcceptor;
+import newnet.connection.FrontendConnection;
+import newnet.factory.FrontendConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,10 +87,11 @@ public final class NIOAcceptor extends Thread implements SocketAcceptor {
         try {
             channel = serverChannel.accept();
             channel.configureBlocking(false);
-            FrontendConnection c = factory.make(channel);
-            c.setAccepted(true);
+            NIOSocketWR socketWR = new NIOSocketWR();
+            FrontendConnection c = factory.make(channel, socketWR);
+            socketWR.initFromConnection(c);
             c.setId(ID_GENERATOR.getId());
-            NIOProcessor processor = DbleServer.getInstance().nextFrontProcessor();
+            IOProcessor processor = DbleServer.getInstance().nextFrontProcessor();
             c.setProcessor(processor);
 
             NIOReactor reactor = reactorPool.getNextReactor();

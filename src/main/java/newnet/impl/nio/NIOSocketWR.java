@@ -25,17 +25,17 @@ public class NIOSocketWR extends SocketWR {
     private SelectionKey processKey;
     private static final int OP_NOT_READ = ~SelectionKey.OP_READ;
     private static final int OP_NOT_WRITE = ~SelectionKey.OP_WRITE;
-    private final AbstractConnection con;
-    private final SocketChannel channel;
+    private AbstractConnection con;
+    private SocketChannel channel;
     private final AtomicBoolean writing = new AtomicBoolean(false);
-    private final ConcurrentLinkedQueue<ByteBuffer> writeQueue;
+    private ConcurrentLinkedQueue<ByteBuffer> writeQueue;
 
     private volatile ByteBuffer leftoverWriteBuffer;
 
-    public NIOSocketWR(AbstractConnection con, SocketChannel channel, ConcurrentLinkedQueue<ByteBuffer> writeQueue) {
+    public void initFromConnection(AbstractConnection con) {
         this.con = con;
-        this.channel = channel;
-        this.writeQueue = writeQueue;
+        this.channel = (SocketChannel) con.getChannel();
+        this.writeQueue = con.getWriteQueue();
     }
 
     public void register(Selector selector) throws IOException {

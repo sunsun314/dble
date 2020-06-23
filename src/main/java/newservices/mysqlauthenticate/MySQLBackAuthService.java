@@ -1,9 +1,8 @@
 package newservices.mysqlauthenticate;
 
-import newcommon.service.AbstractService;
 import newcommon.service.AuthService;
 import newcommon.service.ServiceTask;
-import newnet.AbstractConnection;
+import newnet.connection.AbstractConnection;
 import newservices.mysqlauthenticate.plugin.MySQLAuthPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

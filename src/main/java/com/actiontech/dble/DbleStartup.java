@@ -6,13 +6,6 @@
 package com.actiontech.dble;
 
 
-import com.actiontech.dble.cluster.ClusterController;
-import com.actiontech.dble.config.Versions;
-import com.actiontech.dble.config.loader.SystemConfigLoader;
-import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.manager.handler.ShowServerLog;
-import com.actiontech.dble.singleton.CustomMySQLHa;
-import com.actiontech.dble.singleton.OnlineStatus;
 
 public final class DbleStartup {
     private DbleStartup() {

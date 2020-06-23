@@ -7,4 +7,6 @@ package newnet;
 
 public interface SocketConnector {
 
+    void start();
+
 }

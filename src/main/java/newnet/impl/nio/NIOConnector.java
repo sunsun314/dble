@@ -5,14 +5,14 @@
 */
 package newnet.impl.nio;
 
-import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.net.NIOReactorPool;
-import com.actiontech.dble.net.SocketConnector;
-import newnet.AbstractConnection;
+import newbootstrap.DbleServer;
+import newnet.connection.AbstractConnection;
+import newnet.IOProcessor;
+import newnet.SocketConnector;
+import newnet.connection.BackendConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author mycat
  */
-public final class NIOConnector extends Thread {
+public final class NIOConnector extends Thread implements SocketConnector {
     private static final Logger LOGGER = LoggerFactory.getLogger(NIOConnector.class);
     public static final ConnectIdGenerator ID_GENERATOR = new ConnectIdGenerator();
 
@@ -89,29 +89,25 @@ public final class NIOConnector extends Thread {
             try {
                 SocketChannel channel = (SocketChannel) c.getChannel();
                 channel.register(finalSelector, SelectionKey.OP_CONNECT, c);
-                channel.connect(new InetSocketAddress(c.host, c.port));
+                channel.connect(new InetSocketAddress(c.getHost(), c.getPort()));
 
             } catch (Exception e) {
                 LOGGER.warn("error:", e);
-                c.close(e.toString());
-                if (c instanceof MySQLConnection) {
-                    ((MySQLConnection) c).onConnectFailed(e);
-                }
+                c.onConnectFailed(e);
             }
         }
     }
 
     private void finishConnect(SelectionKey key, Object att) {
-        MySQLConnection c = (MySQLConnection) att;
+        BackendConnection c = (BackendConnection) att;
         try {
-            if (finishConnect(c, (SocketChannel) c.channel)) {
+            if (finishConnect(c, (SocketChannel) c.getChannel())) {
                 clearSelectionKey(key);
                 c.setId(ID_GENERATOR.getId());
-                NIOProcessor processor = DbleServer.getInstance().nextBackendProcessor();
+                IOProcessor processor = DbleServer.getInstance().nextBackendProcessor();
                 c.setProcessor(processor);
                 NIOReactor reactor = reactorPool.getNextReactor();
                 reactor.postRegister(c);
-                c.onConnectFinish();
             }
         } catch (Exception e) {
             clearSelectionKey(key);
@@ -126,7 +122,6 @@ public final class NIOConnector extends Thread {
             throws IOException {
         if (channel.isConnectionPending()) {
             channel.finishConnect();
-
             c.setLocalPort(channel.socket().getLocalPort());
             return true;
         } else {

@@ -169,11 +169,11 @@ public final class NIOReactor {
                     c.register();
                 } catch (Exception e) {
                     if (c instanceof FrontendConnection) {
-                        c.close("register err" + e.toString());
+                        c.close("greeting err" + e.toString());
                     } else if (c instanceof MySQLConnection) {
                         ((MySQLConnection) c).onConnectFailed(e);
                     }
-                    LOGGER.warn("register err", e);
+                    LOGGER.warn("greeting err", e);
                 }
             }
         }

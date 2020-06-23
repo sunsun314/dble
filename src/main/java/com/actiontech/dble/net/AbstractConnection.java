@@ -581,7 +581,7 @@ public abstract class AbstractConnection implements NIOConnection {
         }
     }
 
-    protected synchronized void cleanup() {
+    public synchronized void cleanup() {
 
         if (readBuffer != null) {
             this.recycle(readBuffer);
