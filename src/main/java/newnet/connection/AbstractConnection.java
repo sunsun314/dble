@@ -30,6 +30,7 @@ public abstract class AbstractConnection implements Connection {
 
     protected volatile boolean isClosed = false;
 
+
     private volatile AbstractService service;
 
     protected IOProcessor processor;
@@ -378,4 +379,9 @@ public abstract class AbstractConnection implements Connection {
     public void setPort(int port) {
         this.port = port;
     }
+
+    public void setService(AbstractService service) {
+        this.service = service;
+    }
+
 }

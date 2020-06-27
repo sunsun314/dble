@@ -51,6 +51,7 @@ public class MySQLProtoHandlerImpl implements ProtoHandler {
                     return new ProtoHandlerResult(STLL_DATA_REMING, offset, data);
                 }
             }
+            return new ProtoHandlerResult(REACH_END_BUFFER, offset, data);
         } else {
             // not read whole message package ,so check if buffer enough and
             // compact dataBuffer

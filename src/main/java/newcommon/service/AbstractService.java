@@ -1,6 +1,7 @@
 package newcommon.service;
 
 import com.actiontech.dble.util.StringUtil;
+import newbootstrap.DbleServer;
 import newcommon.proto.handler.ProtoHandler;
 import newcommon.proto.handler.ProtoHandlerResult;
 import newcommon.proto.mysql.packet.ErrorPacket;
@@ -39,6 +40,10 @@ public abstract class AbstractService implements Service {
             switch (result.getCode()) {
                 case REACH_END_BUFFER:
                     connection.readReachEnd();
+                    byte[] packetData = result.getPacketData();
+                    if (packetData != null) {
+                        TaskCreate(packetData);
+                    }
                     break;
                 case BUFFER_PACKET_UNCOMPLETE:
                     connection.compactReadBuffer(dataBuffer, result.getOffset());
@@ -49,8 +54,7 @@ public abstract class AbstractService implements Service {
                     hasReming = false;
                     break;
                 case STLL_DATA_REMING:
-                    byte[] packetData = result.getPacketData();
-                    TaskCreate(packetData);
+                    TaskCreate(result.getPacketData());
                     continue;
             }
         }
@@ -65,7 +69,7 @@ public abstract class AbstractService implements Service {
     }
 
     private void TaskToTotalQueue(ServiceTask task) {
-
+        DbleServer.getInstance().getFrontHandlerQueue().offer(task);
     }
 
     @Override

@@ -9,6 +9,7 @@ package newservices.mysqlsharding.factory;
 import newnet.SocketWR;
 import newnet.connection.FrontendConnection;
 import newnet.factory.FrontendConnectionFactory;
+import newservices.mysqlauthenticate.MySQLFrontAuthService;
 
 import java.io.IOException;
 import java.nio.channels.NetworkChannel;
@@ -19,6 +20,7 @@ public class ServerConnectionFactory extends FrontendConnectionFactory {
     @Override
     protected FrontendConnection getConnection(NetworkChannel channel, SocketWR socketWR) throws IOException {
         FrontendConnection c = new FrontendConnection(channel, socketWR);
+        c.setService(new MySQLFrontAuthService(c));
         return c;
     }
 

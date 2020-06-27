@@ -4,6 +4,7 @@ import com.actiontech.dble.config.Capabilities;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.model.SystemConfig;
 import com.actiontech.dble.config.model.user.UserConfig;
+import newcommon.proto.handler.Impl.MySQLProtoHandlerImpl;
 import newcommon.proto.mysql.packet.*;
 import newcommon.service.AuthResultInfo;
 import newcommon.service.AuthService;
@@ -37,6 +38,7 @@ public class MySQLFrontAuthService extends AuthService {
 
     public MySQLFrontAuthService(AbstractConnection connection) {
         super(connection);
+        this.proto =  new MySQLProtoHandlerImpl();
         SystemConfig.getInstance().getFakeMySQLVersion();
         //如果是5.7 或者之前的版本，就是用NATIVE的插件
         plugin = new NativePwd(connection);

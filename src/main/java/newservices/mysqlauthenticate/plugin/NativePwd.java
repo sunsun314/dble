@@ -28,6 +28,7 @@ public class NativePwd extends MySQLAuthPlugin {
 
     @Override
     public PluginName handleData(byte[] data) {
+        //这个地方还没有来得及写验证的方法，所以返回的信息会有问题
         return null;
     }
 

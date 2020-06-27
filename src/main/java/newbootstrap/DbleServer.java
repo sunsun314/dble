@@ -23,6 +23,7 @@ import com.actiontech.dble.config.model.TableConfig;
 import com.actiontech.dble.config.util.ConfigUtil;
 import com.actiontech.dble.log.transaction.TxnLogProcessor;
 import com.actiontech.dble.meta.ProxyMetaManager;
+import com.actiontech.dble.net.handler.FrontendCommandHandler;
 import com.actiontech.dble.net.mysql.WriteToBackendTask;
 import com.actiontech.dble.server.status.SlowQueryLog;
 import com.actiontech.dble.server.variables.SystemVariables;
@@ -201,7 +202,7 @@ public final class DbleServer {
         LOGGER.info("===================================flow controller finish===================================");
 
         LOGGER.info("==============================Pull metaData from MySQL start======================================");
-        pullVarAndMeta();
+        //pullVarAndMeta();
         LOGGER.info("==============================Pull metaData from MySQL finish=====================================");
 
 
@@ -223,7 +224,7 @@ public final class DbleServer {
         LOGGER.info(server.getName() + " is started and listening on " + server.getPort());
         LOGGER.info("=====================================Server started success=======================================");
 
-        Scheduler.getInstance().init(timerExecutor);
+        //Scheduler.getInstance().init(timerExecutor);
         LOGGER.info("=======================================Scheduler started==========================================");
 
         CronScheduler.getInstance().init(config.getSchemas());
@@ -326,6 +327,10 @@ public final class DbleServer {
             i = nextBackendProcessor = 0;
         }
         return backendProcessors[i];
+    }
+
+    public Queue<ServiceTask> getFrontHandlerQueue() {
+        return frontHandlerQueue;
     }
 
     public BlockingQueue<List<WriteToBackendTask>> getWriteToBackendQueue() {

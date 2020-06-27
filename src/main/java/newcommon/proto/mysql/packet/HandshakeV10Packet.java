@@ -98,6 +98,7 @@ public class HandshakeV10Packet extends MySQLPacket {
         }
         BufferUtil.writeWithNull(buffer, authPluginName);
         //return c.registerWrite(buffer);
+        c.write(buffer);
     }
 
     @Override
