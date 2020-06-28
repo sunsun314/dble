@@ -1,6 +1,7 @@
 package newservices.mysqlauthenticate.plugin;
 
 import newcommon.service.AuthResultInfo;
+import newnet.connection.AbstractConnection;
 import newservices.mysqlauthenticate.PluginName;
 
 /**
@@ -8,6 +9,14 @@ import newservices.mysqlauthenticate.PluginName;
  */
 public class CachingSHA2Pwd extends MySQLAuthPlugin {
 
+
+    public CachingSHA2Pwd(AbstractConnection connection) {
+        super(connection);
+    }
+
+    public CachingSHA2Pwd(MySQLAuthPlugin plugin) {
+        super(plugin);
+    }
 
     @Override
     public boolean verify() {

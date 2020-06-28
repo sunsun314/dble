@@ -13,6 +13,7 @@ import com.actiontech.dble.buffer.BufferPool;
 import com.actiontech.dble.net.FrontendConnection;
 import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.singleton.BufferPoolManager;
+import newnet.connection.AbstractConnection;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -88,9 +89,9 @@ public class RowDataPacket extends MySQLPacket {
     }
 
     @Override
-    public ByteBuffer write(ByteBuffer bb, FrontendConnection c,
+    public ByteBuffer write(ByteBuffer bb, AbstractConnection c,
                             boolean writeSocketIfFull) {
-        int size = calcPacketSize();
+       /* int size = calcPacketSize();
         int totalSize = size + PACKET_HEADER_SIZE;
         boolean isBigPackage = size >= MySQLPacket.MAX_PACKET_SIZE;
         if (isBigPackage) {
@@ -127,7 +128,8 @@ public class RowDataPacket extends MySQLPacket {
                 ((ServerConnection) c).getSession2().getPacketId().set(packetId);
             }
             return bb;
-        }
+        }*/
+        return null;
     }
 
     private void writeBody(ByteBuffer buffer) {

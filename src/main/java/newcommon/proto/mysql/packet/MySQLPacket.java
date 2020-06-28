@@ -5,7 +5,7 @@
 */
 package newcommon.proto.mysql.packet;
 
-import com.actiontech.dble.net.FrontendConnection;
+import newcommon.service.AbstractService;
 import newnet.connection.AbstractConnection;
 
 import java.nio.ByteBuffer;
@@ -182,11 +182,19 @@ public abstract class MySQLPacket {
     /**
      * write to buffer ,if writeSocketIfFull write the buffer data to FrontendConnection
      */
-    public ByteBuffer write(ByteBuffer buffer, FrontendConnection c, boolean writeSocketIfFull) {
+    public ByteBuffer write(ByteBuffer buffer, AbstractConnection c, boolean writeSocketIfFull) {
         throw new UnsupportedOperationException();
     }
 
+    public ByteBuffer write(ByteBuffer buffer, AbstractService service, boolean writeSocketIfFull) {
+        return this.write(buffer, service.getConnection(), writeSocketIfFull);
+    }
+
     public void write(AbstractConnection c) {
+
+    }
+
+    public void write(AbstractService service) {
 
     }
 

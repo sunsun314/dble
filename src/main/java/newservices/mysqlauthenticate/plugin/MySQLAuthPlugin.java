@@ -2,19 +2,33 @@ package newservices.mysqlauthenticate.plugin;
 
 import com.actiontech.dble.config.Capabilities;
 import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.net.mysql.AuthPacket;
+import newcommon.proto.mysql.packet.AuthPacket;
 import newcommon.service.AuthResultInfo;
+import newnet.connection.AbstractConnection;
 import newservices.mysqlauthenticate.PluginName;
+
 
 /**
  * Created by szf on 2020/6/18.
  */
 public abstract class MySQLAuthPlugin {
 
-    private byte[] seed;
+    protected byte[] seed;
     private boolean authSwitch;
+    protected final AbstractConnection connection;
+    protected AuthResultInfo info;
+    protected AuthPacket authPacket;
 
-    private AuthPacket authPacket;
+    MySQLAuthPlugin(AbstractConnection connection) {
+        this.connection = connection;
+    }
+
+    public MySQLAuthPlugin(MySQLAuthPlugin plugin){
+        this.seed  = plugin.seed;
+        this.authPacket = plugin.authPacket;
+        this.connection  = plugin.connection;
+    }
+
 
     public abstract boolean verify();
 
@@ -26,7 +40,9 @@ public abstract class MySQLAuthPlugin {
 
     public abstract PluginName getName();
 
-    public abstract AuthResultInfo getInfo();
+    public AuthResultInfo getInfo(){
+        return info;
+    }
 
     public byte[] getSeed() {
         return seed;

@@ -8,7 +8,7 @@ package newcommon.proto.mysql.packet;
 import com.actiontech.dble.backend.mysql.BufferUtil;
 import com.actiontech.dble.backend.mysql.StreamUtil;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.net.FrontendConnection;
+import newnet.connection.AbstractConnection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,8 +55,7 @@ public class BinaryPacket extends MySQLPacket {
         return publicKey;
     }
 
-    @Override
-    public ByteBuffer write(ByteBuffer buffer, FrontendConnection c, boolean writeSocketIfFull) {
+    public ByteBuffer write(ByteBuffer buffer, AbstractConnection c, boolean writeSocketIfFull) {
         buffer = c.checkWriteBuffer(buffer, PACKET_HEADER_SIZE, writeSocketIfFull);
         BufferUtil.writeUB3(buffer, calcPacketSize());
         buffer.put(packetId);

@@ -221,12 +221,31 @@ public abstract class AbstractConnection implements Connection {
         return buffer;
     }
 
+    public ByteBuffer checkWriteBuffer(ByteBuffer buffer, int capacity, boolean writeSocketIfFull) {
+        if (capacity > buffer.remaining()) {
+            if (writeSocketIfFull) {
+                writePart(buffer);
+                return processor.getBufferPool().allocate(capacity);
+            } else { // Relocate a larger buffer
+                buffer.flip();
+                ByteBuffer newBuf = processor.getBufferPool().allocate(capacity + buffer.limit() + 1);
+                newBuf.put(buffer);
+                this.recycle(buffer);
+                return newBuf;
+            }
+        } else {
+            return buffer;
+        }
+    }
+
+
     public void writePart(ByteBuffer buffer) {
         write(buffer);
     }
 
     public void write(byte[] data) {
-
+        //todo 补全这个部分的方法内容
+         ByteBuffer buffer = this.allocate();
     }
 
     public void write(ByteBuffer buffer) {

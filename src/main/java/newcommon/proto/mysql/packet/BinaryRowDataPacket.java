@@ -9,10 +9,9 @@ package newcommon.proto.mysql.packet;
 import com.actiontech.dble.backend.mysql.BufferUtil;
 import com.actiontech.dble.buffer.BufferPool;
 import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.util.ByteUtil;
 import com.actiontech.dble.util.DateUtil;
+import newnet.connection.AbstractConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -227,21 +226,21 @@ public class BinaryRowDataPacket extends MySQLPacket {
 
     }
 
-    public void write(FrontendConnection conn) {
+    public void write(AbstractConnection conn) {
 
-        int size = calcPacketSize();
+       /* int size = calcPacketSize();
         int totalSize = size + PACKET_HEADER_SIZE;
         ByteBuffer bb = conn.getProcessor().getBufferPool().allocate(totalSize);
         BufferUtil.writeUB3(bb, size);
         bb.put(packetId);
         writeBody(bb);
-        conn.write(bb);
+        conn.write(bb);*/
     }
 
     @Override
-    public ByteBuffer write(ByteBuffer bb, FrontendConnection c,
+    public ByteBuffer write(ByteBuffer bb, AbstractConnection c,
                             boolean writeSocketIfFull) {
-        int size = calcPacketSize();
+        /*int size = calcPacketSize();
         int totalSize = size + PACKET_HEADER_SIZE;
         boolean isBigPackage = size >= MySQLPacket.MAX_PACKET_SIZE;
         if (isBigPackage) {
@@ -259,11 +258,12 @@ public class BinaryRowDataPacket extends MySQLPacket {
             BufferUtil.writeUB3(bb, size);
             bb.put(packetId);
             writeBody(bb);
-            if (c instanceof ServerConnection) {
+            *//*if (c instanceof ServerConnection) {
                 ((ServerConnection) c).getSession2().getPacketId().set(packetId);
-            }
+            }*//*
             return bb;
-        }
+        }*/
+        return null;
     }
 
     private void writeBody(ByteBuffer bb) {

@@ -5,6 +5,8 @@
 */
 package newcommon.proto.mysql.packet;
 
+import newnet.connection.AbstractConnection;
+
 /**
  * @author mycat
  */

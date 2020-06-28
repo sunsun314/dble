@@ -23,7 +23,6 @@ import com.actiontech.dble.config.model.TableConfig;
 import com.actiontech.dble.config.util.ConfigUtil;
 import com.actiontech.dble.log.transaction.TxnLogProcessor;
 import com.actiontech.dble.meta.ProxyMetaManager;
-import com.actiontech.dble.net.handler.FrontendCommandHandler;
 import com.actiontech.dble.net.mysql.WriteToBackendTask;
 import com.actiontech.dble.server.status.SlowQueryLog;
 import com.actiontech.dble.server.variables.SystemVariables;
@@ -42,8 +41,8 @@ import newnet.SocketConnector;
 import newnet.impl.nio.NIOAcceptor;
 import newnet.impl.nio.NIOConnector;
 import newnet.impl.nio.NIOReactorPool;
-import newservices.manager.factory.ManagerConnectionFactory;
-import newservices.mysqlsharding.factory.ServerConnectionFactory;
+import newservices.factorys.ManagerConnectionFactory;
+import newservices.factorys.ServerConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

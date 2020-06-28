@@ -10,6 +10,7 @@ import com.actiontech.dble.backend.mysql.MySQLMessage;
 import com.actiontech.dble.net.FrontendConnection;
 import com.actiontech.dble.net.mysql.StatusFlags;
 import com.actiontech.dble.singleton.BufferPoolManager;
+import newnet.connection.AbstractConnection;
 
 import java.nio.ByteBuffer;
 
@@ -51,7 +52,7 @@ public class EOFPacket extends MySQLPacket {
     }
 
     @Override
-    public ByteBuffer write(ByteBuffer buffer, FrontendConnection c, boolean writeSocketIfFull) {
+    public ByteBuffer write(ByteBuffer buffer, AbstractConnection c, boolean writeSocketIfFull) {
         int size = calcPacketSize();
         buffer = c.checkWriteBuffer(buffer, PACKET_HEADER_SIZE + size, writeSocketIfFull);
         BufferUtil.writeUB3(buffer, size);

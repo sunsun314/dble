@@ -6,5 +6,6 @@ package newservices.mysqlauthenticate;
 public enum PluginName {
     caching_sha2_password,
     mysql_native_password,
-    plugin_same_with_default
+    plugin_same_with_default,
+    unsupport_plugin
 }

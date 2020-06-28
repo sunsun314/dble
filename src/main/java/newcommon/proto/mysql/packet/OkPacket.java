@@ -12,6 +12,7 @@ import com.actiontech.dble.net.mysql.StatusFlags;
 import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.singleton.BufferPoolManager;
 import com.actiontech.dble.singleton.SerializableLock;
+import newnet.connection.AbstractConnection;
 
 import java.nio.ByteBuffer;
 
@@ -73,7 +74,13 @@ public class OkPacket extends MySQLPacket {
         }
     }
 
-    public ByteBuffer write(ByteBuffer buffer, FrontendConnection c) {
+
+    public void write(AbstractConnection c) {
+        ByteBuffer buffer = write(c.allocate(), c);
+        c.write(buffer);
+    }
+
+    public ByteBuffer write(ByteBuffer buffer, AbstractConnection c) {
 
         int size = calcPacketSize();
         buffer = c.checkWriteBuffer(buffer, PACKET_HEADER_SIZE + size,
@@ -88,17 +95,7 @@ public class OkPacket extends MySQLPacket {
         if (message != null) {
             BufferUtil.writeWithLength(buffer, message);
         }
-
         return buffer;
-
-    }
-
-    public void write(FrontendConnection c) {
-        if (c instanceof ServerConnection) {
-            SerializableLock.getInstance().unLock(c.getId());
-        }
-        ByteBuffer buffer = write(c.allocate(), c);
-        c.write(buffer);
     }
 
 

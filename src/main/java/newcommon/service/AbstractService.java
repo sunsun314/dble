@@ -1,6 +1,5 @@
 package newcommon.service;
 
-import com.actiontech.dble.util.StringUtil;
 import newbootstrap.DbleServer;
 import newcommon.proto.handler.ProtoHandler;
 import newcommon.proto.handler.ProtoHandlerResult;
@@ -21,6 +20,7 @@ public abstract class AbstractService implements Service {
     protected volatile ProtoHandler proto;
 
     private final AtomicBoolean executing = new AtomicBoolean(false);
+
 
     protected final AbstractConnection connection;
 
@@ -87,7 +87,9 @@ public abstract class AbstractService implements Service {
         }
     }
 
-    public abstract void register() throws IOException;
+    public void register() throws IOException {
+
+    }
 
     public abstract void handleData(ServiceTask task);
 
@@ -95,16 +97,22 @@ public abstract class AbstractService implements Service {
         return ++packetId;
     }
 
-    public void writeErrMessage(int vendorCode, String msg) {
-        writeErrMessage(vendorCode, "HY000", msg);
+    public void setPacketId(int packetId) {
+        this.packetId = packetId;
     }
 
-    protected void writeErrMessage(int vendorCode, String sqlState, String msg) {
-        ErrorPacket err = new ErrorPacket();
-        err.setPacketId(nextPacketId());
-        err.setErrNo(vendorCode);
-        //err.setSqlState(StringUtil.encode(sqlState, charsetName.getResults()));
-        //err.setMessage(StringUtil.encode(msg, charsetName.getResults()));
-        err.write(connection);
+    public AbstractConnection getConnection() {
+        return connection;
     }
+
+    public ByteBuffer allocate() {
+        return this.connection.allocate();
+    }
+
+    public void write(ByteBuffer buffer) {
+        this.connection.write(buffer);
+    }
+
+
+
 }
