@@ -11,8 +11,6 @@ import com.actiontech.dble.backend.datasource.PhysicalDbGroup;
 import com.actiontech.dble.backend.datasource.PhysicalDbInstance;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.route.parser.ManagerParseSelect;
-import com.actiontech.dble.server.response.SelectVersionComment;
-import com.actiontech.dble.sqlengine.TransformSQLJob;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
@@ -25,6 +23,7 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlSelectQueryBlock;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import newservices.manager.ManagerService;
+import newservices.manager.TransformSQLJob;
 import newservices.manager.response.*;
 
 import java.util.Iterator;

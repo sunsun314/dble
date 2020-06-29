@@ -1,7 +1,6 @@
 package newservices.manager.response;
 
 import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.backend.datasource.check.GlobalCheckJob;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.Fields;
 import com.actiontech.dble.config.model.SchemaConfig;
@@ -11,6 +10,7 @@ import com.actiontech.dble.util.StringUtil;
 import newcommon.proto.mysql.packet.*;
 import newcommon.proto.mysql.util.PacketUtil;
 import newservices.manager.ManagerService;
+import newservices.mysqlsharding.GlobalCheckJob;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

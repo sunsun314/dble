@@ -13,7 +13,6 @@ import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.route.parser.ManagerParseShow;
 import com.actiontech.dble.server.status.SlowQueryLog;
 import com.actiontech.dble.singleton.CustomMySQLHa;
-import com.actiontech.dble.sqlengine.TransformSQLJob;
 import com.actiontech.dble.util.StringUtil;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlShowVariantsStatement;
@@ -21,6 +20,7 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlShowWarningsStatem
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import newservices.manager.ManagerService;
+import newservices.manager.TransformSQLJob;
 import newservices.manager.response.*;
 
 import java.util.Iterator;

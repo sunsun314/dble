@@ -113,6 +113,10 @@ public abstract class AbstractService implements Service {
         this.connection.write(buffer);
     }
 
+    public void write(byte[] data) {
+        this.connection.write(data);
+    }
+
 
 
 }
