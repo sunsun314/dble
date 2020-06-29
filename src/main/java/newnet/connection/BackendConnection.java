@@ -8,7 +8,7 @@ import java.nio.channels.NetworkChannel;
 /**
  * Created by szf on 2020/6/23.
  */
-public class BackendConnection extends AbstractConnection{
+public class BackendConnection extends  PooledConnection {
 
     public BackendConnection(NetworkChannel channel, SocketWR socketWR) {
         super(channel, socketWR);
@@ -35,6 +35,41 @@ public class BackendConnection extends AbstractConnection{
     }
 
     public void onConnectFailed(Throwable e){
+
+    }
+
+    @Override
+    public boolean compareAndSet(int expect, int update) {
+        return false;
+    }
+
+    @Override
+    public void lazySet(int update) {
+
+    }
+
+    @Override
+    public int getState() {
+        return 0;
+    }
+
+    @Override
+    public void release() {
+
+    }
+
+    @Override
+    public void asynchronousTest() {
+
+    }
+
+    @Override
+    public void synchronousTest() {
+
+    }
+
+    @Override
+    public void closePooldestroyed(String reason) {
 
     }
 }

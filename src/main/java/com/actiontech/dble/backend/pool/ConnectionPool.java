@@ -6,6 +6,7 @@ import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnectionListener;
 import com.actiontech.dble.backend.mysql.nio.handler.ConnectionHeartBeatHandler;
 import com.actiontech.dble.config.model.db.DbInstanceConfig;
+import com.actiontech.dble.config.model.db.PoolConfig;
 import com.actiontech.dble.net.NIOProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

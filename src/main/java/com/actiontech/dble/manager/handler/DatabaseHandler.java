@@ -10,8 +10,8 @@ import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;
 import com.actiontech.dble.alarm.ToResolveContainer;
-import com.actiontech.dble.backend.datasource.ShardingNode;
 import com.actiontech.dble.backend.datasource.PhysicalDbInstance;
+import com.actiontech.dble.backend.datasource.ShardingNode;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.net.mysql.OkPacket;
@@ -72,7 +72,7 @@ public final class DatabaseHandler {
         final AtomicInteger numberCount = new AtomicInteger(shardingNodes.size());
         for (final String shardingNode : shardingNodes) {
             ShardingNode dn = allShardingNodes.get(shardingNode);
-            final PhysicalDbInstance ds = dn.getDbGroup().getWriteSource();
+            final PhysicalDbInstance ds = dn.getDbGroup().getWriteDbInstance();
             final String schema = dn.getDatabase();
             OneRawSQLQueryResultHandler resultHandler = new OneRawSQLQueryResultHandler(new String[0], new SQLQueryResultListener<SQLQueryResult<Map<String, String>>>() {
                 @Override

@@ -7,11 +7,8 @@ package newcommon.proto.mysql.packet;
 
 import com.actiontech.dble.backend.mysql.BufferUtil;
 import com.actiontech.dble.backend.mysql.MySQLMessage;
-import com.actiontech.dble.net.FrontendConnection;
 import com.actiontech.dble.net.mysql.StatusFlags;
-import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.singleton.BufferPoolManager;
-import com.actiontech.dble.singleton.SerializableLock;
 import newnet.connection.AbstractConnection;
 
 import java.nio.ByteBuffer;

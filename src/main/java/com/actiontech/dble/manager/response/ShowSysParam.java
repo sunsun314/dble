@@ -94,8 +94,8 @@ public final class ShowSysParam {
         paramValues.add(new ParamInfo("bindIp", sysConfig.getBindIp() + "", "The host where the server is running. The default is 0.0.0.0"));
         paramValues.add(new ParamInfo("serverPort", sysConfig.getServerPort() + "", "User connection port. The default number is 8066"));
         paramValues.add(new ParamInfo("managerPort", sysConfig.getManagerPort() + "", "Manager connection port. The default number is 9066"));
-        paramValues.add(new ParamInfo("processors", sysConfig.getProcessors() + "", "The size of frontend IOProcessor, the default value is the number of processors available to the Java virtual machine"));
-        paramValues.add(new ParamInfo("backendProcessors", sysConfig.getBackendProcessors() + "", "The size of backend IOProcessor, the default value is the number of processors available to the Java virtual machine"));
+        paramValues.add(new ParamInfo("processors", sysConfig.getProcessors() + "", "The size of frontend NIOProcessor, the default value is the number of processors available to the Java virtual machine"));
+        paramValues.add(new ParamInfo("backendProcessors", sysConfig.getBackendProcessors() + "", "The size of backend NIOProcessor, the default value is the number of processors available to the Java virtual machine"));
         paramValues.add(new ParamInfo("processorExecutor", sysConfig.getProcessorExecutor() + "", "The size of fixed thread pool named of frontend businessExecutor,the default value is the number of processors available to the Java virtual machine * 2"));
         paramValues.add(new ParamInfo("backendProcessorExecutor", sysConfig.getBackendProcessorExecutor() + "", "The size of fixed thread pool named of backend businessExecutor,the default value is the number of processors available to the Java virtual machine * 2"));
         paramValues.add(new ParamInfo("complexExecutor", sysConfig.getComplexExecutor() + "", "The size of fixed thread pool named of writeToBackendExecutor,the default is the number of processors available to the Java virtual machine * 2"));
@@ -115,10 +115,7 @@ public final class ShowSysParam {
         paramValues.add(new ParamInfo("autocommit", sysConfig.getAutocommit() + "", "The initially autocommit value.The default value is 1"));
         paramValues.add(new ParamInfo("checkTableConsistency", sysConfig.getCheckTableConsistency() + "", "Whether the consistency tableStructure check is enabled.The default value is 0"));
         paramValues.add(new ParamInfo("checkTableConsistencyPeriod", sysConfig.getCheckTableConsistencyPeriod() + "ms", "The period of consistency tableStructure check .The default value is 30*60*1000"));
-        paramValues.add(new ParamInfo("shardingNodeIdleCheckPeriod", sysConfig.getShardingNodeIdleCheckPeriod() / 1000 + " Seconds", "The period between the heartbeat jobs for checking the health of all idle connections. The default is 300 seconds"));
-        paramValues.add(new ParamInfo("shardingNodeHeartbeatPeriod", sysConfig.getShardingNodeHeartbeatPeriod() / 1000 + " Seconds", "The period between the heartbeat jobs for checking the health of all dbInstances. The default is 10 seconds"));
         paramValues.add(new ParamInfo("processorCheckPeriod", sysConfig.getProcessorCheckPeriod() / 1000 + " Seconds", "The period between the jobs for cleaning the closed or overtime connections. The default is 1 second"));
-        paramValues.add(new ParamInfo("idleTimeout", sysConfig.getIdleTimeout() / 1000 / 60 + " Minutes", "The max allowed time of idle connection. The connection will be closed if it is timed out after last read/write/heartbeat.The default is 30 minutes"));
         paramValues.add(new ParamInfo("sqlExecuteTimeout", sysConfig.getSqlExecuteTimeout() + " Seconds", "The max query executing time.If time out,the connection will be closed. The default is 300 seconds"));
         paramValues.add(new ParamInfo("recordTxn", sysConfig.getRecordTxn() + "", "Whether the transaction be recorded as a file,The default value is 0"));
         paramValues.add(new ParamInfo("transactionLogBaseDir", sysConfig.getTransactionLogBaseDir(), "The directory of the transaction record file,The default value is ./txlogs"));

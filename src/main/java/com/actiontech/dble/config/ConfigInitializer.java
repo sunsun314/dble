@@ -1,8 +1,8 @@
 /*
-* Copyright (C) 2016-2020 ActionTech.
-* based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
-*/
+ * Copyright (C) 2016-2020 ActionTech.
+ * based on code by MyCATCopyrightHolder Copyright (c) 2013, OpenCloudDB/MyCAT.
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher.
+ */
 package com.actiontech.dble.config;
 
 import com.actiontech.dble.backend.datasource.PhysicalDbGroup;
@@ -13,8 +13,13 @@ import com.actiontech.dble.config.helper.TestTask;
 import com.actiontech.dble.config.loader.xml.XMLDbLoader;
 import com.actiontech.dble.config.loader.xml.XMLShardingLoader;
 import com.actiontech.dble.config.loader.xml.XMLUserLoader;
-import com.actiontech.dble.config.model.*;
+import com.actiontech.dble.config.model.ClusterConfig;
+import com.actiontech.dble.config.model.SystemConfig;
+import com.actiontech.dble.config.model.sharding.SchemaConfig;
+import com.actiontech.dble.config.model.sharding.ShardingNodeConfig;
+import com.actiontech.dble.config.model.sharding.table.ERTable;
 import com.actiontech.dble.config.model.user.UserConfig;
+import com.actiontech.dble.config.model.user.UserName;
 import com.actiontech.dble.config.util.ConfigException;
 import com.actiontech.dble.plan.common.ptr.BoolPtr;
 import com.actiontech.dble.route.parser.util.Pair;
@@ -31,7 +36,7 @@ public class ConfigInitializer implements ProblemReporter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigInitializer.class);
 
-    private volatile Map<Pair<String, String>, UserConfig> users;
+    private volatile Map<UserName, UserConfig> users;
     private volatile Map<String, SchemaConfig> schemas;
     private volatile Map<String, ShardingNode> shardingNodes;
     private volatile Map<String, PhysicalDbGroup> dbGroups;
@@ -80,22 +85,21 @@ public class ConfigInitializer implements ProblemReporter {
     private void checkWriteHost() {
         if (this.dbGroups.isEmpty()) {
             return;
-        } else {
-            //Mark all dbInstance whether they are fake or not
-            for (PhysicalDbGroup dbGroup : this.dbGroups.values()) {
-                for (PhysicalDbInstance source : dbGroup.getAllDbInstances()) {
-                    if (checkSourceFake(source)) {
-                        source.setFakeNode(true);
-                    } else if (!source.isDisabled()) {
-                        this.fullyConfigured = true;
-                    }
+        }
+        //Mark all dbInstance whether they are fake or not
+        for (PhysicalDbGroup dbGroup : this.dbGroups.values()) {
+            for (PhysicalDbInstance source : dbGroup.getAllDbInstances()) {
+                if (checkSourceFake(source)) {
+                    source.setFakeNode(true);
+                } else if (!source.isDisabled()) {
+                    this.fullyConfigured = true;
                 }
             }
-            // if there are dbGroups exists. no empty shardingNodes allowed
-            for (ShardingNode shardingNode : this.shardingNodes.values()) {
-                if (shardingNode.getDbGroup() == null) {
-                    throw new ConfigException("dbGroup not exists " + shardingNode.getDbGroupName());
-                }
+        }
+        // if there are dbGroups exists. no empty shardingNodes allowed
+        for (ShardingNode shardingNode : this.shardingNodes.values()) {
+            if (shardingNode.getDbGroup() == null) {
+                throw new ConfigException("dbGroup not exists " + shardingNode.getDbGroupName());
             }
         }
     }
@@ -233,7 +237,7 @@ public class ConfigInitializer implements ProblemReporter {
 
     private void testDbInstance(Set<String> errNodeKeys, Set<String> errSourceKeys, BoolPtr isConnectivity,
                                 BoolPtr isAllDbInstanceConnected, List<Pair<String, String>> nodeList, PhysicalDbGroup pool, PhysicalDbInstance ds) {
-        boolean isMaster = ds == pool.getWriteSource();
+        boolean isMaster = ds == pool.getWriteDbInstance();
         String dbInstanceName = "dbInstance[" + ds.getDbGroupConfig().getName() + "." + ds.getName() + "]";
         try {
             BoolPtr isDSConnectedPtr = new BoolPtr(false);
@@ -296,7 +300,7 @@ public class ConfigInitializer implements ProblemReporter {
     }
 
 
-    public Map<Pair<String, String>, UserConfig> getUsers() {
+    public Map<UserName, UserConfig> getUsers() {
         return users;
     }
 
@@ -315,8 +319,6 @@ public class ConfigInitializer implements ProblemReporter {
     public Map<ERTable, Set<ERTable>> getErRelations() {
         return erRelations;
     }
-
-
 
     private Map<String, ShardingNode> initShardingNodes(Map<String, ShardingNodeConfig> nodeConf) {
         Map<String, ShardingNode> nodes = new HashMap<>(nodeConf.size());

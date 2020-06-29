@@ -14,6 +14,7 @@ import com.actiontech.dble.statistic.CommandCount;
 import com.actiontech.dble.util.TimeUtil;
 import newnet.connection.AbstractConnection;
 import newnet.connection.FrontendConnection;
+import newnet.connection.PooledConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public final class IOProcessor {
     private long netOutBytes;
 
     // after reload @@config_all ,old back ends connections stored in backends_old
-    public static final ConcurrentLinkedQueue<BackendConnection> BACKENDS_OLD = new ConcurrentLinkedQueue<>();
+    public static final ConcurrentLinkedQueue<PooledConnection> BACKENDS_OLD = new ConcurrentLinkedQueue<>();
 
     private AtomicInteger frontEndsLength = new AtomicInteger(0);
 
@@ -191,11 +192,13 @@ public final class IOProcessor {
                     continue;
                 }
             }
-            // close the conn which executeTimeOut
+
+            //todo 空闲检查需要重新写一套
+           /* // close the conn which executeTimeOut
             if (!c.isDDL() && c.isBorrowed() && c.isExecuting() && c.getLastTime() < TimeUtil.currentTimeMillis() - sqlTimeout) {
                 LOGGER.info("found backend connection SQL timeout ,close it " + c);
                 c.close("sql timeout");
-            }
+            }*/
 
             // clean closed conn or check time out
             if (c.isClosed()) {

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.NetworkChannel;
+import java.util.Comparator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**

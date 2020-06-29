@@ -29,6 +29,7 @@ public class ManagerService extends MySQLBasedService {
 
     @Override
     protected void handleInnerData(byte[] data) {
+        //todo real business for manager user
 
     }
 

@@ -29,9 +29,9 @@ import com.actiontech.dble.cluster.zkprocess.zookeeper.process.DDLInfo;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.ServerConfig;
 import com.actiontech.dble.config.model.ClusterConfig;
-import com.actiontech.dble.config.model.SchemaConfig;
 import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.config.model.TableConfig;
+import com.actiontech.dble.config.model.sharding.SchemaConfig;
+import com.actiontech.dble.config.model.sharding.table.BaseTableConfig;
 import com.actiontech.dble.meta.table.AbstractSchemaMetaHandler;
 import com.actiontech.dble.meta.table.DDLNotifyTableMetaHandler;
 import com.actiontech.dble.meta.table.SchemaCheckMetaHandler;
@@ -331,7 +331,7 @@ public class ProxyMetaManager {
                 times++;
             }
             DistributeLock lock;
-            if (ClusterConfig.getInstance().isUseZK()) {
+            if (ClusterConfig.getInstance().useZkMode()) {
                 lock = new ZkDistributeLock(ClusterPathUtil.getSyncMetaLockPath(), String.valueOf(System.currentTimeMillis()));
             } else {
                 lock = new ClusterGeneralDistributeLock(ClusterPathUtil.getSyncMetaLockPath(), String.valueOf(System.currentTimeMillis()));
@@ -351,7 +351,7 @@ public class ProxyMetaManager {
 
     private void releaseSyncMetaLock() throws Exception {
         if (ClusterConfig.getInstance().isClusterEnable()) {
-            if (ClusterConfig.getInstance().isUseZK()) {
+            if (ClusterConfig.getInstance().useZkMode()) {
                 //add watcher
                 ZKUtils.addChildPathCache(ClusterPathUtil.getDDLPath(), new DDLChildListener());
                 //add tow ha status && ha lock watcher
@@ -369,7 +369,7 @@ public class ProxyMetaManager {
 
     private void initViewMeta() {
         if (ClusterConfig.getInstance().isClusterEnable()) {
-            if (ClusterConfig.getInstance().isUseZK()) {
+            if (ClusterConfig.getInstance().useZkMode()) {
                 loadViewFromKV();
             } else {
                 loadViewFromCKV();
@@ -520,9 +520,9 @@ public class ProxyMetaManager {
                 continue;
             }
             Map<String, Set<String>> shardingNodeMap = new HashMap<>();
-            for (Map.Entry<String, TableConfig> entry : schema.getTables().entrySet()) {
+            for (Map.Entry<String, BaseTableConfig> entry : schema.getTables().entrySet()) {
                 String tableName = entry.getKey();
-                TableConfig tbConfig = entry.getValue();
+                BaseTableConfig tbConfig = entry.getValue();
                 for (String shardingNode : tbConfig.getShardingNodes()) {
                     Set<String> tables = shardingNodeMap.computeIfAbsent(shardingNode, k -> new HashSet<>());
                     tables.add(tableName);
@@ -557,7 +557,7 @@ public class ProxyMetaManager {
             String tableDDLPath = ClusterPathUtil.getDDLPath(tableFullName);
             String ddlLockPath = ClusterPathUtil.getDDLLockPath(tableFullName);
             DistributeLock lock;
-            if (ClusterConfig.getInstance().isUseZK()) {
+            if (ClusterConfig.getInstance().useZkMode()) {
                 lock = new ZkDistributeLock(ddlLockPath, ddlInfo.toString());
             } else {
                 lock = new ClusterGeneralDistributeLock(ddlLockPath, ddlInfo.toString());
@@ -576,7 +576,7 @@ public class ProxyMetaManager {
     public void notifyResponseClusterDDL(String schema, String table, String sql, DDLInfo.DDLStatus ddlStatus, DDLInfo.DDLType ddlType, boolean needNotifyOther) throws Exception {
         ClusterDelayProvider.delayAfterDdlExecuted();
         if (ClusterConfig.getInstance().isClusterEnable()) {
-            if (ClusterConfig.getInstance().isUseZK()) {
+            if (ClusterConfig.getInstance().useZkMode()) {
                 notifyResponseZKDdl(schema, table, sql, ddlStatus, ddlType, needNotifyOther);
             } else {
                 notifyResponseUcoreDDL(schema, table, sql, ddlStatus, ddlType, needNotifyOther);
@@ -663,7 +663,7 @@ public class ProxyMetaManager {
         SchemaInfo schemaInfo = getSchemaInfo(schema, table);
         boolean result = isSuccess;
         if (isSuccess) {
-            TableConfig tbConfig = schemaInfo.getSchemaConfig().getTables().get(table);
+            BaseTableConfig tbConfig = schemaInfo.getSchemaConfig().getTables().get(table);
             String showShardingNode = schemaInfo.getSchemaConfig().getShardingNode();
             if (tbConfig != null) {
                 for (String shardingNode : tbConfig.getShardingNodes()) {
@@ -716,7 +716,7 @@ public class ProxyMetaManager {
 
     private boolean genTableMetaByShow(SchemaInfo schemaInfo) {
         String tableName = schemaInfo.getTable();
-        TableConfig tbConfig = schemaInfo.getSchemaConfig().getTables().get(tableName);
+        BaseTableConfig tbConfig = schemaInfo.getSchemaConfig().getTables().get(tableName);
         String showShardingNode = schemaInfo.getSchemaConfig().getShardingNode();
         if (tbConfig != null) {
             for (String shardingNode : tbConfig.getShardingNodes()) {

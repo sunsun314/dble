@@ -10,8 +10,8 @@ import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;
 import com.actiontech.dble.alarm.ToResolveContainer;
-import com.actiontech.dble.backend.datasource.ShardingNode;
 import com.actiontech.dble.backend.datasource.PhysicalDbInstance;
+import com.actiontech.dble.backend.datasource.ShardingNode;
 import com.actiontech.dble.meta.ReloadLogHelper;
 import com.actiontech.dble.sqlengine.MultiRowSQLQueryResultHandler;
 import com.actiontech.dble.sqlengine.MultiTablesMetaJob;
@@ -49,7 +49,7 @@ public abstract class GetTableMetaHandler {
             sbSql.append(SQL_SHOW_CREATE_TABLE.replace("{0}", table));
         }
         ShardingNode dn = DbleServer.getInstance().getConfig().getShardingNodes().get(shardingNode);
-        PhysicalDbInstance ds = dn.getDbGroup().getWriteSource();
+        PhysicalDbInstance ds = dn.getDbGroup().getWriteDbInstance();
         if (ds.isAlive()) {
             logger.info("dbInstance is alive start sqljob for shardingNode:" + shardingNode);
             MultiRowSQLQueryResultHandler resultHandler = new MultiRowSQLQueryResultHandler(MYSQL_SHOW_CREATE_TABLE_COLS, new TableStructureListener(shardingNode, tables, ds));

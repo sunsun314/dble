@@ -5,10 +5,6 @@
  */
 package newservices.manager;
 
-import com.actiontech.dble.config.ErrorCode;
-import newservices.manager.handler.*;
-import newservices.manager.parser.ManagerParse;
-import newservices.manager.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +24,8 @@ public class ManagerQueryHandler {
 
 
     public void query(String sql) {
+
+    } /*{
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(String.valueOf(service) + sql);
         }
@@ -119,6 +117,6 @@ public class ManagerQueryHandler {
             default:
                 service.writeErrMessage(ErrorCode.ER_YES, "Unsupported statement");
         }
-    }
+    }*/
 
 }

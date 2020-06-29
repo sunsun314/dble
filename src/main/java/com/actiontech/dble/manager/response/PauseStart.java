@@ -106,9 +106,9 @@ public final class PauseStart {
 
         } else {
             try {
-                /*if (PauseShardingNodeManager.getInstance().waitForCluster(c, beginTime, timeOut)) {
+                if (PauseShardingNodeManager.getInstance().waitForCluster(c, beginTime, timeOut)) {
                     OK.write(c);
-                }*/
+                }
             } catch (Exception e) {
                 LOGGER.warn(e.getMessage());
                 c.writeErrMessage(1003, e.getMessage());

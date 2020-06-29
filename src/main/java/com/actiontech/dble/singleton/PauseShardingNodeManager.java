@@ -6,15 +6,16 @@ package com.actiontech.dble.singleton;
 
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.BackendConnection;
-import com.actiontech.dble.cluster.general.ClusterGeneralDistributeLock;
 import com.actiontech.dble.cluster.ClusterHelper;
 import com.actiontech.dble.cluster.ClusterPathUtil;
+import com.actiontech.dble.cluster.general.ClusterGeneralDistributeLock;
 import com.actiontech.dble.cluster.general.kVtoXml.ClusterToXml;
 import com.actiontech.dble.cluster.zkprocess.zookeeper.process.PauseInfo;
 import com.actiontech.dble.config.model.ClusterConfig;
-import com.actiontech.dble.config.model.SchemaConfig;
 import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.config.model.TableConfig;
+import com.actiontech.dble.config.model.sharding.SchemaConfig;
+import com.actiontech.dble.config.model.sharding.table.BaseTableConfig;
+import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.meta.PauseEndThreadPool;
 import com.actiontech.dble.meta.SchemaMeta;
 import com.actiontech.dble.meta.TableMeta;
@@ -22,7 +23,6 @@ import com.actiontech.dble.plan.node.TableNode;
 import com.actiontech.dble.route.RouteResultset;
 import com.actiontech.dble.route.RouteResultsetNode;
 import com.actiontech.dble.server.ServerConnection;
-import newservices.manager.ManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,9 +99,9 @@ public final class PauseShardingNodeManager {
                 }
             } else {
                 SchemaConfig schemaConfig = entry.getValue();
-                for (Entry<String, TableConfig> tableEntry : schemaConfig.getTables().entrySet()) {
+                for (Entry<String, BaseTableConfig> tableEntry : schemaConfig.getTables().entrySet()) {
                     LOGGER.info("lock for schema " + entry.getValue().getName() + " table config ");
-                    TableConfig tableConfig = tableEntry.getValue();
+                    BaseTableConfig tableConfig = tableEntry.getValue();
                     for (String shardingNode : tableConfig.getShardingNodes()) {
                         if (shardingNodes.contains(shardingNode)) {
                             addToLockSet(entry.getKey(), tableEntry.getKey());
@@ -194,7 +194,7 @@ public final class PauseShardingNodeManager {
 
 
     public boolean clusterPauseNotic(String shardingNode, int timeOut, int queueLimit) {
-        if (ClusterConfig.getInstance().isClusterEnable() && !ClusterConfig.getInstance().isUseZK()) {
+        if (ClusterConfig.getInstance().isClusterEnable() && !ClusterConfig.getInstance().useZkMode()) {
             try {
                 uDistributeLock = new ClusterGeneralDistributeLock(ClusterPathUtil.getPauseShardingNodePath(),
                         new PauseInfo(SystemConfig.getInstance().getInstanceName(), shardingNode, PAUSE, timeOut, queueLimit).toString());
@@ -213,8 +213,8 @@ public final class PauseShardingNodeManager {
     }
 
 
-    public boolean waitForCluster(ManagerService service, long beginTime, long timeOut) throws Exception {
-        if (ClusterConfig.getInstance().isClusterEnable() && !ClusterConfig.getInstance().isUseZK()) {
+    public boolean waitForCluster(ManagerConnection c, long beginTime, long timeOut) throws Exception {
+        if (ClusterConfig.getInstance().isClusterEnable() && !ClusterConfig.getInstance().useZkMode()) {
             Map<String, String> expectedMap = ClusterToXml.getOnlineMap();
             StringBuffer sb = new StringBuffer();
             for (; ; ) {
@@ -223,14 +223,14 @@ public final class PauseShardingNodeManager {
                         return true;
                     } else {
                         LOGGER.info("wait for cluster error " + sb.toString());
-                        service.writeErrMessage(1003, sb.toString());
+                        c.writeErrMessage(1003, sb.toString());
                         return false;
                     }
                 } else if (System.currentTimeMillis() - beginTime > timeOut) {
                     LOGGER.info("wait for cluster timeout, try to resume the self & others");
                     PauseShardingNodeManager.getInstance().resume();
                     PauseShardingNodeManager.getInstance().resumeCluster();
-                    service.writeErrMessage(1003, "There are some node in cluster can't recycle backend");
+                    c.writeErrMessage(1003, "There are some node in cluster can't recycle backend");
                     return false;
                 }
             }
@@ -240,7 +240,7 @@ public final class PauseShardingNodeManager {
 
 
     public void resumeCluster() throws Exception {
-        if (ClusterConfig.getInstance().isClusterEnable() && !ClusterConfig.getInstance().isUseZK()) {
+        if (ClusterConfig.getInstance().isClusterEnable() && !ClusterConfig.getInstance().useZkMode()) {
             ClusterHelper.setKV(ClusterPathUtil.getPauseResumePath(),
                     new PauseInfo(SystemConfig.getInstance().getInstanceName(), " ", PauseInfo.RESUME, 0, 0).toString());
 

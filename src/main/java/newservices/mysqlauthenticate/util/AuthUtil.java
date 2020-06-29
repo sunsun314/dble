@@ -7,11 +7,7 @@ package newservices.mysqlauthenticate.util;
 
 import com.actiontech.dble.backend.mysql.SecurityUtil;
 import com.actiontech.dble.config.ErrorCode;
-import com.actiontech.dble.config.model.user.ManagerUserConfig;
-import com.actiontech.dble.config.model.user.RwSplitUserConfig;
-import com.actiontech.dble.config.model.user.ShardingUserConfig;
-import com.actiontech.dble.config.model.user.UserConfig;
-import com.actiontech.dble.route.parser.util.Pair;
+import com.actiontech.dble.config.model.user.*;
 import com.actiontech.dble.singleton.FrontendUserManager;
 import newbootstrap.DbleServer;
 import newnet.connection.AbstractConnection;
@@ -27,7 +23,7 @@ public final class AuthUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthUtil.class);
 
-    public static String auhth(Pair<String, String> user, AbstractConnection connection, byte[] seed, byte[] password, String schema) {
+    public static String auhth(UserName user, AbstractConnection connection, byte[] seed, byte[] password, String schema) {
         UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(user);
         if (userConfig == null) {
             return "Access denied for user '" + user + "' with host '" + connection.getHost() + "'";

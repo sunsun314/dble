@@ -26,13 +26,13 @@ public abstract class AbstractConsistencyChecker implements SQLQueryResultListen
     private List<SQLQueryResult<List<Map<String, String>>>> results = Collections.synchronizedList(new ArrayList<>());
     private List<SQLQueryResult<List<Map<String, String>>>> errorList = Collections.synchronizedList(new ArrayList<>());
 
-    public void addCheckNode(String dbName, ShardingNode shardingNode) {
+    void addCheckNode(String dbName, ShardingNode shardingNode) {
         MultiRowSQLQueryResultHandler resultHandler = new MultiRowSQLQueryResultHandler(this.getFetchCols(), this);
         SQLJob sqlJob = new SQLJob(this.getCountSQL(dbName, tableName), shardingNode.getName(), resultHandler, true);
         sqlJobs.add(sqlJob);
     }
 
-    public void startCheckTable() {
+    void startCheckTable() {
         count.set(sqlJobs.size());
         for (SQLJob sqlJob : sqlJobs) {
             sqlJob.run();

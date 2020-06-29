@@ -4,6 +4,7 @@ import com.actiontech.dble.backend.mysql.CharsetUtil;
 import com.actiontech.dble.config.Versions;
 import com.actiontech.dble.config.model.SystemConfig;
 import com.actiontech.dble.config.model.user.UserConfig;
+import com.actiontech.dble.config.model.user.UserName;
 import com.actiontech.dble.route.parser.util.Pair;
 import com.actiontech.dble.util.RandomUtil;
 import newbootstrap.DbleServer;
@@ -45,8 +46,8 @@ public class NativePwd extends MySQLAuthPlugin {
         try {
             PluginName name = PluginName.valueOf(auth.getAuthPlugin());
             if (PLUGIN_NAME == name) {
-                String errMsg = AuthUtil.auhth(new Pair<>(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase());
-                UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(new Pair<>(authPacket.getUser(), authPacket.getTenant()));
+                String errMsg = AuthUtil.auhth(new UserName(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase());
+                UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(new UserName(authPacket.getUser(), authPacket.getTenant()));
                 info = new AuthResultInfo(errMsg, authPacket, userConfig);
                 return PluginName.plugin_same_with_default;
             } else {
@@ -63,7 +64,7 @@ public class NativePwd extends MySQLAuthPlugin {
         authSwitchResponse.read(data);
         authPacket.setPassword(authSwitchResponse.getAuthPluginData());
 
-        String errMsg = AuthUtil.auhth(new Pair<>(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase());
+        String errMsg = AuthUtil.auhth(new UserName(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase());
 
         UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(new Pair<>(authPacket.getUser(), authPacket.getTenant()));
         info = new AuthResultInfo(errMsg, authPacket, userConfig);

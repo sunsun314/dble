@@ -3,7 +3,6 @@ package newcommon.service;
 import newbootstrap.DbleServer;
 import newcommon.proto.handler.ProtoHandler;
 import newcommon.proto.handler.ProtoHandlerResult;
-import newcommon.proto.mysql.packet.ErrorPacket;
 import newnet.connection.AbstractConnection;
 
 import java.io.IOException;
