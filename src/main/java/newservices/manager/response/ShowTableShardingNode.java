@@ -7,20 +7,17 @@ package newservices.manager.response;
 
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.ShardingNode;
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.Fields;
 import com.actiontech.dble.config.model.DbInstanceConfig;
 import com.actiontech.dble.config.model.SchemaConfig;
 import com.actiontech.dble.config.model.TableConfig;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.singleton.ProxyMeta;
 import com.actiontech.dble.util.LongUtil;
 import com.actiontech.dble.util.StringUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -68,10 +65,10 @@ public final class ShowTableShardingNode {
         EOF.setPacketId(++packetId);
     }
 
-    public static void execute(ManagerConnection c, String tableInfo) {
+    public static void execute(ManagerService service, String tableInfo) {
         Matcher ma = PATTERN_FOR_TABLE_INFO.matcher(tableInfo);
         if (!ma.matches()) {
-            c.writeErrMessage(ErrorCode.ER_UNKNOWN_ERROR, "The Correct Query Format Is:show @@shardingnodes where schema='?' and table ='?'");
+            service.writeErrMessage(ErrorCode.ER_UNKNOWN_ERROR, "The Correct Query Format Is:show @@shardingnodes where schema='?' and table ='?'");
             return;
         }
         String schemaName = StringUtil.removeAllApostrophe(ma.group(1));
@@ -84,7 +81,7 @@ public final class ShowTableShardingNode {
         SchemaConfig schemaConfig = DbleServer.getInstance().getConfig().getSchemas().get(schemaName);
         List<String> shardingNodes = null;
         if (schemaConfig == null) {
-            c.writeErrMessage(ErrorCode.ER_UNKNOWN_ERROR, "the schema [" + schemaName + "] does not exists");
+            service.writeErrMessage(ErrorCode.ER_UNKNOWN_ERROR, "the schema [" + schemaName + "] does not exists");
             return;
         } else if (schemaConfig.isNoSharding()) {
             if (ProxyMeta.getInstance().getTmManager().checkTableExists(schemaName, tableName)) {
@@ -94,7 +91,7 @@ public final class ShowTableShardingNode {
             TableConfig tableConfig = schemaConfig.getTables().get(tableName);
             if (tableConfig == null) {
                 if (schemaConfig.getShardingNode() == null) {
-                    c.writeErrMessage(ErrorCode.ER_UNKNOWN_ERROR, "the table [" + tableName + "] in schema [" + schemaName + "] does not exists");
+                    service.writeErrMessage(ErrorCode.ER_UNKNOWN_ERROR, "the table [" + tableName + "] in schema [" + schemaName + "] does not exists");
                     return;
                 } else if (ProxyMeta.getInstance().getTmManager().checkTableExists(schemaName, tableName)) {
                     shardingNodes = Collections.singletonList(schemaConfig.getShardingNode());
@@ -103,36 +100,36 @@ public final class ShowTableShardingNode {
                 shardingNodes = tableConfig.getShardingNodes();
             }
         }
-        ByteBuffer buffer = c.allocate();
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = HEADER.write(buffer, c, true);
+        buffer = HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
 
         // write eof
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
 
         // write rows
         byte packetId = EOF.getPacketId();
 
         if (shardingNodes != null) {
-            for (RowDataPacket row : getRows(shardingNodes, c.getCharset().getResults())) {
+            for (RowDataPacket row : getRows(shardingNodes, service.getCharset().getResults())) {
                 row.setPacketId(++packetId);
-                buffer = row.write(buffer, c, true);
+                buffer = row.write(buffer, service, true);
             }
         }
 
         // write last eof
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // post write
-        c.write(buffer);
+        service.write(buffer);
     }
 
     private static List<RowDataPacket> getRows(List<String> shardingNodes, String charset) {

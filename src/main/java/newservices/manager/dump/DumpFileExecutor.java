@@ -1,11 +1,11 @@
 package newservices.manager.dump;
 
 import com.actiontech.dble.config.model.SchemaConfig;
-import com.actiontech.dble.manager.dump.handler.StatementHandler;
-import com.actiontech.dble.manager.dump.handler.StatementHandlerManager;
 import com.actiontech.dble.server.parser.ServerParse;
 import com.actiontech.dble.util.TimeUtil;
 import com.alibaba.druid.sql.ast.SQLStatement;
+import newservices.manager.dump.handler.StatementHandler;
+import newservices.manager.dump.handler.StatementHandlerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

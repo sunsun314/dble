@@ -7,23 +7,20 @@ package newservices.manager.response;
 
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.BackendConnection;
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.net.NIOProcessor;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.route.factory.RouteStrategyFactory;
 import com.actiontech.dble.sqlengine.HeartbeatSQLJob;
 import com.actiontech.dble.util.*;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 import java.sql.SQLSyntaxErrorException;
@@ -100,7 +97,7 @@ public final class ShowBackend {
     private ShowBackend() {
     }
 
-    public static void execute(ManagerConnection c, String whereCondition) {
+    public static void execute(ManagerService service, String whereCondition) {
         Map<String, String> whereInfo = new HashMap<>(8);
         if (!StringUtil.isEmpty(whereCondition)) {
             SQLStatement statement;
@@ -109,17 +106,17 @@ public final class ShowBackend {
                 SQLExpr whereExpr = ((SQLSelectStatement) statement).getSelect().getQueryBlock().getWhere();
                 ShowConnection.getWhereCondition(whereExpr, whereInfo);
             } catch (SQLSyntaxErrorException e) {
-                c.writeErrMessage(ErrorCode.ER_PARSE_ERROR, "The sql has error syntax.");
+                service.writeErrMessage(ErrorCode.ER_PARSE_ERROR, "The sql has error syntax.");
                 return;
             }
         }
 
-        ByteBuffer buffer = c.allocate();
-        buffer = HEADER.write(buffer, c, true);
+        ByteBuffer buffer = service.allocate();
+        buffer = HEADER.write(buffer, service, true);
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
         byte packetId = EOF.getPacketId();
 
         NIOProcessor[] processors = null;
@@ -140,8 +137,8 @@ public final class ShowBackend {
         if (processors == null) {
             EOFPacket lastEof = new EOFPacket();
             lastEof.setPacketId(++packetId);
-            buffer = lastEof.write(buffer, c, true);
-            c.write(buffer);
+            buffer = lastEof.write(buffer, service, true);
+            service.write(buffer);
             return;
         }
 
@@ -153,10 +150,10 @@ public final class ShowBackend {
                 }
                 whereInfo.remove("backend_id");
                 if (whereInfo.isEmpty() || checkConn((MySQLConnection) bc, whereInfo)) {
-                    RowDataPacket row = getRow(bc, c.getCharset().getResults());
+                    RowDataPacket row = getRow(bc, service.getCharset().getResults());
                     if (row != null) {
                         row.setPacketId(++packetId);
-                        buffer = row.write(buffer, c, true);
+                        buffer = row.write(buffer, service, true);
                     }
                 }
                 break;
@@ -164,10 +161,10 @@ public final class ShowBackend {
 
             for (BackendConnection bc : p.getBackends().values()) {
                 if (bc != null && (whereInfo.isEmpty() || checkConn((MySQLConnection) bc, whereInfo))) {
-                    RowDataPacket row = getRow(bc, c.getCharset().getResults());
+                    RowDataPacket row = getRow(bc, service.getCharset().getResults());
                     if (row != null) {
                         row.setPacketId(++packetId);
-                        buffer = row.write(buffer, c, true);
+                        buffer = row.write(buffer, service, true);
                     }
                 }
             }
@@ -175,8 +172,8 @@ public final class ShowBackend {
 
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
-        c.write(buffer);
+        buffer = lastEof.write(buffer, service, true);
+        service.write(buffer);
     }
 
     private static boolean checkConn(MySQLConnection bc, Map<String, String> whereInfo) {

@@ -5,17 +5,14 @@
 
 package newservices.manager.response;
 
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.route.RouteResultsetNode;
 import com.actiontech.dble.server.NonBlockingSession;
 import com.actiontech.dble.singleton.XASessionCheck;
 import com.actiontech.dble.util.StringUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 
@@ -53,41 +50,41 @@ public final class ShowXASession {
         EOF.setPacketId(++packetId);
     }
 
-    public static void execute(ManagerConnection c) {
-        ByteBuffer buffer = c.allocate();
+    public static void execute(ManagerService service) {
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = HEADER.write(buffer, c, true);
+        buffer = HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
 
         // write eof
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
 
         // write rows
         byte packetId = EOF.getPacketId();
         final XASessionCheck xaCheck = XASessionCheck.getInstance();
         for (NonBlockingSession commitSession : xaCheck.getCommittingSession().values()) {
-            RowDataPacket row = getRow(commitSession, c.getCharset().getResults());
+            RowDataPacket row = getRow(commitSession, service.getCharset().getResults());
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
         }
         for (NonBlockingSession rollbackSession : xaCheck.getRollbackingSession().values()) {
-            RowDataPacket row = getRow(rollbackSession, c.getCharset().getResults());
+            RowDataPacket row = getRow(rollbackSession, service.getCharset().getResults());
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
         }
 
         // write last eof
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // write buffer
-        c.write(buffer);
+        service.write(buffer);
     }
 
     private static RowDataPacket getRow(NonBlockingSession session, String charset) {

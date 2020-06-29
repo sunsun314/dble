@@ -3,7 +3,7 @@ package newservices.manager.dump;
 import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.config.model.SchemaConfig;
 import com.actiontech.dble.config.model.TableConfig;
-import com.actiontech.dble.manager.dump.handler.DefaultHandler;
+import newservices.manager.dump.handler.DefaultHandler;
 
 import java.util.ArrayList;
 import java.util.List;

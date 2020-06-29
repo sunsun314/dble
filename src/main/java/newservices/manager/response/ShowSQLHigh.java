@@ -5,13 +5,7 @@
 
 package newservices.manager.response;
 
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.route.parser.util.Pair;
 import com.actiontech.dble.statistic.stat.SqlFrequency;
 import com.actiontech.dble.statistic.stat.UserStat;
@@ -19,6 +13,9 @@ import com.actiontech.dble.statistic.stat.UserStatAnalyzer;
 import com.actiontech.dble.util.FormatUtil;
 import com.actiontech.dble.util.LongUtil;
 import com.actiontech.dble.util.StringUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -70,19 +67,19 @@ public final class ShowSQLHigh {
         EOF.setPacketId(++packetId);
     }
 
-    public static void execute(ManagerConnection c, boolean isClear) {
-        ByteBuffer buffer = c.allocate();
+    public static void execute(ManagerService service, boolean isClear) {
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = HEADER.write(buffer, c, true);
+        buffer = HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
 
         // write eof
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
 
         // write rows
         byte packetId = EOF.getPacketId();
@@ -97,9 +94,9 @@ public final class ShowSQLHigh {
                     if (sqlFrequency != null) {
                         RowDataPacket row = getRow(i, user, sqlFrequency.getSql(), sqlFrequency.getCount(),
                                 sqlFrequency.getAvgTime(), sqlFrequency.getMaxTime(), sqlFrequency.getMinTime(),
-                                sqlFrequency.getExecuteTime(), sqlFrequency.getLastTime(), c.getCharset().getResults());
+                                sqlFrequency.getExecuteTime(), sqlFrequency.getLastTime(), service.getCharset().getResults());
                         row.setPacketId(++packetId);
-                        buffer = row.write(buffer, c, true);
+                        buffer = row.write(buffer, service, true);
                         i++;
                     }
                 }
@@ -109,10 +106,10 @@ public final class ShowSQLHigh {
         // write last eof
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // write buffer
-        c.write(buffer);
+        service.write(buffer);
     }
 
     private static RowDataPacket getRow(int i, Pair<String, String> user, String sql, long count, long avgTime, long maxTime,

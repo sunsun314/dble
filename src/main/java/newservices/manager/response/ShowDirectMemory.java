@@ -5,17 +5,14 @@
 
 package newservices.manager.response;
 
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.memory.unsafe.Platform;
 import com.actiontech.dble.memory.unsafe.utils.JavaUtils;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.singleton.BufferPoolManager;
 import com.actiontech.dble.util.StringUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 
@@ -51,38 +48,38 @@ public final class ShowDirectMemory {
     }
 
 
-    public static void execute(ManagerConnection c) {
-        ByteBuffer buffer = c.allocate();
+    public static void execute(ManagerService service) {
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = TOTAL_HEADER.write(buffer, c, true);
+        buffer = TOTAL_HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : TOTAL_FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
         // write eof
-        buffer = TOTAL_EOF.write(buffer, c, true);
+        buffer = TOTAL_EOF.write(buffer, service, true);
         RowDataPacket row = new RowDataPacket(TOTAL_FIELD_COUNT);
         /* the value of -XX:MaxDirectMemorySize */
         long totalAvailable = Platform.getMaxDirectMemory();
         long poolSize = BufferPoolManager.getBufferPool().capacity();
         long used = poolSize - BufferPoolManager.getBufferPool().size();
-        row.add(StringUtil.encode(JavaUtils.bytesToString2(totalAvailable), c.getCharset().getResults()));
-        row.add(StringUtil.encode(JavaUtils.bytesToString2(poolSize), c.getCharset().getResults()));
-        row.add(StringUtil.encode(JavaUtils.bytesToString2(used), c.getCharset().getResults()));
+        row.add(StringUtil.encode(JavaUtils.bytesToString2(totalAvailable), service.getCharset().getResults()));
+        row.add(StringUtil.encode(JavaUtils.bytesToString2(poolSize), service.getCharset().getResults()));
+        row.add(StringUtil.encode(JavaUtils.bytesToString2(used), service.getCharset().getResults()));
         // write rows
         byte packetId = TOTAL_EOF.getPacketId();
         row.setPacketId(++packetId);
-        buffer = row.write(buffer, c, true);
+        buffer = row.write(buffer, service, true);
 
         // write last eof
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // write buffer
-        c.write(buffer);
+        service.write(buffer);
     }
 
 }

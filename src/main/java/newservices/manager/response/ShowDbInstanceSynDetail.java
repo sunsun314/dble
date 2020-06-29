@@ -9,19 +9,16 @@ import com.actiontech.dble.DbleServer;
 import com.actiontech.dble.backend.datasource.PhysicalDbGroup;
 import com.actiontech.dble.backend.datasource.PhysicalDbInstance;
 import com.actiontech.dble.backend.heartbeat.MySQLHeartbeat;
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.Fields;
 import com.actiontech.dble.config.ServerConfig;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.route.parser.ManagerParseShow;
 import com.actiontech.dble.statistic.DbInstanceSyncRecorder;
 import com.actiontech.dble.statistic.DbInstanceSyncRecorder.Record;
 import com.actiontech.dble.util.LongUtil;
 import com.actiontech.dble.util.StringUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
@@ -79,36 +76,36 @@ public final class ShowDbInstanceSynDetail {
         EOF.setPacketId(++packetId);
     }
 
-    public static void response(ManagerConnection c, String stmt) {
-        ByteBuffer buffer = c.allocate();
+    public static void response(ManagerService service, String stmt) {
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = HEADER.write(buffer, c, true);
+        buffer = HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
 
         // write eof
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
 
         // write rows
         byte packetId = EOF.getPacketId();
 
         String name = ManagerParseShow.getWhereParameter(stmt);
-        for (RowDataPacket row : getRows(name, c.getCharset().getResults())) {
+        for (RowDataPacket row : getRows(name, service.getCharset().getResults())) {
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
         }
 
         // write last eof
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // post write
-        c.write(buffer);
+        service.write(buffer);
     }
 
     private static List<RowDataPacket> getRows(String name, String charset) {

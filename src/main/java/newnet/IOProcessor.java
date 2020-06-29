@@ -7,16 +7,13 @@ package newnet;
 
 import com.actiontech.dble.backend.BackendConnection;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
-import com.actiontech.dble.backend.mysql.nio.handler.transaction.xa.stage.XAStage;
 import com.actiontech.dble.backend.mysql.xa.TxState;
 import com.actiontech.dble.buffer.BufferPool;
 import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.net.AbstractConnection;
-import com.actiontech.dble.net.FrontendConnection;
-import com.actiontech.dble.server.ServerConnection;
-import com.actiontech.dble.singleton.XASessionCheck;
 import com.actiontech.dble.statistic.CommandCount;
 import com.actiontech.dble.util.TimeUtil;
+import newnet.connection.AbstractConnection;
+import newnet.connection.FrontendConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,9 +142,9 @@ public final class IOProcessor {
                 it.remove();
                 this.frontEndsLength.decrementAndGet();
             } else {
-                // very important ,for some data maybe not sent
+                // very important ,for some data maybe not sent todo
                 checkConSendQueue(c);
-                if (c instanceof ServerConnection && c.isIdleTimeout()) {
+                /*if (c instanceof ServerConnection && c.isIdleTimeout()) {
                     ServerConnection s = (ServerConnection) c;
                     String xaStage = s.getSession2().getTransactionManager().getXAStage();
                     if (xaStage != null) {
@@ -159,12 +156,12 @@ public final class IOProcessor {
                         continue;
                     }
                 }
-                c.idleCheck();
+                c.idleCheck();*/
             }
         }
     }
 
-    private void checkConSendQueue(com.actiontech.dble.net.AbstractConnection c) {
+    private void checkConSendQueue(AbstractConnection c) {
         // very important ,for some data maybe not sent
         if (!c.getWriteQueue().isEmpty()) {
             c.getSocketWR().doNextWriteCheck();
@@ -205,10 +202,10 @@ public final class IOProcessor {
                 it.remove();
             } else {
                 // very important ,for some data maybe not sent
-                if (c instanceof com.actiontech.dble.net.AbstractConnection) {
-                    checkConSendQueue((com.actiontech.dble.net.AbstractConnection) c);
+                /*if (c instanceof com.actiontech.dble.net.AbstractConnection) {
+                    checkConSendQueue(c);
                 }
-                c.idleCheck();
+                c.idleCheck();*/
             }
         }
     }

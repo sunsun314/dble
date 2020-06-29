@@ -298,7 +298,7 @@ public abstract class AbstractConnection implements Connection {
 
     }
 
-    protected synchronized void cleanup() {
+    public synchronized void cleanup() {
 
         if (readBuffer != null) {
             this.recycle(readBuffer);

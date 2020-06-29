@@ -6,19 +6,16 @@
 package newservices.manager.response;
 
 import com.actiontech.dble.backend.BackendConnection;
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.net.NIOProcessor;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.util.IntegerUtil;
 import com.actiontech.dble.util.LongUtil;
 import com.actiontech.dble.util.StringUtil;
 import com.actiontech.dble.util.TimeUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 
@@ -63,27 +60,27 @@ public final class ShowBackendOld {
         EOF.setPacketId(++packetId);
     }
 
-    public static void execute(ManagerConnection c) {
-        ByteBuffer buffer = c.allocate();
-        buffer = HEADER.write(buffer, c, true);
+    public static void execute(ManagerService service) {
+        ByteBuffer buffer = service.allocate();
+        buffer = HEADER.write(buffer, service, true);
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
         byte packetId = EOF.getPacketId();
 
         for (BackendConnection bc : NIOProcessor.BACKENDS_OLD) {
             if (bc != null) {
-                RowDataPacket row = getRow(bc, c.getCharset().getResults());
+                RowDataPacket row = getRow(bc, service.getCharset().getResults());
                 row.setPacketId(++packetId);
-                buffer = row.write(buffer, c, true);
+                buffer = row.write(buffer, service, true);
             }
         }
 
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
-        c.write(buffer);
+        buffer = lastEof.write(buffer, service, true);
+        service.write(buffer);
     }
 
     private static RowDataPacket getRow(BackendConnection c, String charset) {

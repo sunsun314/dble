@@ -6,16 +6,10 @@
 package newservices.manager.response;
 
 import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.Fields;
-import com.actiontech.dble.manager.ManagerConnection;
 import com.actiontech.dble.net.FrontendConnection;
 import com.actiontech.dble.net.NIOProcessor;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.route.factory.RouteStrategyFactory;
 import com.actiontech.dble.server.ServerConnection;
 import com.actiontech.dble.util.IntegerUtil;
@@ -26,6 +20,9 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.SQLBinaryOpExpr;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 import java.sql.SQLSyntaxErrorException;
@@ -111,7 +108,7 @@ public final class ShowConnection {
     private ShowConnection() {
     }
 
-    public static void execute(ManagerConnection c, String whereCondition) {
+    public static void execute(ManagerService service, String whereCondition) {
         Map<String, String> whereInfo = new HashMap<>(8);
         if (!StringUtil.isEmpty(whereCondition)) {
             SQLStatement statement;
@@ -120,23 +117,23 @@ public final class ShowConnection {
                 SQLExpr whereExpr = ((SQLSelectStatement) statement).getSelect().getQueryBlock().getWhere();
                 getWhereCondition(whereExpr, whereInfo);
             } catch (SQLSyntaxErrorException e) {
-                c.writeErrMessage(ErrorCode.ER_PARSE_ERROR, "The sql has error syntax.");
+                service.writeErrMessage(ErrorCode.ER_PARSE_ERROR, "The sql has error syntax.");
                 return;
             }
         }
 
-        ByteBuffer buffer = c.allocate();
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = HEADER.write(buffer, c, true);
+        buffer = HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
 
         // write eof
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
 
         // write rows
         byte packetId = EOF.getPacketId();
@@ -158,8 +155,8 @@ public final class ShowConnection {
         if (processors == null) {
             EOFPacket lastEof = new EOFPacket();
             lastEof.setPacketId(++packetId);
-            buffer = lastEof.write(buffer, c, true);
-            c.write(buffer);
+            buffer = lastEof.write(buffer, service, true);
+            service.write(buffer);
             return;
         }
 
@@ -171,18 +168,18 @@ public final class ShowConnection {
                 }
                 whereInfo.remove("front_id");
                 if (whereInfo.isEmpty() || checkConn(fc, whereInfo)) {
-                    RowDataPacket row = getRow(fc, c.getCharset().getResults());
+                    RowDataPacket row = getRow(fc, service.getCharset().getResults());
                     row.setPacketId(++packetId);
-                    buffer = row.write(buffer, c, true);
+                    buffer = row.write(buffer, service, true);
                 }
                 break;
             }
 
             for (FrontendConnection fc : p.getFrontends().values()) {
                 if (fc != null && (whereInfo.isEmpty() || checkConn(fc, whereInfo))) {
-                    RowDataPacket row = getRow(fc, c.getCharset().getResults());
+                    RowDataPacket row = getRow(fc, service.getCharset().getResults());
                     row.setPacketId(++packetId);
-                    buffer = row.write(buffer, c, true);
+                    buffer = row.write(buffer, service, true);
                 }
             }
         }
@@ -190,10 +187,10 @@ public final class ShowConnection {
         // write last eof
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // write buffer
-        c.write(buffer);
+        service.write(buffer);
     }
 
     static void getWhereCondition(SQLExpr whereExpr, Map<String, String> whereInfo) {

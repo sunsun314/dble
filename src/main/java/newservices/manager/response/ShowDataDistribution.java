@@ -6,22 +6,19 @@
 package newservices.manager.response;
 
 import com.actiontech.dble.DbleServer;
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.Fields;
 import com.actiontech.dble.config.model.SchemaConfig;
 import com.actiontech.dble.config.model.TableConfig;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.sqlengine.OneRawSQLQueryResultHandler;
 import com.actiontech.dble.sqlengine.SQLJob;
 import com.actiontech.dble.sqlengine.SQLQueryResult;
 import com.actiontech.dble.sqlengine.SQLQueryResultListener;
 import com.actiontech.dble.util.IntegerUtil;
 import com.actiontech.dble.util.StringUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
+import newservices.manager.ManagerService;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -53,9 +50,9 @@ public final class ShowDataDistribution {
         EOF.setPacketId(++packetId);
     }
 
-    public static void execute(ManagerConnection c, String name) {
+    public static void execute(ManagerService service, String name) {
         if (!name.startsWith("'") || !name.endsWith("'")) {
-            c.writeErrMessage(ErrorCode.ER_YES, "The query should be show @@data_distribution where table ='schema.table'");
+            service.writeErrMessage(ErrorCode.ER_YES, "The query should be show @@data_distribution where table ='schema.table'");
             return;
         }
         if (DbleServer.getInstance().getSystemVariables().isLowerCaseTableNames()) {
@@ -63,23 +60,23 @@ public final class ShowDataDistribution {
         }
         String[] schemaInfo = name.substring(1, name.length() - 1).split("\\.");
         if (schemaInfo.length != 2) {
-            c.writeErrMessage(ErrorCode.ER_YES, "The query should be show @@data_distribution where table ='schema.table'");
+            service.writeErrMessage(ErrorCode.ER_YES, "The query should be show @@data_distribution where table ='schema.table'");
             return;
         }
         SchemaConfig schemaConfig = DbleServer.getInstance().getConfig().getSchemas().get(schemaInfo[0]);
         if (schemaConfig == null) {
-            c.writeErrMessage(ErrorCode.ER_YES, "The schema " + schemaInfo[0] + " doesn't exist");
+            service.writeErrMessage(ErrorCode.ER_YES, "The schema " + schemaInfo[0] + " doesn't exist");
             return;
         } else if (schemaConfig.isNoSharding()) {
-            c.writeErrMessage(ErrorCode.ER_YES, "The schema " + schemaInfo[0] + " is no sharding schema");
+            service.writeErrMessage(ErrorCode.ER_YES, "The schema " + schemaInfo[0] + " is no sharding schema");
             return;
         }
         TableConfig tableConfig = schemaConfig.getTables().get(schemaInfo[1]);
         if (tableConfig == null) {
-            c.writeErrMessage(ErrorCode.ER_YES, "The table " + name + " doesn‘t exist");
+            service.writeErrMessage(ErrorCode.ER_YES, "The table " + name + " doesn‘t exist");
             return;
         } else if (tableConfig.isNoSharding()) {
-            c.writeErrMessage(ErrorCode.ER_YES, "The table " + name + " is no sharding table");
+            service.writeErrMessage(ErrorCode.ER_YES, "The table " + name + " is no sharding table");
             return;
         }
         ReentrantLock lock = new ReentrantLock();
@@ -97,28 +94,28 @@ public final class ShowDataDistribution {
                 cond.await();
             }
         } catch (InterruptedException e) {
-            c.writeErrMessage(ErrorCode.ER_YES, "occur InterruptedException, so try again later ");
+            service.writeErrMessage(ErrorCode.ER_YES, "occur InterruptedException, so try again later ");
             return;
         } finally {
             lock.unlock();
         }
 
         if (!succeed.get()) {
-            c.writeErrMessage(ErrorCode.ER_YES, "occur Exception, so see dble.log to check reason");
+            service.writeErrMessage(ErrorCode.ER_YES, "occur Exception, so see dble.log to check reason");
             return;
         }
-        ByteBuffer buffer = c.allocate();
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = HEADER.write(buffer, c, true);
+        buffer = HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
 
         // write eof
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
 
         // write rows
         byte packetId = EOF.getPacketId();
@@ -126,18 +123,18 @@ public final class ShowDataDistribution {
 
         for (Map.Entry<String, Integer> entry : orderResults.entrySet()) {
             RowDataPacket row = new RowDataPacket(FIELD_COUNT);
-            row.add(StringUtil.encode(entry.getKey(), c.getCharset().getResults()));
+            row.add(StringUtil.encode(entry.getKey(), service.getCharset().getResults()));
             row.add(IntegerUtil.toBytes(entry.getValue()));
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
         }
         // write last eof
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // post write
-        c.write(buffer);
+        service.write(buffer);
     }
 
     private static class ShowDataDistributionListener implements SQLQueryResultListener<SQLQueryResult<Map<String, String>>> {

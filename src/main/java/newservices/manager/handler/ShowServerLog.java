@@ -5,18 +5,14 @@
 */
 package newservices.manager.handler;
 
-import com.actiontech.dble.backend.mysql.PacketUtil;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.Fields;
 import com.actiontech.dble.config.model.SystemConfig;
-import com.actiontech.dble.manager.ManagerConnection;
-import com.actiontech.dble.net.mysql.EOFPacket;
-import com.actiontech.dble.net.mysql.FieldPacket;
-import com.actiontech.dble.net.mysql.ResultSetHeaderPacket;
-import com.actiontech.dble.net.mysql.RowDataPacket;
 import com.actiontech.dble.route.parser.ManagerParseShow;
 import com.actiontech.dble.util.CircularArrayList;
 import com.actiontech.dble.util.StringUtil;
+import newcommon.proto.mysql.packet.*;
+import newcommon.proto.mysql.util.PacketUtil;
 import newservices.manager.ManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,26 +53,26 @@ public final class ShowServerLog {
         return new File(homePath, "logs" + File.separator + logFile);
     }
 
-    public static void handle(String stmt, ManagerService c) {
+    public static void handle(String stmt, ManagerService service) {
 
         Map<String, String> condPairMap = getCondPair(stmt);
         if (condPairMap == null) {
-            c.writeErrMessage(ErrorCode.ER_YES, "Unsupported statement");
+            service.writeErrMessage(ErrorCode.ER_YES, "Unsupported statement");
             return;
         }
 
-        ByteBuffer buffer = c.allocate();
+        ByteBuffer buffer = service.allocate();
 
         // write header
-        buffer = HEADER.write(buffer, c, true);
+        buffer = HEADER.write(buffer, service, true);
 
         // write fields
         for (FieldPacket field : FIELDS) {
-            buffer = field.write(buffer, c, true);
+            buffer = field.write(buffer, service, true);
         }
 
         // write eof
-        buffer = EOF.write(buffer, c, true);
+        buffer = EOF.write(buffer, service, true);
 
         // write rows
 
@@ -84,7 +80,7 @@ public final class ShowServerLog {
         PackageBufINf bufInf;
 
         if (condPairMap.isEmpty()) {
-            bufInf = showLogSum(c, buffer, packetId);
+            bufInf = showLogSum(service, buffer, packetId);
         } else {
             String logFile = condPairMap.get("file");
             if (logFile == null) {
@@ -98,7 +94,7 @@ public final class ShowServerLog {
             int end = start + page;
             String key = condPairMap.get("key");
             String regex = condPairMap.get("regex");
-            bufInf = showLogRange(c, buffer, packetId, key, regex, start, end,
+            bufInf = showLogRange(service, buffer, packetId, key, regex, start, end,
                     logFile);
 
         }
@@ -108,13 +104,13 @@ public final class ShowServerLog {
 
         EOFPacket lastEof = new EOFPacket();
         lastEof.setPacketId(++packetId);
-        buffer = lastEof.write(buffer, c, true);
+        buffer = lastEof.write(buffer, service, true);
 
         // write buffer
-        c.write(buffer);
+        service.write(buffer);
     }
 
-    public static PackageBufINf showLogRange(ManagerConnection c,
+    public static PackageBufINf showLogRange(ManagerService service,
                                              ByteBuffer buffer, byte packetId, String key, String regex,
                                              int start, int end, String logFile) {
         PackageBufINf bufINf = new PackageBufINf();
@@ -139,9 +135,9 @@ public final class ShowServerLog {
                                 (key != null && line.toLowerCase().contains(key)))) {
                     RowDataPacket row = new RowDataPacket(FIELD_COUNT);
                     row.add(StringUtil.encode(curLine + "->" + line,
-                            c.getCharset().getResults()));
+                            service.getCharset().getResults()));
                     row.setPacketId(++packetId);
-                    buffer = row.write(buffer, c, true);
+                    buffer = row.write(buffer, service, true);
                 }
             }
             bufINf.setBuffer(buffer);
@@ -151,9 +147,9 @@ public final class ShowServerLog {
         } catch (Exception e) {
             LOGGER.info("showLogRangeError", e);
             RowDataPacket row = new RowDataPacket(FIELD_COUNT);
-            row.add(StringUtil.encode(e.toString(), c.getCharset().getResults()));
+            row.add(StringUtil.encode(e.toString(), service.getCharset().getResults()));
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
             bufINf.setBuffer(buffer);
         } finally {
             if (br != null) {
@@ -169,7 +165,7 @@ public final class ShowServerLog {
         return bufINf;
     }
 
-    private static PackageBufINf showLogSum(ManagerConnection c,
+    private static PackageBufINf showLogSum(ManagerService service,
                                             ByteBuffer buffer, byte packetId) {
         PackageBufINf bufINf = new PackageBufINf();
         File[] logFiles = new File(SystemConfig.getInstance().getHomePath(), "logs").listFiles();
@@ -200,21 +196,21 @@ public final class ShowServerLog {
             }
 
             RowDataPacket row = new RowDataPacket(FIELD_COUNT);
-            row.add(StringUtil.encode("files in log dir:" + totalLines + fileNames, c.getCharset().getResults()));
+            row.add(StringUtil.encode("files in log dir:" + totalLines + fileNames, service.getCharset().getResults()));
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
             row = new RowDataPacket(FIELD_COUNT);
             row.add(StringUtil.encode("Total lines " + totalLines + " ,tail " +
-                    queue.size() + " line is following:", c.getCharset().getResults()));
+                    queue.size() + " line is following:", service.getCharset().getResults()));
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
             int size = queue.size() - 1;
             for (int i = size; i >= 0; i--) {
                 String data = queue.get(i);
                 row = new RowDataPacket(FIELD_COUNT);
-                row.add(StringUtil.encode(data, c.getCharset().getResults()));
+                row.add(StringUtil.encode(data, service.getCharset().getResults()));
                 row.setPacketId(++packetId);
-                buffer = row.write(buffer, c, true);
+                buffer = row.write(buffer, service, true);
             }
             bufINf.setBuffer(buffer);
             bufINf.setPacketId(packetId);
@@ -223,9 +219,9 @@ public final class ShowServerLog {
         } catch (Exception e) {
             LOGGER.info("showLogSumError", e);
             RowDataPacket row = new RowDataPacket(FIELD_COUNT);
-            row.add(StringUtil.encode(e.toString(), c.getCharset().getResults()));
+            row.add(StringUtil.encode(e.toString(), service.getCharset().getResults()));
             row.setPacketId(++packetId);
-            buffer = row.write(buffer, c, true);
+            buffer = row.write(buffer, service, true);
             bufINf.setBuffer(buffer);
         } finally {
             if (br != null) {

@@ -1,8 +1,6 @@
 package newservices.manager.dump.handler;
 
 import com.actiontech.dble.config.model.TableConfig;
-import com.actiontech.dble.manager.dump.DumpException;
-import com.actiontech.dble.manager.dump.DumpFileContext;
 import com.actiontech.dble.meta.TableMeta;
 import com.actiontech.dble.route.factory.RouteStrategyFactory;
 import com.actiontech.dble.singleton.ProxyMeta;
@@ -15,6 +13,8 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.SQLIntegerExpr;
 import com.alibaba.druid.sql.ast.statement.SQLInsertStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
+import newservices.manager.dump.DumpException;
+import newservices.manager.dump.DumpFileContext;
 
 import java.sql.SQLNonTransientException;
 import java.util.List;
