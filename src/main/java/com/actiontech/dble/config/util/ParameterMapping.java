@@ -8,6 +8,7 @@ package com.actiontech.dble.config.util;
 import com.actiontech.dble.config.ProblemReporter;
 import com.actiontech.dble.util.BooleanUtil;
 import com.actiontech.dble.util.StringUtil;
+import com.actiontech.dble.util.SystemProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,9 +39,9 @@ public final class ParameterMapping {
             Class<?> cls = pd.getPropertyType();
             if (cls == null) {
                 if (problemReporter != null) {
-                    problemReporter.warn("unknown property [ " + pd.getName() + " ], skip");
+                    problemReporter.warn("unknown property [ " + pd.getName() + " ]");
                 } else {
-                    LOGGER.warn("unknown property [ " + pd.getName() + " ], skip");
+                    LOGGER.warn("unknown property [ " + pd.getName() + " ]");
                 }
                 continue;
             }
@@ -55,9 +56,9 @@ public final class ParameterMapping {
                         value = convert(cls, valStr);
                     } catch (NumberFormatException nfe) {
                         if (problemReporter != null) {
-                            problemReporter.warn("property [ " + pd.getName() + " ] '" + valStr + "' data type should be " + cls.toString() + ", skip");
+                            problemReporter.warn("property [ " + pd.getName() + " ] '" + valStr + "' data type should be " + cls.toString() + "");
                         } else {
-                            LOGGER.warn("property [ " + pd.getName() + " ] '" + valStr + "' data type should be " + cls.toString() + ", skip");
+                            LOGGER.warn("property [ " + pd.getName() + " ] '" + valStr + "' data type should be " + cls.toString() + "");
                         }
                         parameter.remove(pd.getName());
                         continue;
@@ -75,21 +76,27 @@ public final class ParameterMapping {
     }
 
 
-    public static void mapping(Object object, ProblemReporter problemReporter) throws IllegalAccessException,
+    public static Properties mapping(Object object, ProblemReporter problemReporter) throws IllegalAccessException,
             InvocationTargetException {
+        Properties systemProperties = (Properties) (System.getProperties().clone());
+        for (String key : SystemProperty.getInnerProperties()) {
+            systemProperties.remove(key);
+        }
         PropertyDescriptor[] pds = getDescriptors(object.getClass());
         for (PropertyDescriptor pd : pds) {
-            String valStr = System.getProperty(pd.getName());
+            String propertyName = pd.getName();
+            String valStr = systemProperties.getProperty(propertyName);
             if (valStr == null) {
                 continue;
             }
             Object value = valStr;
             Class<?> cls = pd.getPropertyType();
             if (cls == null) {
+                String msg = "unknown property [ " + pd.getName() + " ]";
                 if (problemReporter != null) {
-                    problemReporter.warn("unknown property [ " + pd.getName() + " ], skip");
+                    problemReporter.warn(msg);
                 } else {
-                    LOGGER.warn("unknown property [ " + pd.getName() + " ], skip");
+                    LOGGER.warn(msg);
                 }
                 continue;
             }
@@ -101,11 +108,13 @@ public final class ParameterMapping {
                 try {
                     value = convert(cls, valStr);
                 } catch (NumberFormatException nfe) {
+                    String msg = "property [ " + pd.getName() + " ] '" + valStr + "' data type should be " + cls.toString() ;
                     if (problemReporter != null) {
-                        problemReporter.warn("property [ " + pd.getName() + " ] '" + valStr + "' data type should be " + cls.toString() + ", skip");
+                        problemReporter.warn(msg);
                     } else {
-                        LOGGER.warn("property [ " + pd.getName() + " ] '" + valStr + "' data type should be " + cls.toString() + ", skip");
+                        LOGGER.warn(msg);
                     }
+                    systemProperties.remove(propertyName);
                     continue;
                 }
             }
@@ -115,7 +124,9 @@ public final class ParameterMapping {
                     method.invoke(object, value);
                 }
             }
+            systemProperties.remove(propertyName);
         }
+        return systemProperties;
     }
 
     /**

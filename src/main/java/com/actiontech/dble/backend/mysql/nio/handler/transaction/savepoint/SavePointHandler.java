@@ -22,9 +22,11 @@ public class SavePointHandler extends MultiNodeHandler {
     private final SavePoint savepoints = new SavePoint(null);
     private volatile SavePoint performSp = null;
     private Type type = Type.SAVE;
+
     public enum Type {
         SAVE, ROLLBACK, RELEASE
     }
+
     private byte[] sendData = OkPacket.OK;
 
     public SavePointHandler(NonBlockingSession session) {
@@ -198,7 +200,7 @@ public class SavePointHandler extends MultiNodeHandler {
     }
 
     @Override
-    public void connectionError(Throwable e, BackendConnection conn) {
+    public void connectionError(Throwable e, Object attachment) {
         LOGGER.warn("connection Error in savePointHandler, err:", e);
         boolean finished;
         lock.lock();
@@ -208,7 +210,6 @@ public class SavePointHandler extends MultiNodeHandler {
         } finally {
             lock.unlock();
         }
-        conn.close("connection Error in savePointHandler");
         if (finished) {
             cleanAndFeedback();
         }
