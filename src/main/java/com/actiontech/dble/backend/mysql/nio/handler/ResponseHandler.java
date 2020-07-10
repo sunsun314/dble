@@ -27,7 +27,7 @@ public interface ResponseHandler {
     /**
      * execute after acquired an valid connection
      */
-    void connectionAcquired(BackendConnection conn);
+    void connectionAcquired(Pooled conn);
 
     /**
      * execute after get an error response

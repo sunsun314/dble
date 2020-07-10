@@ -5,16 +5,23 @@ import com.actiontech.dble.config.Versions;
 import com.actiontech.dble.config.model.SystemConfig;
 import com.actiontech.dble.config.model.user.UserConfig;
 import com.actiontech.dble.config.model.user.UserName;
+import com.actiontech.dble.net.mysql.BinaryPacket;
 import com.actiontech.dble.route.parser.util.Pair;
 import com.actiontech.dble.util.RandomUtil;
 import newbootstrap.DbleServer;
 import newcommon.proto.mysql.packet.AuthPacket;
+import newcommon.proto.mysql.packet.AuthSwitchRequestPackage;
 import newcommon.proto.mysql.packet.AuthSwitchResponsePackage;
+import newcommon.proto.mysql.packet.ErrorPacket;
 import newcommon.proto.mysql.packet.HandshakeV10Packet;
+import newcommon.proto.mysql.packet.OkPacket;
 import newcommon.service.AuthResultInfo;
 import newnet.connection.AbstractConnection;
+import newservices.mysqlauthenticate.PasswordAuthPlugin;
 import newservices.mysqlauthenticate.PluginName;
 import newservices.mysqlauthenticate.util.AuthUtil;
+
+import java.security.NoSuchAlgorithmException;
 
 import static newservices.mysqlauthenticate.PluginName.mysql_native_password;
 
@@ -34,9 +41,48 @@ public class NativePwd extends MySQLAuthPlugin {
     }
 
     @Override
-    public boolean verify() {
-        return false;
+    public void authenticate(String user, String password, String schema, byte packetId) {
+        AuthPacket packet = new AuthPacket();
+        packet.setPacketId(packetId);
+        packet.setMaxPacketSize(connection.getMaxPacketSize());
+        int charsetIndex = CharsetUtil.getCharsetDefaultIndex(SystemConfig.getInstance().getCharset());
+        packet.setCharsetIndex(charsetIndex);
+        packet.setUser(user);
+        try {
+            sendAuthPacket(packet, PasswordAuthPlugin.passwd(password, handshakePacket), PLUGIN_NAME.name(), schema);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
+
+    @Override
+    public PluginName handleBackData(byte[] data) throws Exception {
+        switch (data[4]) {
+            case AuthSwitchRequestPackage.STATUS:
+                BinaryPacket bin2 = new BinaryPacket();
+                String authPluginName = bin2.getAuthPluginName(data);
+                byte[] authPluginData = bin2.getAuthPluginData(data);
+                try {
+                    PluginName name = PluginName.valueOf(authPluginName);
+                    return name;
+                } catch (IllegalArgumentException e) {
+                    return PluginName.unsupport_plugin;
+                }
+            case OkPacket.FIELD_COUNT:
+                // execute auth response
+                info = new AuthResultInfo(null, handshakePacket);
+                return PluginName.plugin_same_with_default;
+            case ErrorPacket.FIELD_COUNT:
+                ErrorPacket err = new ErrorPacket();
+                err.read(data);
+                String errMsg = new String(err.getMessage());
+                info = new AuthResultInfo(errMsg, handshakePacket);
+                return PluginName.plugin_same_with_default;
+            default:
+                return PluginName.unsupport_plugin;
+        }
+    }
+
 
     @Override
     public PluginName handleData(byte[] data) {
@@ -46,7 +92,7 @@ public class NativePwd extends MySQLAuthPlugin {
         try {
             PluginName name = PluginName.valueOf(auth.getAuthPlugin());
             if (PLUGIN_NAME == name) {
-                String errMsg = AuthUtil.auhth(new UserName(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase());
+                String errMsg = AuthUtil.auhth(new UserName(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase(), PLUGIN_NAME);
                 UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(new UserName(authPacket.getUser(), authPacket.getTenant()));
                 info = new AuthResultInfo(errMsg, authPacket, userConfig);
                 return PluginName.plugin_same_with_default;
@@ -64,41 +110,12 @@ public class NativePwd extends MySQLAuthPlugin {
         authSwitchResponse.read(data);
         authPacket.setPassword(authSwitchResponse.getAuthPluginData());
 
-        String errMsg = AuthUtil.auhth(new UserName(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase());
+        String errMsg = AuthUtil.auhth(new UserName(authPacket.getUser(), authPacket.getTenant()), connection, seed, authPacket.getPassword(), authPacket.getDatabase(), PLUGIN_NAME);
 
-        UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(new Pair<>(authPacket.getUser(), authPacket.getTenant()));
+        UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(new UserName(authPacket.getUser(), authPacket.getTenant()));
         info = new AuthResultInfo(errMsg, authPacket, userConfig);
-
     }
 
-    @Override
-    public byte[] greeting() {
-        // generate auth data
-        byte[] rand1 = RandomUtil.randomBytes(8);
-        byte[] rand2 = RandomUtil.randomBytes(12);
-
-        // save  auth data
-        byte[] rand = new byte[rand1.length + rand2.length];
-        System.arraycopy(rand1, 0, rand, 0, rand1.length);
-        System.arraycopy(rand2, 0, rand, rand1.length, rand2.length);
-        this.seed = rand;
-
-        HandshakeV10Packet hs = new HandshakeV10Packet();
-        hs.setPacketId(0);
-        hs.setProtocolVersion(Versions.PROTOCOL_VERSION);  // [0a] protocol version   V10
-        hs.setServerVersion(Versions.getServerVersion());
-        hs.setThreadId(connection.getId());
-        hs.setSeed(rand1);
-        hs.setServerCapabilities(getServerCapabilities());
-        int charsetIndex = CharsetUtil.getCharsetDefaultIndex(SystemConfig.getInstance().getCharset());
-        hs.setServerCharsetIndex((byte) (charsetIndex & 0xff));
-        hs.setServerStatus(2);
-        hs.setRestOfScrambleBuff(rand2);
-
-        //write out
-        hs.write(connection);
-        return seed;
-    }
 
     @Override
     public PluginName getName() {

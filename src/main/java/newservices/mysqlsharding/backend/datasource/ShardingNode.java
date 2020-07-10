@@ -8,9 +8,9 @@ package newservices.mysqlsharding.backend.datasource;
 import com.actiontech.dble.alarm.AlarmCode;
 import com.actiontech.dble.alarm.Alert;
 import com.actiontech.dble.alarm.AlertUtil;
-import com.actiontech.dble.backend.BackendConnection;
 import com.actiontech.dble.backend.mysql.nio.handler.ResponseHandler;
 import com.actiontech.dble.route.RouteResultsetNode;
+import newnet.connection.BackendConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -12,6 +12,7 @@ import com.actiontech.dble.singleton.FrontendUserManager;
 import newbootstrap.DbleServer;
 import newnet.connection.AbstractConnection;
 import newnet.connection.FrontendConnection;
+import newservices.mysqlauthenticate.PluginName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public final class AuthUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthUtil.class);
 
-    public static String auhth(UserName user, AbstractConnection connection, byte[] seed, byte[] password, String schema) {
+    public static String auhth(UserName user, AbstractConnection connection, byte[] seed, byte[] password, String schema, PluginName plugin) {
         UserConfig userConfig = DbleServer.getInstance().getConfig().getUsers().get(user);
         if (userConfig == null) {
             return "Access denied for user '" + user + "' with host '" + connection.getHost() + "'";
@@ -47,7 +48,7 @@ public final class AuthUtil {
         }
 
         // check password
-        if (!checkPassword(seed, password, userConfig.getPassword())) {
+        if (!checkPassword(seed, password, userConfig.getPassword(), plugin)) {
             return "Access denied for user '" + user + "', because password is incorrect";
         }
 
@@ -82,7 +83,7 @@ public final class AuthUtil {
     }
 
 
-    private static boolean checkPassword(byte[] seed, byte[] password, String pass) {
+    private static boolean checkPassword(byte[] seed, byte[] password, String pass, PluginName name) {
 
         // check null
         if (pass == null || pass.length() == 0) {
@@ -95,7 +96,14 @@ public final class AuthUtil {
         // encrypt
         byte[] encryptPass = null;
         try {
-            encryptPass = SecurityUtil.scramble411(pass.getBytes(), seed);
+            switch (name) {
+                case mysql_native_password:
+                    encryptPass = SecurityUtil.scramble411(pass.getBytes(), seed);
+                    break;
+                case caching_sha2_password:
+                    encryptPass = SecurityUtil.scramble256(pass.getBytes(), seed);
+                    break;
+            }
         } catch (NoSuchAlgorithmException e) {
             return false;
         }

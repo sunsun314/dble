@@ -42,7 +42,7 @@ public class XACommitFailStage extends XACommitStage {
         if (!isFail || xaOldThreadIds.isEmpty()) {
             XAStateLog.saveXARecoveryLog(xaId, TxState.TX_COMMITTED_STATE);
             // remove session in background
-            XASessionCheck.getInstance().getCommittingSession().remove(session.getSource().getId());
+            XASessionCheck.getInstance().getCommittingSession().remove(session.getService().getId());
             // resolve alert
             AlertUtil.alertSelfResolve(AlarmCode.XA_BACKGROUND_RETRY_FAIL, Alert.AlertLevel.WARN, AlertUtil.genSingleLabel("XA_ID", session.getSessionXaID()));
             feedback(true);
@@ -58,7 +58,7 @@ public class XACommitFailStage extends XACommitStage {
 
         // close this session ,add to schedule job
         if (!session.closed()) {
-            session.getSource().close("COMMIT FAILED but it will try to COMMIT repeatedly in background until it is success!");
+            session.getService().close("COMMIT FAILED but it will try to COMMIT repeatedly in background until it is success!");
         }
         // kill xa or retry to commit xa in background
         if (!session.isRetryXa()) {

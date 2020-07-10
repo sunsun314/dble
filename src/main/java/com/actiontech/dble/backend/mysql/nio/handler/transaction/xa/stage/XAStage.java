@@ -52,9 +52,9 @@ public abstract class XAStage implements TransactionStage {
         session.setResponseTime(isSuccess);
         byte[] sendData = xaHandler.getPacketIfSuccess();
         if (sendData != null) {
-            session.getSource().write(sendData);
+            session.getService().write(sendData);
         } else {
-            session.getSource().write(session.getOkByteArray());
+            session.getService().write(session.getOkByteArray());
         }
         xaHandler.clearResources();
     }

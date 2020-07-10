@@ -1,13 +1,12 @@
 package newservices;
 
-import com.actiontech.dble.backend.mysql.CharsetUtil;
 import com.actiontech.dble.config.model.user.UserConfig;
-import com.actiontech.dble.net.mysql.CharsetNames;
 import com.actiontech.dble.route.parser.util.Pair;
 import com.actiontech.dble.util.StringUtil;
+import newbootstrap.DbleServer;
+import newcommon.proto.mysql.packet.CharsetNames;
 import newcommon.proto.mysql.packet.ErrorPacket;
 import newcommon.service.AbstractService;
-import newcommon.service.AuthResultInfo;
 import newcommon.service.ServiceTask;
 import newnet.connection.AbstractConnection;
 
@@ -22,29 +21,41 @@ public abstract class MySQLBasedService extends AbstractService {
 
     protected long clientFlags;
 
-    protected volatile CharsetNames charsetName = new CharsetNames();
 
     public MySQLBasedService(AbstractConnection connection) {
         super(connection);
     }
 
-    public abstract void initFromAuthInfo(AuthResultInfo info);
 
-    public void initCharsetIndex(int ci) {
-        String name = CharsetUtil.getCharset(ci);
-        if (name != null) {
-            charsetName.setClient(name);
-            charsetName.setResults(name);
-            charsetName.setCollation(CharsetUtil.getDefaultCollation(name));
-        }
+    protected void TaskToPriorityQueue(ServiceTask task){
+        DbleServer.getInstance().getFrontPriorityQueue().offer(task);
     }
+
+    protected void TaskToTotalQueue(ServiceTask task) {
+        DbleServer.getInstance().getFrontHandlerQueue().offer(task);
+    }
+
 
     @Override
     public void handleData(ServiceTask task) {
-        byte[] data = task.getOrgData();
-        this.setPacketId(data[3]);
-        //todo:这里需要处理对应的高优先级回环的问题，之后再来进行处理
-        this.handleInnerData(data);
+        ServiceTask executeTask = null;
+        synchronized (this) {
+            if (currentTask == null) {
+                executeTask = taskQueue.poll();
+                if (executeTask != null) {
+                    currentTask = executeTask;
+                }
+            }
+            if (currentTask != task) {
+                TaskToPriorityQueue(task);
+            }
+        }
+
+        if (executeTask != null) {
+            byte[] data = executeTask.getOrgData();
+            this.setPacketId(data[3]);
+            this.handleInnerData(data);
+        }
     }
 
     protected abstract void handleInnerData(byte[] data);
@@ -57,8 +68,8 @@ public abstract class MySQLBasedService extends AbstractService {
         ErrorPacket err = new ErrorPacket();
         err.setPacketId(nextPacketId());
         err.setErrNo(vendorCode);
-        err.setSqlState(StringUtil.encode(sqlState, charsetName.getResults()));
-        err.setMessage(StringUtil.encode(msg, charsetName.getResults()));
+        err.setSqlState(StringUtil.encode(sqlState, connection.getCharsetName().getResults()));
+        err.setMessage(StringUtil.encode(msg, connection.getCharsetName().getResults()));
         err.write(connection);
     }
 
@@ -67,6 +78,6 @@ public abstract class MySQLBasedService extends AbstractService {
     }
 
     public CharsetNames getCharset() {
-        return charsetName;
+        return connection.getCharsetName();
     }
 }

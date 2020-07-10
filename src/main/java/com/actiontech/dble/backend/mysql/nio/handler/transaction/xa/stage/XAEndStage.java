@@ -33,8 +33,8 @@ public class XAEndStage extends XAStage {
 
         if (isFail) {
             if (xaHandler.isInterruptTx()) {
-                session.getSource().setTxInterrupt(errMsg);
-                session.getSource().write(errPacket);
+                session.getService().setTxInterrupt(errMsg);
+                session.getService().write(errPacket);
                 return null;
             } else {
                 return new XARollbackStage(session, xaHandler, true);

@@ -5,7 +5,8 @@
 */
 package newcommon.proto.mysql.packet;
 
-import newnet.connection.AbstractConnection;
+
+import newcommon.service.AbstractService;
 
 /**
  * @author mycat
@@ -21,6 +22,10 @@ public class PingPacket extends MySQLPacket {
     @Override
     protected String getPacketInfo() {
         return "MySQL Ping Packet";
+    }
+
+    public static void response(AbstractService service) {
+        service.write(OkPacket.OK);
     }
 
 }

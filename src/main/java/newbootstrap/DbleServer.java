@@ -99,7 +99,7 @@ public final class DbleServer {
     private Map<String, ThreadWorkUsage> threadUsedMap = new ConcurrentHashMap<>();
     private BlockingQueue<ServiceTask> frontHandlerQueue;
     private BlockingQueue<List<WriteToBackendTask>> writeToBackendQueue;
-    private Queue<ServiceTask> concurrentFrontHandlerQueue;
+    private Queue<ServiceTask> frontPriorityQueue;
     //private Queue<BackendAsyncHandler> concurrentBackHandlerQueue;
 
 
@@ -285,10 +285,10 @@ public final class DbleServer {
     }
 
     private void initTaskQueue() {
-        concurrentFrontHandlerQueue = new ConcurrentLinkedQueue<ServiceTask>();
+        frontPriorityQueue = new ConcurrentLinkedQueue<ServiceTask>();
         frontHandlerQueue = new LinkedBlockingQueue<ServiceTask>();
         for (int i = 0; i < SystemConfig.getInstance().getProcessorExecutor(); i++) {
-            businessExecutor.execute(new FrontEndHandlerRunnable(frontHandlerQueue, concurrentFrontHandlerQueue));
+            businessExecutor.execute(new FrontEndHandlerRunnable(frontHandlerQueue, frontPriorityQueue));
         }
 
         writeToBackendQueue = new LinkedBlockingQueue<>();
@@ -325,6 +325,10 @@ public final class DbleServer {
             i = nextBackendProcessor = 0;
         }
         return backendProcessors[i];
+    }
+
+    public Queue<ServiceTask> getFrontPriorityQueue() {
+        return frontPriorityQueue;
     }
 
     public Queue<ServiceTask> getFrontHandlerQueue() {
@@ -610,11 +614,6 @@ public final class DbleServer {
     public ServerConfig getConfig() {
         return config;
     }
-
-
-   /* public Queue<BackendAsyncHandler> getBackHandlerQueue() {
-        return concurrentBackHandlerQueue;
-    }*/
 
     public IOProcessor[] getFrontProcessors() {
         return frontProcessors;

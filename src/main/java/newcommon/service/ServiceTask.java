@@ -9,7 +9,7 @@ public class ServiceTask {
     private volatile boolean highPriority = false;
     private final Service service;
 
-    ServiceTask(byte[] orgData, Service service) {
+    public ServiceTask(byte[] orgData, Service service) {
         this.orgData = orgData;
         this.service = service;
     }

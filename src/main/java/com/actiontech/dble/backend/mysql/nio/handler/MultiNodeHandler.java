@@ -129,7 +129,7 @@ public abstract class MultiNodeHandler implements ResponseHandler {
             lock.unlock();
         }
         err.setErrNo(ErrorCode.ER_UNKNOWN_ERROR);
-        err.setMessage(StringUtil.encode(errMsg, session.getSource().getCharset().getResults()));
+        err.setMessage(StringUtil.encode(errMsg, session.getService().getCharset().getResults()));
         return err;
     }
 
@@ -152,16 +152,16 @@ public abstract class MultiNodeHandler implements ResponseHandler {
             }
             clearSessionResources();
             if (errorResponse.compareAndSet(false, true)) {
-                createErrPkg(this.error).write(session.getSource());
+                createErrPkg(this.error).write(session.getService());
             }
         }
     }
 
     private void clearSessionResources() {
-        if (session.getSource().isAutocommit()) {
+        if (session.getService().isAutocommit()) {
             session.closeAndClearResources(error);
         } else {
-            session.getSource().setTxInterrupt(this.error);
+            session.getService().setTxInterrupt(this.error);
             this.clearResources();
         }
     }

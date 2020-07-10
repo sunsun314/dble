@@ -846,7 +846,7 @@ public class ServerConnection extends FrontendConnection {
     @Override
     public void killAndClose(String reason) {
         super.close(reason);
-        if (!session.getSource().isTxStart() || session.getTransactionManager().getXAStage() == null) {
+        if (!session.getService().isTxStart() || session.getTransactionManager().getXAStage() == null) {
             //not a xa transaction ,close it
             session.kill();
         }

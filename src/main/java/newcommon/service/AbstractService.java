@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class AbstractService implements Service {
 
     protected final ConcurrentLinkedQueue<ServiceTask> taskQueue = new ConcurrentLinkedQueue<>();
+    protected ServiceTask currentTask = null;
     protected volatile ProtoHandler proto;
 
     private final AtomicBoolean executing = new AtomicBoolean(false);
@@ -59,17 +60,14 @@ public abstract class AbstractService implements Service {
         }
     }
 
-
     private void TaskCreate(byte[] packetData) {
         ServiceTask task = new ServiceTask(packetData, this);
         taskQueue.offer(task);
-        //向总队列提供这个task
         TaskToTotalQueue(task);
     }
 
-    private void TaskToTotalQueue(ServiceTask task) {
-        DbleServer.getInstance().getFrontHandlerQueue().offer(task);
-    }
+    protected abstract void TaskToTotalQueue(ServiceTask task);
+
 
     @Override
     public void execute(ServiceTask task) {
@@ -115,7 +113,6 @@ public abstract class AbstractService implements Service {
     public void write(byte[] data) {
         this.connection.write(data);
     }
-
 
 
 }

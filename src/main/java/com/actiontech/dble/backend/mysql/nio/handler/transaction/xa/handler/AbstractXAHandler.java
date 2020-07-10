@@ -169,15 +169,15 @@ public abstract class AbstractXAHandler extends MultiNodeHandler {
 
     public void interruptTx(String reason) {
         setFail(reason);
-        session.getSource().setTxInterrupt(reason);
-        session.getSource().write(makeErrorPacket(reason));
+        session.getService().setTxInterrupt(reason);
+        session.getService().write(makeErrorPacket(reason));
     }
 
     private byte[] makeErrorPacket(String errMsg) {
         ErrorPacket errPacket = new ErrorPacket();
         errPacket.setPacketId(1);
         errPacket.setErrNo(ErrorCode.ER_UNKNOWN_ERROR);
-        errPacket.setMessage(StringUtil.encode(errMsg, session.getSource().getCharset().getResults()));
+        errPacket.setMessage(StringUtil.encode(errMsg, session.getService().getCharset().getResults()));
         return errPacket.toBytes();
     }
 

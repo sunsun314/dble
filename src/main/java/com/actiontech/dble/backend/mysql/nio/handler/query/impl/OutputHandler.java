@@ -41,7 +41,7 @@ public class OutputHandler extends BaseDMLHandler {
         this.lock = new ReentrantLock();
         this.packetId = (byte) session.getPacketId().get();
         this.isBinary = session.isPrepared();
-        this.buffer = session.getSource().allocate();
+        this.buffer = session.getService().allocate();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class OutputHandler extends BaseDMLHandler {
         this.netOutBytes += ok.length;
         OkPacket okPacket = new OkPacket();
         okPacket.read(ok);
-        ServerConnection source = session.getSource();
+        ServerConnection source = session.getService();
         lock.lock();
         try {
             ok[3] = ++packetId;
@@ -80,9 +80,9 @@ public class OutputHandler extends BaseDMLHandler {
         logger.info(conn.toString() + "|errorResponse()|" + new String(errPacket.getMessage()));
         lock.lock();
         try {
-            buffer = session.getSource().writeToBuffer(err, buffer);
+            buffer = session.getService().writeToBuffer(err, buffer);
             session.resetMultiStatementStatus();
-            session.getSource().write(buffer);
+            session.getService().write(buffer);
         } finally {
             lock.unlock();
         }
@@ -106,7 +106,7 @@ public class OutputHandler extends BaseDMLHandler {
             hp.setFieldCount(fieldPackets.size());
             hp.setPacketId(++packetId);
             this.netOutBytes += hp.calcPacketSize();
-            ServerConnection source = session.getSource();
+            ServerConnection source = session.getService();
             buffer = hp.write(buffer, source, true);
             for (FieldPacket fp : fieldPackets) {
                 fp.setPacketId(++packetId);
@@ -139,24 +139,24 @@ public class OutputHandler extends BaseDMLHandler {
                 binRowPacket.read(this.fieldPackets, rowPacket);
                 binRowPacket.setPacketId(++packetId);
                 this.netOutBytes += binRowPacket.calcPacketSize();
-                buffer = binRowPacket.write(buffer, session.getSource(), true);
+                buffer = binRowPacket.write(buffer, session.getService(), true);
                 this.packetId = (byte) session.getPacketId().get();
             } else {
                 if (rowPacket != null) {
                     rowPacket.setPacketId(++packetId);
                     this.netOutBytes += rowPacket.calcPacketSize();
-                    buffer = rowPacket.write(buffer, session.getSource(), true);
+                    buffer = rowPacket.write(buffer, session.getService(), true);
                     this.packetId = (byte) session.getPacketId().get();
                 } else {
                     row = rowNull;
                     this.netOutBytes += row.length;
                     boolean isBigPackage = row.length >= MySQLPacket.MAX_PACKET_SIZE + MySQLPacket.PACKET_HEADER_SIZE;
                     if (isBigPackage) {
-                        buffer = session.getSource().writeBigPackageToBuffer(row, buffer, packetId);
+                        buffer = session.getService().writeBigPackageToBuffer(row, buffer, packetId);
                         this.packetId = (byte) session.getPacketId().get();
                     } else {
                         row[3] = ++packetId;
-                        buffer = session.getSource().writeToBuffer(row, buffer);
+                        buffer = session.getService().writeToBuffer(row, buffer);
                     }
                 }
             }
@@ -172,7 +172,7 @@ public class OutputHandler extends BaseDMLHandler {
             return;
         }
         logger.debug("--------sql execute end!");
-        ServerConnection source = session.getSource();
+        ServerConnection source = session.getService();
         lock.lock();
         try {
             if (terminate.get()) {
@@ -202,10 +202,10 @@ public class OutputHandler extends BaseDMLHandler {
     private void doSqlStat() {
         if (SystemConfig.getInstance().getUseSqlStat() == 1) {
             long netInBytes = 0;
-            String sql = session.getSource().getExecuteSql();
+            String sql = session.getService().getExecuteSql();
             if (sql != null) {
                 netInBytes += sql.getBytes().length;
-                QueryResult queryResult = new QueryResult(session.getSource().getUser(), ServerParse.SELECT,
+                QueryResult queryResult = new QueryResult(session.getService().getUser(), ServerParse.SELECT,
                         sql, selectRows, netInBytes, netOutBytes, session.getQueryStartTime(), System.currentTimeMillis(), netOutBytes);
                 if (logger.isDebugEnabled()) {
                     logger.debug("try to record sql:" + sql);
@@ -236,7 +236,7 @@ public class OutputHandler extends BaseDMLHandler {
                 error.setMessage("unknown error".getBytes());
             }
             error.setPacketId(++packetId);
-            session.getSource().write(error.toBytes());
+            session.getService().write(error.toBytes());
         } finally {
             lock.unlock();
         }
@@ -245,9 +245,9 @@ public class OutputHandler extends BaseDMLHandler {
     private void recycleResources() {
         if (buffer != null) {
             if (buffer.position() > 0) {
-                session.getSource().write(buffer);
+                session.getService().write(buffer);
             } else {
-                session.getSource().recycle(buffer);
+                session.getService().recycle(buffer);
                 buffer = null;
             }
         }

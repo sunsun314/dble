@@ -1,8 +1,10 @@
 package newnet.connection;
 
 import com.actiontech.dble.backend.BackendConnection;
+import com.actiontech.dble.backend.mysql.CharsetUtil;
 import com.actiontech.dble.config.model.SystemConfig;
 import com.actiontech.dble.util.TimeUtil;
+import newcommon.proto.mysql.packet.CharsetNames;
 import newcommon.service.AbstractService;
 import newcommon.service.AuthResultInfo;
 import newcommon.service.Service;
@@ -31,7 +33,6 @@ public abstract class AbstractConnection implements Connection {
 
     protected volatile boolean isClosed = false;
 
-
     private volatile AbstractService service;
 
     protected IOProcessor processor;
@@ -55,6 +56,9 @@ public abstract class AbstractConnection implements Connection {
     //连接设置
     protected int readBufferChunk;
     protected int maxPacketSize;
+    protected volatile CharsetNames charsetName = new CharsetNames();
+    protected volatile boolean isSupportCompress = false;
+
 
     //统计值先不值得多管
     protected long startupTime;
@@ -174,12 +178,24 @@ public abstract class AbstractConnection implements Connection {
         channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
         channel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
 
-        /*todo 需要对于这些参数进行区分，到底应该是什么级别的参数
         this.setMaxPacketSize(system.getMaxPacketSize());
-        this.setIdleTimeout(system.getIdleTimeout());
         this.initCharacterSet(system.getCharset());
         this.setReadBufferChunk(soRcvBuf);
-        */
+    }
+
+    public void initCharacterSet(String name) {
+        charsetName.setClient(name);
+        charsetName.setResults(name);
+        charsetName.setCollation(CharsetUtil.getDefaultCollation(name));
+    }
+
+    public void initCharsetIndex(int ci) {
+        String name = CharsetUtil.getCharset(ci);
+        if (name != null) {
+            charsetName.setClient(name);
+            charsetName.setResults(name);
+            charsetName.setCollation(CharsetUtil.getDefaultCollation(name));
+        }
     }
 
     public final void recycle(ByteBuffer buffer) {
@@ -404,4 +420,38 @@ public abstract class AbstractConnection implements Connection {
         this.service = service;
     }
 
+
+    public int getMaxPacketSize() {
+        return maxPacketSize;
+    }
+
+    public void setMaxPacketSize(int maxPacketSize) {
+        this.maxPacketSize = maxPacketSize;
+    }
+
+    public int getReadBufferChunk() {
+        return readBufferChunk;
+    }
+
+    public void setReadBufferChunk(int readBufferChunk) {
+        this.readBufferChunk = readBufferChunk;
+    }
+
+
+    public CharsetNames getCharsetName() {
+        return charsetName;
+    }
+
+    public void setCharsetName(CharsetNames charsetName) {
+        this.charsetName = charsetName;
+    }
+
+
+    public boolean isSupportCompress() {
+        return isSupportCompress;
+    }
+
+    public void setSupportCompress(boolean supportCompress) {
+        isSupportCompress = supportCompress;
+    }
 }

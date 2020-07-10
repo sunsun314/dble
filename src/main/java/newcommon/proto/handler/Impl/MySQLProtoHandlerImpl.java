@@ -2,8 +2,11 @@ package newcommon.proto.handler.Impl;
 
 import newcommon.proto.handler.ProtoHandler;
 import newcommon.proto.handler.ProtoHandlerResult;
+import newcommon.proto.mysql.packet.CharsetNames;
 import newcommon.proto.mysql.packet.MySQLPacket;
+import newservices.mysqlsharding.backend.MySQLMessage;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 import static newcommon.proto.handler.ProtoHandlerResultCode.*;
@@ -13,9 +16,13 @@ import static newcommon.proto.handler.ProtoHandlerResultCode.*;
  */
 public class MySQLProtoHandlerImpl implements ProtoHandler {
 
-    protected volatile boolean isSupportCompress = false;
+    protected final boolean isSupportCompress;
 
     private byte[] incompleteData = null;
+
+    public MySQLProtoHandlerImpl(boolean isSupportCompress) {
+        this.isSupportCompress = isSupportCompress;
+    }
 
     @Override
     public ProtoHandlerResult handle(ByteBuffer dataBuffer, int offset) {
@@ -60,6 +67,19 @@ public class MySQLProtoHandlerImpl implements ProtoHandler {
             }
         }
         return new ProtoHandlerResult(REACH_END_BUFFER, offset);
+    }
+
+    @Override
+    public String getSQL(byte[] data, CharsetNames charsetName) throws UnsupportedEncodingException {
+        String sql = null;
+        try {
+            MySQLMessage mm = new MySQLMessage(data);
+            mm.position(5);
+            sql = mm.readString(charsetName.getClient());
+        } catch (UnsupportedEncodingException e) {
+            throw e;
+        }
+        return sql;
     }
 
 

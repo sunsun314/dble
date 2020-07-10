@@ -7,6 +7,7 @@ import newcommon.service.AbstractService;
 import newcommon.service.AuthResultInfo;
 import newnet.connection.AbstractConnection;
 import newservices.manager.ManagerService;
+import newservices.mysqlsharding.MySQLResponseService;
 import newservices.mysqlsharding.MySQLShardingService;
 
 /**
@@ -26,5 +27,11 @@ public class BusinessServiceFactory {
             return service;
         }
         return null;
+    }
+
+
+    public static AbstractService getBackendBusinessService(AuthResultInfo info, AbstractConnection connection) {
+        MySQLResponseService service = new MySQLResponseService(connection);
+        return service;
     }
 }

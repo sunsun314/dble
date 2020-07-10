@@ -133,8 +133,7 @@ public class NonBlockingSession implements Session {
         this.outputHandler = outputHandler;
     }
 
-    @Override
-    public ServerConnection getSource() {
+    public ServerConnection getService() {
         return source;
     }
 
@@ -452,7 +451,7 @@ public class NonBlockingSession implements Session {
         if (PauseShardingNodeManager.getInstance().getIsPausing().get() &&
                 !PauseShardingNodeManager.getInstance().checkTarget(target) &&
                 PauseShardingNodeManager.getInstance().checkRRS(rrs)) {
-            if (PauseShardingNodeManager.getInstance().waitForResume(rrs, this.getSource(), CONTINUE_TYPE_SINGLE)) {
+            if (PauseShardingNodeManager.getInstance().waitForResume(rrs, this.getService(), CONTINUE_TYPE_SINGLE)) {
                 return;
             }
         }
@@ -575,7 +574,7 @@ public class NonBlockingSession implements Session {
 
     public void executeMultiSelect(RouteResultset rrs) {
         SQLSelectStatement ast = (SQLSelectStatement) rrs.getSqlStatement();
-        MySQLPlanNodeVisitor visitor = new MySQLPlanNodeVisitor(this.getSource().getSchema(), this.getSource().getCharset().getResultsIndex(), ProxyMeta.getInstance().getTmManager(), false, this.getSource().getUsrVariables());
+        MySQLPlanNodeVisitor visitor = new MySQLPlanNodeVisitor(this.getService().getSchema(), this.getService().getCharset().getResultsIndex(), ProxyMeta.getInstance().getTmManager(), false, this.getService().getUsrVariables());
         visitor.visit(ast);
         PlanNode node = visitor.getTableNode();
         if (node.isCorrelatedSubQuery()) {
@@ -815,7 +814,7 @@ public class NonBlockingSession implements Session {
         }
 
         boolean canReUse = false;
-        if (conn.isFromSlaveDB() && (node.canRunINReadDB(getSource().isAutocommit()) &&
+        if (conn.isFromSlaveDB() && (node.canRunINReadDB(getService().isAutocommit()) &&
                 (node.getRunOnSlave() == null || node.getRunOnSlave()))) {
             canReUse = true;
         }
@@ -1131,7 +1130,7 @@ public class NonBlockingSession implements Session {
     }
 
     public void stopFlowControl() {
-        LOGGER.info("Session stop flow control " + this.getSource());
+        LOGGER.info("Session stop flow control " + this.getService());
         synchronized (flowControlledBackendConnections) {
             source.setFlowControlled(false);
             for (BackendConnection entry : flowControlledBackendConnections) {
@@ -1144,7 +1143,7 @@ public class NonBlockingSession implements Session {
     public void startFlowControl(BackendConnection backendConnection) {
         synchronized (flowControlledBackendConnections) {
             if (!source.isFlowControlled()) {
-                LOGGER.info("Session start flow control " + this.getSource());
+                LOGGER.info("Session start flow control " + this.getService());
             }
             source.setFlowControlled(true);
             backendConnection.disableRead();

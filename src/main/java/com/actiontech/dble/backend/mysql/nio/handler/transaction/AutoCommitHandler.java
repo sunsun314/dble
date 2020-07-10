@@ -40,7 +40,7 @@ public class AutoCommitHandler implements TransactionHandler {
             }
             session.getTargetMap().clear();
             errConnection.clear();
-            session.getSource().write(sendData);
+            session.getService().write(sendData);
             return;
         }
         if (errConnection != null && errConnection.size() > 0) {

@@ -4,13 +4,11 @@ import com.actiontech.dble.config.Capabilities;
 import com.actiontech.dble.config.ErrorCode;
 import com.actiontech.dble.config.model.SystemConfig;
 import com.actiontech.dble.config.model.user.UserConfig;
-import com.actiontech.dble.util.StringUtil;
 import newcommon.proto.handler.Impl.MySQLProtoHandlerImpl;
 import newcommon.proto.mysql.packet.*;
 import newcommon.service.AbstractService;
 import newcommon.service.AuthResultInfo;
 import newcommon.service.AuthService;
-import newcommon.service.ServiceTask;
 import newnet.connection.AbstractConnection;
 import newservices.MySQLBasedService;
 import newservices.factorys.BusinessServiceFactory;
@@ -31,8 +29,6 @@ import static newservices.mysqlauthenticate.PluginName.mysql_native_password;
 public class MySQLFrontAuthService extends MySQLBasedService implements AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MySQLFrontAuthService.class);
-    private static final byte[] AUTH_OK = new byte[]{7, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0};
-    private static final byte[] SWITCH_AUTH_OK = new byte[]{7, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0};
 
     private volatile MySQLAuthPlugin plugin;
 
@@ -42,16 +38,15 @@ public class MySQLFrontAuthService extends MySQLBasedService implements AuthServ
 
     public MySQLFrontAuthService(AbstractConnection connection) {
         super(connection);
-        this.proto = new MySQLProtoHandlerImpl();
+        this.proto = new MySQLProtoHandlerImpl(connection.isSupportCompress());
         SystemConfig.getInstance().getFakeMySQLVersion();
-        //如果是5.7 或者之前的版本，就是用NATIVE的插件
+
         plugin = new NativePwd(connection);
     }
 
 
     @Override
     public void register() throws IOException {
-        //让验证插件自己 写出握手包
         seed = plugin.greeting();
     }
 
@@ -92,6 +87,9 @@ public class MySQLFrontAuthService extends MySQLBasedService implements AuthServ
 
 
     private void checkForResult(AuthResultInfo info) {
+        if (info == null) {
+            return;
+        }
         if (info.isSuccess()) {
             String errMsg = checkUserRights(info.getUserConfig());
             if (errMsg != null) {
@@ -99,7 +97,6 @@ public class MySQLFrontAuthService extends MySQLBasedService implements AuthServ
             } else {
                 AbstractService service = BusinessServiceFactory.getBusinessService(info, connection);
                 connection.setService(service);
-                //具体的写出方式待定，主要可能和paketId的使用有关
                 MySQLPacket packet = new OkPacket();
                 packet.setPacketId(hasAuthSwitched ? 4 : 2);
                 packet.write(connection);
@@ -179,9 +176,5 @@ public class MySQLFrontAuthService extends MySQLBasedService implements AuthServ
         return null;
     }
 
-    @Override
-    public void initFromAuthInfo(AuthResultInfo info) {
-
-    }
 
 }

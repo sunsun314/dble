@@ -190,7 +190,7 @@ public abstract class BaseHandlerBuilder {
             }
         }
 
-        MultiNodeMergeHandler mh = new MultiNodeEasyMergeHandler(getSequenceId(), rrss, session.getSource().isAutocommit() && !session.getSource().isTxStart(),
+        MultiNodeMergeHandler mh = new MultiNodeEasyMergeHandler(getSequenceId(), rrss, session.getService().isAutocommit() && !session.getService().isTxStart(),
                 session);
         addHandler(mh);
     }
@@ -386,9 +386,9 @@ public abstract class BaseHandlerBuilder {
 
         MultiNodeMergeHandler mh;
         if (isEasyMerge) {
-            mh = new MultiNodeEasyMergeHandler(getSequenceId(), rrssArray, session.getSource().isAutocommit() && !session.getSource().isTxStart(), session);
+            mh = new MultiNodeEasyMergeHandler(getSequenceId(), rrssArray, session.getService().isAutocommit() && !session.getService().isTxStart(), session);
         } else {
-            mh = new MultiNodeMergeAndOrderHandler(getSequenceId(), rrssArray, session.getSource().isAutocommit() && !session.getSource().isTxStart(), session, orderBys);
+            mh = new MultiNodeMergeAndOrderHandler(getSequenceId(), rrssArray, session.getService().isAutocommit() && !session.getService().isTxStart(), session, orderBys);
         }
         addHandler(mh);
     }

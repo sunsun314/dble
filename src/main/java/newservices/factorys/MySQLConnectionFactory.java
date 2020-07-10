@@ -10,8 +10,4 @@ import newnet.factory.PooledConnectionFactory;
  */
 public class MySQLConnectionFactory extends PooledConnectionFactory {
 
-    @Override
-    public BackendConnection make(PhysicalDbInstance pool, AbstractService nextService, String schema) {
-        return null;
-    }
 }

@@ -8,11 +8,14 @@ import java.nio.channels.NetworkChannel;
 /**
  * Created by szf on 2020/6/23.
  */
-public class BackendConnection extends  PooledConnection {
+public class BackendConnection extends PooledConnection {
+
+    private long threadId = 0;
 
     public BackendConnection(NetworkChannel channel, SocketWR socketWR) {
         super(channel, socketWR);
     }
+
 
     @Override
     public void businessClose(String reason) {
@@ -34,7 +37,7 @@ public class BackendConnection extends  PooledConnection {
 
     }
 
-    public void onConnectFailed(Throwable e){
+    public void onConnectFailed(Throwable e) {
 
     }
 
@@ -71,5 +74,14 @@ public class BackendConnection extends  PooledConnection {
     @Override
     public void closePooldestroyed(String reason) {
 
+    }
+
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
     }
 }

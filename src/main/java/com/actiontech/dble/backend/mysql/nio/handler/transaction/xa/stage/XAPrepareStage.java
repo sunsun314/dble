@@ -27,8 +27,8 @@ public class XAPrepareStage extends XAStage {
             if (prepareUnconnect) {
                 xaHandler.setPacketIfSuccess(errPacket);
             } else if (xaHandler.isInterruptTx()) {
-                session.getSource().setTxInterrupt(errMsg);
-                session.getSource().write(errPacket);
+                session.getService().setTxInterrupt(errMsg);
+                session.getService().write(errPacket);
                 return null;
             }
             return new XARollbackStage(session, xaHandler, false);

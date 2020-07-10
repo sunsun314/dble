@@ -1,5 +1,8 @@
 package newcommon.proto.handler;
 
+import newcommon.proto.mysql.packet.CharsetNames;
+
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 /**
@@ -8,4 +11,6 @@ import java.nio.ByteBuffer;
 public interface ProtoHandler {
 
     ProtoHandlerResult handle(ByteBuffer dataBuffer, int dataBufferOffset);
+
+    String getSQL(byte[] data, CharsetNames charsetNames) throws UnsupportedEncodingException;
 }

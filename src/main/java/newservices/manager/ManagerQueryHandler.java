@@ -24,11 +24,10 @@ public class ManagerQueryHandler {
 
 
     public void query(String sql) {
-
-    } /*{
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(String.valueOf(service) + sql);
         }
+        /*
         int rs = ManagerParse.parse(sql);
         int sqlType = rs & 0xff;
         if (readOnly && sqlType != ManagerParse.SELECT && sqlType != ManagerParse.SHOW) {
@@ -116,7 +115,7 @@ public class ManagerQueryHandler {
                 break;
             default:
                 service.writeErrMessage(ErrorCode.ER_YES, "Unsupported statement");
-        }
-    }*/
+        }*/
+    }
 
 }

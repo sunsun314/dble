@@ -40,7 +40,7 @@ public class KillConnectionHandler implements ResponseHandler {
     public void connectionAcquired(BackendConnection conn) {
         conn.setResponseHandler(this);
         conn.setSession(session);
-        ((MySQLConnection) conn).sendQueryCmd(("KILL " + toKilled.getThreadId()), session.getSource().getCharset());
+        ((MySQLConnection) conn).sendQueryCmd(("KILL " + toKilled.getThreadId()), session.getService().getCharset());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class KillConnectionHandler implements ResponseHandler {
     @Override
     public void rowEofResponse(byte[] eof, boolean isLeft, BackendConnection conn) {
         LOGGER.info("unexpected packet for " +
-                conn + " bound by " + session.getSource() +
+                conn + " bound by " + session.getService() +
                 ": field's eof");
         conn.close("close unexpected packet of killConnection");
         toKilled.close("killed");

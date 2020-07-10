@@ -5,6 +5,8 @@
 */
 package com.actiontech.dble.backend.mysql;
 
+import newservices.mysqlauthenticate.PasswordAuthPlugin;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -16,6 +18,35 @@ import java.security.NoSuchAlgorithmException;
 public final class SecurityUtil {
     private SecurityUtil() {
     }
+
+    public static byte[] scramble256(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
+        try {
+            int cachingSha2DigestLength = 32;
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] dig1 = new byte[cachingSha2DigestLength];
+            byte[] dig2 = new byte[cachingSha2DigestLength];
+            md.update(pass, 0, pass.length);
+            md.digest(dig1, 0, cachingSha2DigestLength);
+            md.reset();
+            md.update(dig1, 0, dig1.length);
+            md.digest(dig2, 0, cachingSha2DigestLength);
+            md.reset();
+
+            md.update(dig2, 0, dig1.length);
+            md.update(seed, 0, seed.length);
+            byte[] scramble1 = new byte[cachingSha2DigestLength];
+            md.digest(scramble1, 0, cachingSha2DigestLength);
+
+            byte[] mysqlScrambleBuff = new byte[cachingSha2DigestLength];
+            PasswordAuthPlugin.xorString(dig1, mysqlScrambleBuff, scramble1, cachingSha2DigestLength);
+
+            return mysqlScrambleBuff;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return pass;
+    }
+
 
     public static byte[] scramble411(byte[] pass, byte[] seed) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");

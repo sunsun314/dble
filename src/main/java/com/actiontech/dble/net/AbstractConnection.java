@@ -62,6 +62,7 @@ public abstract class AbstractConnection implements NIOConnection {
     protected long netInBytes;
     protected long netOutBytes;
 
+
     protected volatile boolean isSupportCompress = false;
     protected final ConcurrentLinkedQueue<byte[]> decompressUnfinishedDataQueue = new ConcurrentLinkedQueue<>();
     protected final ConcurrentLinkedQueue<byte[]> compressUnfinishedDataQueue = new ConcurrentLinkedQueue<>();
@@ -528,12 +529,11 @@ public abstract class AbstractConnection implements NIOConnection {
     }
 
 
-    public abstract void connectionCount();
 
     @Override
     public void close(String reason) {
         if (!isClosed) {
-            this.connectionCount();
+            //this.connectionCount();
             closeSocket();
             isClosed = true;
             if (processor != null) {

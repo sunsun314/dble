@@ -165,7 +165,7 @@ public class ConnectionPool extends PoolBase implements PooledConnectionListener
         totalConnections.decrementAndGet();
         // conn can be null if newChannel crashed (eg SocketException("too many open files"))
         if (conn != null) {
-            conn.closeWithoutRsp("create fail");
+            conn.businessClose("create fail");
         }
     }
 

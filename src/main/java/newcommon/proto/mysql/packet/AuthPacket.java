@@ -12,6 +12,7 @@ import com.actiontech.dble.backend.mysql.MySQLMessage;
 import com.actiontech.dble.backend.mysql.StreamUtil;
 import com.actiontech.dble.backend.mysql.nio.MySQLConnection;
 import com.actiontech.dble.config.Capabilities;
+import newnet.connection.AbstractConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -216,7 +217,7 @@ public class AuthPacket extends MySQLPacket {
         }
     }
 
-    public void writeWithKey(MySQLConnection c) {
+    public void writeWithKey(AbstractConnection c) {
         ByteBuffer buffer = c.allocate();
         BufferUtil.writeUB3(buffer, calcPacketSizeWithKey());
         buffer.put(packetId);

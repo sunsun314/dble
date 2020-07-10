@@ -92,7 +92,7 @@ public final class ShowXASession {
 
     private static RowDataPacket getRow(NonBlockingSession session, String charset) {
         RowDataPacket row = new RowDataPacket(FIELD_COUNT);
-        row.add(StringUtil.encode(session.getSource().getId() + "", charset));
+        row.add(StringUtil.encode(session.getService().getId() + "", charset));
         row.add(StringUtil.encode(session.getSessionXaID() + "", charset));
         row.add(StringUtil.encode(session.getTransactionManager().getXAStage(), charset));
         StringBuilder sb = new StringBuilder();
